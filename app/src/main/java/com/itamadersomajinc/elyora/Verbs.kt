@@ -24,7 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -438,7 +438,7 @@ private fun VerbQuizPane(store: Store, speaker: Speaker, modifier: Modifier = Mo
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
                 Text("${v.base} → ${v.v2} → ${v.v3} → ${v.v4}", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyMedium)
                 FilledIconButton(onClick = { speakIn(store, speaker, "${v.base}, ${v.v2}, ${v.v3}", "en") }, modifier = Modifier.size(38.dp)) {
-                    Icon(Icons.Filled.VolumeUp, contentDescription = "Hear forms", modifier = Modifier.size(18.dp))
+                    Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear forms", modifier = Modifier.size(18.dp))
                 }
             }
             Spacer(Modifier.height(10.dp))
@@ -488,7 +488,7 @@ private fun VerbCard(e: VerbEntry, native: String, store: Store, speaker: Speake
                     onClick = { speakIn(store, speaker, "${e.base}, ${e.v2}, ${e.v3}", "en") },
                     modifier = Modifier.size(38.dp)
                 ) {
-                    Icon(Icons.Filled.VolumeUp, contentDescription = "Hear verb forms", modifier = Modifier.size(18.dp))
+                    Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear verb forms", modifier = Modifier.size(18.dp))
                 }
             }
             Spacer(Modifier.height(8.dp))

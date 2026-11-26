@@ -2,7 +2,7 @@ package com.itamadersomajinc.elyora
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -113,13 +113,13 @@ object Updater {
         val pkg = ctx.packageName
         try {
             ctx.startActivity(
-                Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$pkg"))
+                Intent(Intent.ACTION_VIEW, "market://details?id=$pkg".toUri())
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         } catch (_: Exception) {
             runCatching {
                 ctx.startActivity(
-                    Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$pkg"))
+                    Intent(Intent.ACTION_VIEW, "https://play.google.com/store/apps/details?id=$pkg".toUri())
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 )
             }

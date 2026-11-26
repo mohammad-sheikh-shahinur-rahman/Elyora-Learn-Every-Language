@@ -33,7 +33,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -262,7 +262,7 @@ private fun FlashcardBrowse(store: Store, speaker: Speaker, lesson: Lesson, onSt
             horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
         ) {
             FilledIconButton(onClick = { speak(store, speaker, if (targetJa) w.kana else w.en, targetJa) }) {
-                Icon(Icons.Filled.VolumeUp, contentDescription = "Hear · শুনুন")
+                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear · শুনুন")
             }
             OutlinedButton(
                 onClick = { exampleWord = w },
@@ -376,7 +376,7 @@ private fun WordListBrowser(
                             onClick = { speak(store, speaker, if (targetJa) w.kana else w.en, targetJa) },
                             modifier = Modifier.size(34.dp)
                         ) {
-                            Icon(Icons.Filled.VolumeUp, contentDescription = "Hear · শুনুন", modifier = Modifier.size(16.dp))
+                            Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear · শুনুন", modifier = Modifier.size(16.dp))
                         }
                         OutlinedButton(
                             onClick = { exampleWord = w },
@@ -548,7 +548,7 @@ private fun WordDetail(
                 )
                 Spacer(Modifier.height(16.dp))
                 FilledIconButton(onClick = { speak(store, speaker, if (targetJa) w.kana else w.en, targetJa) }) {
-                    Icon(Icons.Filled.VolumeUp, contentDescription = "Hear")
+                    Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear")
                 }
             }
         }
@@ -675,7 +675,7 @@ private fun ExampleSheet(
                                 fontWeight = FontWeight.Medium
                             )
                             IconButton(onClick = { speak(store, speaker, ex.text, lang != "en") }) {
-                                Icon(Icons.Filled.VolumeUp, contentDescription = "Hear sentence")
+                                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear sentence")
                             }
                         }
                         if (ex.sub.isNotBlank()) {

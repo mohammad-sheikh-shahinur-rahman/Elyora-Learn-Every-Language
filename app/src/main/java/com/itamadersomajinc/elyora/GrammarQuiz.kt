@@ -22,7 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Quiz
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -505,7 +505,7 @@ private fun GrammarQuizRunner(
                                 onClick = { speakIn(store, speaker, q.audioText, "en") },
                                 modifier = Modifier.size(40.dp)
                             ) {
-                                Icon(Icons.Filled.VolumeUp, contentDescription = "Listen", modifier = Modifier.size(18.dp))
+                                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Listen", modifier = Modifier.size(18.dp))
                             }
                         }
                     }

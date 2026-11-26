@@ -22,6 +22,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 
 data class QwenModelSpec(
@@ -305,7 +306,7 @@ class LocalLlamaBridge(
                                         totalBytes = totalBytes,
                                         progressPct = pct,
                                         speedMbPerSec = speedMb,
-                                        statusText = "$dlMb / $totMb MB ($pct%) · ${String.format("%.1f", speedMb)} MB/s"
+                                        statusText = "$dlMb / $totMb MB ($pct%) · ${String.format(Locale.US, "%.1f", speedMb)} MB/s"
                                     )
                                 )
                                 lastUiUpdateMs = nowMs

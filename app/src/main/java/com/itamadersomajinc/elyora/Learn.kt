@@ -27,7 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -591,7 +591,7 @@ private fun PhraseList(store: Store, speaker: Speaker) {
                         onClick = { speak(store, speaker, p.ja, true) },
                         modifier = Modifier.size(36.dp)
                     ) {
-                        Icon(Icons.Filled.VolumeUp, contentDescription = "Play", modifier = Modifier.size(18.dp))
+                        Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Play", modifier = Modifier.size(18.dp))
                     }
                 }
                 if (expanded == p.id) {
@@ -758,7 +758,7 @@ fun LessonFlow(store: Store, speaker: Speaker, lesson: Lesson, modifier: Modifie
                                 Text("🔊 Listen and type · শুনে লিখুন", fontSize = 22.sp, textAlign = TextAlign.Center)
                                 Spacer(Modifier.height(8.dp))
                                 FilledIconButton(onClick = { speak(store, speaker, q.promptAudio ?: "", false) }) {
-                                    Icon(Icons.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
+                                    Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
                                 }
                             }
                             QuizType.CHOICE -> {
@@ -766,7 +766,7 @@ fun LessonFlow(store: Store, speaker: Speaker, lesson: Lesson, modifier: Modifie
                                     Text("🔊 Listen · শুনুন", fontSize = 26.sp)
                                     Spacer(Modifier.height(8.dp))
                                     FilledIconButton(onClick = { speak(store, speaker, q.promptAudio ?: "", q.promptIsJa) }) {
-                                        Icon(Icons.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
+                                        Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
                                     }
                                 } else {
                                     Text(q.promptText, fontSize = 34.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
@@ -1002,7 +1002,7 @@ fun SentenceCategoryScreen(cat: SentenceCategory, store: Store, speaker: Speaker
                             onClick = { speak(store, speaker, if (isJa) s.ja else s.en, isJa) },
                             modifier = Modifier.size(36.dp)
                         ) {
-                            Icon(Icons.Filled.VolumeUp, contentDescription = "Hear", modifier = Modifier.size(18.dp))
+                            Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear", modifier = Modifier.size(18.dp))
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 package com.itamadersomajinc.elyora
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.room.Dao
@@ -236,6 +237,7 @@ class AppContainer(context: Context) {
 }
 
 object ElyoraAppProvider {
+    @SuppressLint("StaticFieldLeak")
     @Volatile
     private var instance: AppContainer? = null
 

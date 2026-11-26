@@ -32,7 +32,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import java.util.Locale
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -418,8 +419,8 @@ fun ListeningPracticeScreen(
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Icon(
-                            Icons.Filled.VolumeUp,
-                            contentDescription = "Play Audio (${String.format("%.2f", activeRate)}x)",
+                            Icons.AutoMirrored.Filled.VolumeUp,
+                            contentDescription = "Play Audio (${String.format(Locale.US, "%.2f", activeRate)}x)",
                             tint = cs.primary,
                             modifier = Modifier.size(40.dp)
                         )
@@ -540,7 +541,7 @@ fun ListeningPracticeScreen(
                                     modifier = Modifier.size(32.dp)
                                 ) {
                                     Icon(
-                                        Icons.Filled.VolumeUp,
+                                        Icons.AutoMirrored.Filled.VolumeUp,
                                         contentDescription = "Speak ${info.cleanWord}",
                                         tint = cs.primary,
                                         modifier = Modifier.size(18.dp)

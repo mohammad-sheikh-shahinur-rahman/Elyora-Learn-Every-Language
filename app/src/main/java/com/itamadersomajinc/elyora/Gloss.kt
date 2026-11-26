@@ -1,5 +1,6 @@
 package com.itamadersomajinc.elyora
 
+import android.annotation.SuppressLint
 import android.content.Context
 
 /**
@@ -13,6 +14,7 @@ import android.content.Context
  */
 object Gloss {
 
+    @SuppressLint("StaticFieldLeak")
     private var ctx: Context? = null
 
     @Volatile

@@ -2,6 +2,7 @@ package com.itamadersomajinc.elyora
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import java.util.Locale
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -340,7 +341,7 @@ fun ProfileScreen(
                     valueRange = 0.5f..1.2f
                 )
                 Text(
-                    "${String.format("%.2f", store.speechRate)}×",
+                    "${String.format(Locale.US, "%.2f", store.speechRate)}×",
                     style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier.align(Alignment.End)
                 )

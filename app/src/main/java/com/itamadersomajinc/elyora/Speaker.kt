@@ -123,7 +123,7 @@ class Speaker(context: Context) {
         val tag = localeFor(lang)
         out.add(Locale.forLanguageTag(tag))
         val root = tag.substringBefore('-')
-        out.add(Locale(root))
+        out.add(Locale.forLanguageTag(root))
         runCatching {
             for (l in t.availableLanguages) {
                 if (l.language.equals(root, true)) out.add(l)

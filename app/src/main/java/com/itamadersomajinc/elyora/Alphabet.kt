@@ -24,7 +24,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Quiz
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -110,7 +110,7 @@ fun AlphabetScreen(store: Store, speaker: Speaker, modifier: Modifier = Modifier
                             onClick = { speak(store, speaker, a.letter + " for " + a.word, false) },
                             modifier = Modifier.size(38.dp)
                         ) {
-                            Icon(Icons.Filled.VolumeUp, contentDescription = "Hear", modifier = Modifier.size(18.dp))
+                            Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear", modifier = Modifier.size(18.dp))
                         }
                         if (learned) {
                             Spacer(Modifier.width(6.dp))
@@ -167,7 +167,7 @@ private fun AlphabetDetailDialog(
         confirmButton = {
             Row {
                 FilledIconButton(onClick = { speak(store, speaker, a.word, false) }) {
-                    Icon(Icons.Filled.VolumeUp, contentDescription = "Hear")
+                    Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear")
                 }
                 Spacer(Modifier.width(10.dp))
                 Button(onClick = {
@@ -244,7 +244,7 @@ private fun AlphabetQuiz(store: Store, speaker: Speaker, modifier: Modifier = Mo
                     )
                     Spacer(Modifier.height(8.dp))
                     FilledIconButton(onClick = { speak(store, speaker, target.letter + " for " + target.word, false) }) {
-                        Icon(Icons.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
+                        Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
                     }
                 }
             }

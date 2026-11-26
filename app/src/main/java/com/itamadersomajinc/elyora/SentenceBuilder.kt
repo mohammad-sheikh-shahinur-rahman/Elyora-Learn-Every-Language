@@ -31,7 +31,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledIconButton
@@ -528,7 +528,7 @@ fun SentenceBuilderScreen(
                         onClick = { speakIn(store, speaker, item.sentence, "en") },
                         modifier = Modifier.size(40.dp)
                     ) {
-                        Icon(Icons.Filled.VolumeUp, contentDescription = "Listen", modifier = Modifier.size(18.dp))
+                        Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Listen", modifier = Modifier.size(18.dp))
                     }
                 }
             }

@@ -17,7 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -257,7 +257,7 @@ private fun ReviewSession(
                     )
                     Spacer(Modifier.height(10.dp))
                     FilledIconButton(onClick = { speak(store, speaker, if (targetJa) w.kana else w.en, targetJa) }) {
-                        Icon(Icons.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
+                        Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
                     }
                 }
             }

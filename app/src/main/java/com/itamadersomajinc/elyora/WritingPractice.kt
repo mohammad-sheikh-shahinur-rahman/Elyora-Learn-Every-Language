@@ -24,7 +24,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Spellcheck
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -502,7 +502,7 @@ private fun WritingEditorView(
                                 onClick = { speakIn(store, speaker, prompt.modelAnswer, "en") },
                                 modifier = Modifier.size(36.dp)
                             ) {
-                                Icon(Icons.Filled.VolumeUp, contentDescription = "Listen to model answer", modifier = Modifier.size(18.dp))
+                                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Listen to model answer", modifier = Modifier.size(18.dp))
                             }
                         }
                         Spacer(Modifier.height(6.dp))

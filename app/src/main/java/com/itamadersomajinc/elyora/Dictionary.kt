@@ -21,7 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -203,7 +203,7 @@ fun DictionaryScreen(store: Store, speaker: Speaker, modifier: Modifier = Modifi
                         }
                     }
                     FilledIconButton(onClick = { speakIn(store, speaker, wod.head, "en") }, modifier = Modifier.size(40.dp)) {
-                        Icon(Icons.Filled.VolumeUp, contentDescription = "Hear word of the day", modifier = Modifier.size(18.dp))
+                        Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear word of the day", modifier = Modifier.size(18.dp))
                     }
                 }
             }
@@ -317,7 +317,7 @@ private fun EnResultCard(e: EnEntry, store: Store, speaker: Speaker) {
                 onClick = { speakIn(store, speaker, e.head, "en") },
                 modifier = Modifier.size(36.dp)
             ) {
-                Icon(Icons.Filled.VolumeUp, contentDescription = "Hear word", modifier = Modifier.size(16.dp))
+                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear word", modifier = Modifier.size(16.dp))
             }
         }
     }
@@ -365,7 +365,7 @@ private fun JaResultCard(j: JaEntry, store: Store, speaker: Speaker) {
                 onClick = { speakIn(store, speaker, j.kana.ifEmpty { j.kanji }, "ja") },
                 modifier = Modifier.size(36.dp)
             ) {
-                Icon(Icons.Filled.VolumeUp, contentDescription = "Hear Japanese word", modifier = Modifier.size(16.dp))
+                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear Japanese word", modifier = Modifier.size(16.dp))
             }
         }
     }
@@ -403,7 +403,7 @@ private fun AppResultCard(w: Word, store: Store, speaker: Speaker) {
                 },
                 modifier = Modifier.size(36.dp)
             ) {
-                Icon(Icons.Filled.VolumeUp, contentDescription = "Hear word", modifier = Modifier.size(16.dp))
+                Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear word", modifier = Modifier.size(16.dp))
             }
         }
     }

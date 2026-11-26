@@ -62,8 +62,8 @@ import androidx.compose.material.icons.filled.RecordVoiceOver
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.icons.filled.VolumeOff
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeOff
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -329,8 +329,8 @@ class AiGrammarViewModel(application: Application) : AndroidViewModel(applicatio
 fun AiAssistantScreen(
     store: Store,
     speaker: Speaker,
-    onOpenLanguageSwitcher: () -> Unit = {},
     modifier: Modifier = Modifier,
+    onOpenLanguageSwitcher: () -> Unit = {},
     onClose: (() -> Unit)? = null,
     startInVoiceChat: Boolean = false,
     vm: AiGrammarViewModel = viewModel()
@@ -872,7 +872,7 @@ fun AiAssistantScreen(
                                         modifier = Modifier.size(36.dp)
                                     ) {
                                         Icon(
-                                            if (isAiSpeaking) Icons.Filled.Stop else Icons.Filled.VolumeUp,
+                                            if (isAiSpeaking) Icons.Filled.Stop else Icons.AutoMirrored.Filled.VolumeUp,
                                             contentDescription = "Replay voice reply",
                                             tint = cs.primary
                                         )
@@ -988,7 +988,7 @@ fun AiAssistantScreen(
                                 .testTag("ai_voice_stop_or_close")
                         ) {
                             Icon(
-                                imageVector = if (isAiSpeaking || isListening) Icons.Filled.VolumeOff else Icons.Filled.Close,
+                                imageVector = if (isAiSpeaking || isListening) Icons.AutoMirrored.Filled.VolumeOff else Icons.Filled.Close,
                                 contentDescription = if (isAiSpeaking || isListening) "Mute & Stop" else "Close Voice Chat"
                             )
                         }
@@ -1270,7 +1270,7 @@ fun AiAssistantScreen(
                             Text(spec.summaryBn, style = MaterialTheme.typography.bodySmall, color = cs.primary)
                             Text("Benchmark: বাংলা $bnPct% · English $enPct% · 日本語 ${savedBench?.jaScore ?: spec.defaultJaScore}%", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold)
 
-                            if (isDownloading && dl != null) {
+                            if (dl != null && dl.isDownloading) {
                                 LinearProgressIndicator(
                                     progress = { dl.progressPct / 100f },
                                     modifier = Modifier
@@ -1391,7 +1391,7 @@ private fun ChatBubble(
                             },
                             modifier = Modifier.size(32.dp)
                         ) {
-                            Icon(Icons.Filled.VolumeUp, contentDescription = "Read aloud", modifier = Modifier.size(16.dp))
+                            Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Read aloud", modifier = Modifier.size(16.dp))
                         }
                     }
                 }

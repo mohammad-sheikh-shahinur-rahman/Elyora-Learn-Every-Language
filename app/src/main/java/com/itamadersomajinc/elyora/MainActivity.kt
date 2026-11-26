@@ -107,6 +107,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -825,7 +826,7 @@ private fun FloatingNavTabItem(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .offset(y = iconLift)
+                .offset { IntOffset(0, iconLift.roundToPx()) }
                 .graphicsLayer {
                     scaleX = iconScale
                     scaleY = iconScale

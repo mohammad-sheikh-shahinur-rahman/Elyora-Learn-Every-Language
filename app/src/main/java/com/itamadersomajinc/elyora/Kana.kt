@@ -26,7 +26,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Quiz
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -181,7 +181,7 @@ private fun KanaDetailDialog(
         confirmButton = {
             Row {
                 FilledIconButton(onClick = { speak(store, speaker, c.kana, true) }) {
-                    Icon(Icons.Filled.VolumeUp, contentDescription = "Hear · শুনুন")
+                    Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear · শুনুন")
                 }
                 Spacer(Modifier.width(10.dp))
                 Button(onClick = {
@@ -264,7 +264,7 @@ private fun KanaQuiz(store: Store, speaker: Speaker, chars: List<KanaChar>, modi
                         FilledIconButton(onClick = {
                             speak(store, speaker, questions[index].second[questions[index].third].kana, true)
                         }) {
-                            Icon(Icons.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
+                            Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
                         }
                     } else {
                         Text(

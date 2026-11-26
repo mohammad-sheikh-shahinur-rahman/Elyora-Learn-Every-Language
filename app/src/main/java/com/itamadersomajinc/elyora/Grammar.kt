@@ -20,7 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Button
@@ -404,7 +404,7 @@ private fun PatternDetail(p: Pattern, store: Store, speaker: Speaker, modifier: 
                             onClick = { speak(store, speaker, ex.ja, p.lang != "en") },
                             modifier = Modifier.size(38.dp)
                         ) {
-                            Icon(Icons.Filled.VolumeUp, contentDescription = "Hear", modifier = Modifier.size(18.dp))
+                            Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear", modifier = Modifier.size(18.dp))
                         }
                     }
                 }
@@ -644,7 +644,7 @@ private fun PatternQuiz(
             Spacer(Modifier.height(10.dp))
             if (revealed) {
                 FilledIconButton(onClick = { speak(store, speaker, q.answer, p.lang != "en") }) {
-                    Icon(Icons.Filled.VolumeUp, contentDescription = "Hear")
+                    Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Hear")
                 }
                 Spacer(Modifier.height(10.dp))
                 Button(
