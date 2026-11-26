@@ -59,6 +59,7 @@ class Speaker(context: Context) {
                         }
 
                         @Deprecated("Deprecated in Java")
+                        @Suppress("OVERRIDE_DEPRECATION")
                         override fun onError(utteranceId: String?) {
                             fallbackIfCurrent(utteranceId)
                         }
