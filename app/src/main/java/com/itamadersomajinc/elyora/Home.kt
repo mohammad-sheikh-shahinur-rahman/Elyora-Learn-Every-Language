@@ -36,9 +36,12 @@ import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Quiz
+import androidx.compose.material.icons.filled.RecordVoiceOver
+import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Spellcheck
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.ViewAgenda
 import androidx.compose.material.icons.filled.ViewModule
 import androidx.compose.material3.Button
@@ -174,8 +177,14 @@ fun HomeScreen(
 
     val studioModules = listOf(
         HubFeature(
-            "tense_mastery", "12 Tenses", "টেন্স মাস্টারি",
-            "${store.masteredTenses.size}/12 টি টেন্স",
+            "grammar_academy_studio", "Grammar 210+", "গ্রামার একাডেমি ও প্যাটার্ন",
+            "${store.completedGrammar.size}/$grammarTotal পাঠ · JLPT/CEFR",
+            Icons.Filled.Translate, accents.lavender,
+            onClick = { onNav(Screen.GRAMMAR) }
+        ),
+        HubFeature(
+            "tense_mastery", "13 Tenses", "টেন্স মাস্টারি (Be Going To)",
+            "${store.masteredTenses.size}/13 টি টেন্স ও উদাহরণ",
             Icons.Filled.Schedule, accents.mint,
             onClick = { onOpenTool(FeatureTool.TENSE_MASTERY) }
         ),
@@ -192,22 +201,64 @@ fun HomeScreen(
             onClick = { onOpenTool(FeatureTool.SENTENCE_BUILDER) }
         ),
         HubFeature(
+            "vocabulary", "Vocabulary 25k+", "অফলাইন ডিকশনারি",
+            "25k+ EN · 217k+ JA · 12 ভাষা",
+            Icons.Filled.School, accents.sky,
+            onClick = { onNav(Screen.DICTIONARY) }
+        ),
+        HubFeature(
+            "verb_master", "Verb Master", "ক্রিয়া মাস্টার (4,400+)",
+            "V1–V4 · Regular ও Irregular",
+            Icons.Filled.Spellcheck, accents.amber,
+            onClick = onOpenVerbs
+        ),
+        HubFeature(
+            "courses_oxford", "Oxford & Courses", "অক্সফোর্ড ৫০০০ · Genki · JFZ",
+            "A1–C2 · Kana · 5000 Kanji",
+            Icons.Filled.MenuBook, accents.sky,
+            onClick = { onNav(Screen.LEARN) }
+        ),
+        HubFeature(
+            "roleplay_chunks", "Roleplay & Chunks", "সংলাপ ও বাক্যাংশ",
+            "বাস্তব কথোপকথন ও ১০+ উদাহরণ",
+            Icons.Filled.Forum, accents.mint,
+            onClick = { onNav(Screen.LEARN) }
+        ),
+        HubFeature(
+            "speaking_studio", "Speaking", "বলার অনুশীলন",
+            "${store.speakingCompleted} বার উচ্চারণ",
+            Icons.Filled.Mic, accents.coral,
+            onClick = { onOpenTool(FeatureTool.SPEAKING) }
+        ),
+        HubFeature(
+            "listening_studio", "Listening", "শোনার অনুশীলন",
+            "${store.listeningCompleted} অডিও লেসন",
+            Icons.Filled.Headphones, accents.sky,
+            onClick = { onOpenTool(FeatureTool.LISTENING) }
+        ),
+        HubFeature(
             "writing", "Writing Studio", "লেখার অনুশীলন",
             "অনুচ্ছেদ · ইমেইল · রচনা",
             Icons.Filled.Create, accents.lavender,
             onClick = { onOpenTool(FeatureTool.WRITING) }
         ),
         HubFeature(
-            "vocabulary", "Vocabulary 25k+", "শব্দভান্ডার",
-            "SQLite FTS দ্রুত খোঁজ",
-            Icons.Filled.School, accents.sky,
-            onClick = { onNav(Screen.DICTIONARY) }
+            "daily_challenge_studio", "Daily Challenge", "দৈনিক পরীক্ষা",
+            if (doneToday) "আজ সম্পন্ন ✓" else "নতুন ১০ প্রশ্ন (+50 XP)",
+            Icons.Filled.AutoAwesome, accents.mint,
+            onClick = { onOpenTool(FeatureTool.DAILY_CHALLENGE) }
         ),
         HubFeature(
-            "verb_master", "Verb Master", "ক্রিয়া মাস্টার",
-            "Regular ও Irregular",
-            Icons.Filled.Spellcheck, accents.amber,
-            onClick = onOpenVerbs
+            "ai_voice_studio", "AI Voice & Chat", "অফলাইন এআই ভয়েস",
+            "Qwen2.5 / Qwen3 .gguf",
+            Icons.Filled.RecordVoiceOver, accents.lavender,
+            onClick = { onOpenTool(FeatureTool.AI_ASSISTANT) }
+        ),
+        HubFeature(
+            "flashcard_review_studio", "Flashcard Review", "SM-2 রিভিশন ও কার্ড",
+            "${store.dueCount()} টি কার্ড প্রস্তুত",
+            Icons.Filled.Replay, accents.sky,
+            onClick = { onNav(Screen.REVIEW) }
         )
     )
 
@@ -437,7 +488,7 @@ fun HomeScreen(
 
             Spacer(Modifier.height(16.dp))
             Text(
-                "Practice Studio · দক্ষতা অনুশীলন",
+                "Practice Studio · সব অনুশীলন ও টুলস (${studioModules.size})",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.ExtraBold
             )

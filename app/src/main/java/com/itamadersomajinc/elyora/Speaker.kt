@@ -14,6 +14,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 import java.util.Locale
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * Speaks text in any of the supported languages, prioritizing on-device offline TTS voices first.
@@ -36,6 +39,8 @@ class Speaker(context: Context) {
     private var lastUtteranceId: String? = null
     private var lastFallback: Pair<String, String>? = null
     private var completionCallback: (() -> Unit)? = null
+    private val _isSpeaking = MutableStateFlow(false)
+    val isSpeakingFlow: StateFlow<Boolean> = _isSpeaking.asStateFlow()
 
     init {
         try {
@@ -44,7 +49,9 @@ class Speaker(context: Context) {
                     ready = true
                     tts?.setSpeechRate(rate)
                     tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-                        override fun onStart(utteranceId: String?) {}
+                        override fun onStart(utteranceId: String?) {
+                            _isSpeaking.value = true
+                        }
                         override fun onDone(utteranceId: String?) {
                             if (utteranceId == lastUtteranceId) {
                                 notifyDoneOnMain()
@@ -76,6 +83,7 @@ class Speaker(context: Context) {
     }
 
     private fun notifyDoneOnMain() {
+        _isSpeaking.value = false
         val cb = completionCallback
         completionCallback = null
         if (cb != null) {
@@ -284,6 +292,7 @@ class Speaker(context: Context) {
         val id = "k$speakSeq"
         lastUtteranceId = id
         lastFallback = text to lang
+        _isSpeaking.value = true
         val result = try {
             t.speak(text, TextToSpeech.QUEUE_FLUSH, null, id)
         } catch (_: Exception) {
@@ -300,6 +309,7 @@ class Speaker(context: Context) {
     }
 
     fun stop() {
+        _isSpeaking.value = false
         completionCallback = null
         lastFallback = null
         tts?.stop()
@@ -307,6 +317,7 @@ class Speaker(context: Context) {
     }
 
     fun shutdown() {
+        _isSpeaking.value = false
         completionCallback = null
         lastFallback = null
         tts?.stop()

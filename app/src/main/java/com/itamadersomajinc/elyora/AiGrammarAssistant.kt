@@ -97,19 +97,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.math.PI
+import kotlin.math.sin
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -352,6 +359,8 @@ fun AiAssistantScreen(
     var autoHandsFree by remember { mutableStateOf(true) }
     var isListening by remember { mutableStateOf(false) }
     var isAiSpeaking by remember { mutableStateOf(false) }
+    val ttsSpeaking by speaker.isSpeakingFlow.collectAsStateWithLifecycle()
+    val orbSpeaking = isAiSpeaking || ttsSpeaking
     var micRmsNorm by remember { mutableFloatStateOf(0f) }
     var liveTranscript by remember { mutableStateOf("") }
     var voiceStatus by remember { mutableStateOf("Ready · কথা বলতে নিচের মাইক বাটনে ট্যাপ করুন") }
@@ -746,77 +755,23 @@ fun AiAssistantScreen(
 
                     Spacer(Modifier.height(14.dp))
 
-                    // Living Manus Concentric Orb + Reactive Acoustic Halo
+                    // Living Manus Concentric Orb + Animated Pearl Mascot
                     val primaryRingColor = when {
                         isListening -> accents.pinkRing
-                        isAiSpeaking -> accents.tealHighlight
+                        orbSpeaking -> accents.tealHighlight
                         isThinking -> cs.primary
                         else -> cs.primary.copy(alpha = 0.72f)
                     }
-                    Box(
-                        modifier = Modifier
-                            .size(216.dp)
-                            .clickable { toggleMic() },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Canvas(modifier = Modifier.fillMaxSize()) {
-                            val cx = size.width / 2f
-                            val cy = size.height / 2f
-                            val maxR = size.minDimension / 2f
-                            // Soft radial backdrop glow
-                            drawCircle(
-                                brush = Brush.radialGradient(
-                                    colors = listOf(
-                                        primaryRingColor.copy(alpha = 0.28f + smoothRms * 0.2f),
-                                        primaryRingColor.copy(alpha = 0.06f),
-                                        Color.Transparent
-                                    )
-                                ),
-                                radius = maxR
-                            )
-                            // Acoustic pulse rings reacting to voice / TTS
-                            val outerR = maxR * (0.74f + smoothRms * 0.22f * (0.7f + 0.3f * wavePhase))
-                            val midR = maxR * (0.62f + smoothRms * 0.14f)
-                            drawCircle(
-                                color = primaryRingColor.copy(alpha = 0.25f),
-                                radius = outerR,
-                                style = Stroke(width = 2.dp.toPx())
-                            )
-                            drawCircle(
-                                color = primaryRingColor.copy(alpha = 0.48f),
-                                radius = midR,
-                                style = Stroke(width = 2.5.dp.toPx())
-                            )
-                            if (isThinking || isAiSpeaking) {
-                                rotate(spinAngle) {
-                                    drawArc(
-                                        brush = Brush.sweepGradient(
-                                            listOf(
-                                                Color.Transparent,
-                                                primaryRingColor,
-                                                accents.lavender.badgeBg,
-                                                Color.Transparent
-                                            )
-                                        ),
-                                        startAngle = 0f,
-                                        sweepAngle = 220f,
-                                        useCenter = false,
-                                        style = Stroke(width = 4.dp.toPx(), cap = StrokeCap.Round)
-                                    )
-                                }
-                            }
-                        }
-
-                        Image(
-                            painter = painterResource(R.drawable.img_ai_orb),
-                            contentDescription = "Elyora Manus Offline Voice Orb",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(134.dp)
-                                .scale(orbPulse + smoothRms * 0.06f)
-                                .clip(CircleShape)
-                        )
-                    }
+                    AnimatedPearlMascotOrb(
+                        isSpeaking = orbSpeaking,
+                        isListening = isListening,
+                        isThinking = isThinking,
+                        micLevel = smoothRms,
+                        ringColor = primaryRingColor,
+                        totalSize = 224.dp,
+                        orbSize = 142.dp,
+                        onClick = { toggleMic() }
+                    )
 
                     // Live Equalizer Bars + State Pill
                     Surface(
@@ -830,7 +785,7 @@ fun AiAssistantScreen(
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             Icon(
-                                imageVector = if (isListening || isAiSpeaking) Icons.Filled.GraphicEq else Icons.Filled.RecordVoiceOver,
+                                imageVector = if (isListening || orbSpeaking) Icons.Filled.GraphicEq else Icons.Filled.RecordVoiceOver,
                                 contentDescription = null,
                                 tint = primaryRingColor,
                                 modifier = Modifier.size(16.dp)
@@ -839,7 +794,7 @@ fun AiAssistantScreen(
                                 when {
                                     isListening -> "Listening offline… শুনছি…"
                                     isThinking -> "Qwen GGUF thinking… ভাবছে…"
-                                    isAiSpeaking -> "Speaking · থামাতে মাইকে ট্যাপ করুন"
+                                    orbSpeaking -> "Speaking · থামাতে মাইকে ট্যাপ করুন"
                                     else -> voiceStatus
                                 },
                                 style = MaterialTheme.typography.labelMedium,
@@ -1084,32 +1039,18 @@ fun AiAssistantScreen(
                                     color = cs.primary,
                                     fontWeight = FontWeight.Bold
                                 )
-                                Spacer(Modifier.height(12.dp))
-                                Box(
-                                    modifier = Modifier
-                                        .size(124.dp)
-                                        .scale(orbPulse)
-                                        .clip(CircleShape)
-                                        .background(
-                                            Brush.radialGradient(
-                                                listOf(
-                                                    cs.primary.copy(alpha = 0.28f),
-                                                    cs.secondary.copy(alpha = 0.1f)
-                                                )
-                                            )
-                                        ),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Image(
-                                        painter = painterResource(R.drawable.img_ai_orb),
-                                        contentDescription = "Elyora Qwen Mascot",
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier
-                                            .size(110.dp)
-                                            .clip(CircleShape)
-                                    )
-                                }
-                                Spacer(Modifier.height(12.dp))
+                                Spacer(Modifier.height(8.dp))
+                                AnimatedPearlMascotOrb(
+                                    isSpeaking = orbSpeaking,
+                                    isListening = isListening,
+                                    isThinking = uiState is AiUiState.Loading || uiState is AiUiState.Streaming,
+                                    micLevel = if (orbSpeaking) 0.55f else 0.1f,
+                                    ringColor = if (orbSpeaking) accents.tealHighlight else cs.primary,
+                                    totalSize = 156.dp,
+                                    orbSize = 112.dp,
+                                    onClick = { voiceChatMode = true }
+                                )
+                                Spacer(Modifier.height(8.dp))
                                 Text(
                                     "Voice Chat, Grammar Correction, 12 Tenses & In-App .gguf Downloader.\nকোনো বিজ্ঞাপন বা সার্ভার নেই।",
                                     style = MaterialTheme.typography.bodyMedium,
@@ -1458,3 +1399,217 @@ private fun ChatBubble(
         }
     }
 }
+
+/**
+ * Animated pearl AI mascot orb: floats smoothly while idle, and comes alive when speaking
+ * with rhythmic talk bounce, playful tilt, natural eye blinks, radiating acoustic rings,
+ * and an animated voice-wave equalizer bar.
+ */
+@Composable
+fun AnimatedPearlMascotOrb(
+    isSpeaking: Boolean,
+    isListening: Boolean,
+    isThinking: Boolean,
+    micLevel: Float,
+    ringColor: Color,
+    totalSize: Dp = 220.dp,
+    orbSize: Dp = 140.dp,
+    onClick: () -> Unit = {}
+) {
+    val accents = LocalElyoraAccents.current
+    val inf = rememberInfiniteTransition(label = "pearlMascot")
+
+    // Gentle levitation float (faster + livelier when talking)
+    val floatWave by inf.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            tween(if (isSpeaking) 480 else 1900, easing = LinearEasing),
+            RepeatMode.Reverse
+        ),
+        label = "floatWave"
+    )
+    // Speech cadence bounce for talking squash & stretch + equalizer bars
+    val talkPulse by inf.animateFloat(
+        initialValue = 0f,
+        targetValue = (2f * PI).toFloat(),
+        animationSpec = infiniteRepeatable(tween(950, easing = LinearEasing)),
+        label = "talkPulse"
+    )
+    // Orbital shimmer ring rotation
+    val orbitAngle by inf.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(tween(3400, easing = LinearEasing)),
+        label = "orbitAngle"
+    )
+
+    // Natural eye-blink timer
+    var blinkAmount by remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(3100)
+            blinkAmount = 1f
+            delay(130)
+            blinkAmount = 0f
+        }
+    }
+    val smoothBlink by animateFloatAsState(
+        targetValue = blinkAmount,
+        animationSpec = tween(75),
+        label = "blink"
+    )
+
+    val activeEnergy = when {
+        isSpeaking -> (0.55f + 0.35f * ((sin(talkPulse.toDouble()).toFloat() + 1f) / 2f))
+        isListening -> micLevel.coerceAtLeast(0.28f)
+        isThinking -> 0.4f
+        else -> 0.08f
+    }
+
+    val bobOffsetDp = if (isSpeaking) {
+        -4f * sin(talkPulse.toDouble()).toFloat()
+    } else {
+        -5f * (floatWave - 0.5f) * 2f
+    }
+    val talkScaleX = if (isSpeaking) 1f - 0.03f * sin(talkPulse.toDouble()).toFloat() else 1f + 0.015f * floatWave
+    val talkScaleY = if (isSpeaking) 1f + 0.045f * sin(talkPulse.toDouble()).toFloat() else 1f + 0.015f * floatWave
+    val talkTilt = if (isSpeaking) 3.8f * sin((talkPulse * 0.5f).toDouble()).toFloat() else 1.2f * (floatWave - 0.5f) * 2f
+
+    Box(
+        modifier = Modifier
+            .size(totalSize)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        // Outer radiating acoustic aura & rotating ring
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val maxR = size.minDimension / 2f
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(
+                        ringColor.copy(alpha = 0.28f + activeEnergy * 0.22f),
+                        ringColor.copy(alpha = 0.06f),
+                        Color.Transparent
+                    )
+                ),
+                radius = maxR
+            )
+
+            // Concentric acoustic ripple rings
+            val outerR = maxR * (0.74f + activeEnergy * 0.20f)
+            val midR = maxR * (0.61f + activeEnergy * 0.12f)
+            drawCircle(
+                color = ringColor.copy(alpha = if (isSpeaking || isListening) 0.34f else 0.16f),
+                radius = outerR,
+                style = Stroke(width = 2.dp.toPx())
+            )
+            drawCircle(
+                color = ringColor.copy(alpha = if (isSpeaking || isListening) 0.58f else 0.25f),
+                radius = midR,
+                style = Stroke(width = 2.5.dp.toPx())
+            )
+
+            if (isSpeaking || isThinking || isListening) {
+                rotate(orbitAngle) {
+                    drawArc(
+                        brush = Brush.sweepGradient(
+                            listOf(
+                                Color.Transparent,
+                                ringColor,
+                                accents.pinkRing,
+                                Color.Transparent
+                            )
+                        ),
+                        startAngle = 0f,
+                        sweepAngle = 210f,
+                        useCenter = false,
+                        style = Stroke(width = 3.5.dp.toPx(), cap = StrokeCap.Round)
+                    )
+                }
+            }
+
+            // Soft ground shadow beneath the floating pearl sphere
+            val shadowW = (orbSize.toPx() * (0.62f - bobOffsetDp * 0.01f)).coerceAtLeast(24f)
+            val shadowH = 10.dp.toPx()
+            drawOval(
+                color = ringColor.copy(alpha = 0.18f),
+                topLeft = Offset((size.width - shadowW) / 2f, size.height * 0.85f),
+                size = Size(shadowW, shadowH)
+            )
+        }
+
+        // Floating & Talking Pearl Mascot Core + Blink + Voice Wave Overlay
+        Box(
+            modifier = Modifier
+                .size(orbSize)
+                .graphicsLayer {
+                    translationY = bobOffsetDp.dp.toPx()
+                    scaleX = talkScaleX
+                    scaleY = talkScaleY
+                    rotationZ = talkTilt
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(R.drawable.img_ai_orb),
+                contentDescription = "Elyora Animated Pearl Mascot",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape)
+            )
+
+            // Eyelid blink + animated voice waveform inside the orb visor when talking/listening
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val w = size.width
+                val h = size.height
+                // Subtle natural eyelid blink aligned with the mascot's two eyes
+                if (smoothBlink > 0.05f) {
+                    val eyeW = w * 0.085f
+                    val eyeH = h * 0.13f * smoothBlink
+                    val eyeY = h * 0.435f
+                    val leftX = w * 0.378f
+                    val rightX = w * 0.538f
+                    val lidColor = Color(0xFFD5D4F7)
+                    drawRoundRect(
+                        color = lidColor,
+                        topLeft = Offset(leftX, eyeY),
+                        size = Size(eyeW, eyeH),
+                        cornerRadius = CornerRadius(eyeW / 2f, eyeW / 2f)
+                    )
+                    drawRoundRect(
+                        color = lidColor,
+                        topLeft = Offset(rightX, eyeY),
+                        size = Size(eyeW, eyeH),
+                        cornerRadius = CornerRadius(eyeW / 2f, eyeW / 2f)
+                    )
+                }
+
+                // Glowing 5-bar voice wave across the lower visor lip while talking or listening
+                if (isSpeaking || isListening) {
+                    val barCount = 5
+                    val barW = (w * 0.032f).coerceAtLeast(2.5.dp.toPx())
+                    val gap = barW * 1.45f
+                    val totalW = barCount * barW + (barCount - 1) * gap
+                    val startX = (w - totalW) / 2f
+                    val centerY = h * 0.595f
+                    val barColor = if (isSpeaking) Color(0xFF00D2D3) else accents.pinkRing
+                    for (i in 0 until barCount) {
+                        val phase = talkPulse + i * 1.05f
+                        val wave = (sin(phase.toDouble()).toFloat() + 1f) / 2f
+                        val barH = (h * 0.025f) + (h * 0.075f) * wave * activeEnergy
+                        val x = startX + i * (barW + gap)
+                        drawRoundRect(
+                            color = barColor.copy(alpha = 0.92f),
+                            topLeft = Offset(x, centerY - barH / 2f),
+                            size = Size(barW, barH),
+                            cornerRadius = CornerRadius(barW / 2f, barW / 2f)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+

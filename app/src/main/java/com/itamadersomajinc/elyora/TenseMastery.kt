@@ -265,6 +265,21 @@ object TenseMasteryData {
                 TenseDrillQ("At 6 PM, we ___ for over four hours straight.", listOf("will have been studying", "will study", "studied", "are studying"), "will have been studying", "Focuses on ongoing duration up to a future clock time.", "ভবিষ্যতের নির্দিষ্ট সময় পর্যন্ত একটানা চলমান কাজের ব্যাপ্তি বোঝায়।", "Fill Verb · শূন্যস্থান"),
                 TenseDrillQ("Identify the tense: 'By next year, they will have been living abroad for a decade.'", listOf("Future Perfect", "Future Continuous", "Future Perfect Continuous", "Present Perfect Continuous"), "Future Perfect Continuous", "will + have + been + V-ing = Future Perfect Continuous.", "will + have + been + V-ing হলো Future Perfect Continuous।", "Identify · শনাক্তকরণ")
             )
+        ),
+        TenseMeta(
+            id = "t13", name = "Future Plans (Be Going To)", nameBn = "পরিকল্পিত ভবিষ্যৎ (Be Going To)", timeGroup = "Future", timeGroupBn = "ভবিষ্যৎ", aspect = "Planned Future", level = "A1",
+            affirmative = "Subject + am/is/are + going to + V1",
+            negative = "Subject + am/is/are + not + going to + V1",
+            question = "Am/Is/Are + Subject + going to + V1?",
+            signalWords = listOf("tomorrow", "next weekend", "soon", "I've decided", "look at those clouds!"),
+            timelineNote = "Pre-decided plans & intentions, plus predictions with present evidence",
+            timelineNoteBn = "আগে থেকে ঠিক করা ভবিষ্যৎ পরিকল্পনা বা বর্তমান প্রমাণ দেখে অনুমান বোঝাতে ব্যবহৃত হয়",
+            tipBn = "টিপস: তাৎক্ষণিক সিদ্ধান্তে 'will', আর আগে থেকে ঠিক করা পরিকল্পনায় 'going to' বসে।",
+            drillQuestions = listOf(
+                TenseDrillQ("Look at those dark clouds! It ___ rain soon.", listOf("will", "is going to", "going to", "rained"), "is going to", "Evidence visible right now ('dark clouds') -> use 'is going to'.", "এখনই প্রমাণ দেখা যাচ্ছে ('কালো মেঘ') -> 'is going to' হবে।", "Evidence · প্রমাণ"),
+                TenseDrillQ("We have already bought tickets. We ___ visit Cox's Bazar next week.", listOf("are going to", "going to", "will have", "were"), "are going to", "A pre-decided plan with tickets already bought uses 'am/is/are going to'.", "আগে থেকেই টিকিট কেনা ও পরিকল্পনা করা থাকলে 'are going to' বসে।", "Plan · পরিকল্পনা"),
+                TenseDrillQ("Choose the correct negative with going to:", listOf("They not going to come.", "They aren't going to come.", "They don't going to come.", "They isn't going to come."), "They aren't going to come.", "Negative is am/is/are + not + going to + base verb.", "না-বোধক রূপ: Subject + am/is/are + not + going to + V1।", "Transform · রূপান্তর")
+            )
         )
     )
 }
@@ -282,8 +297,8 @@ fun TenseMasteryScreen(
 
     if (mixedDrill) {
         TenseDrillView(
-            title = "12 Tenses Mixed Practice · ১২ টেন্স অনুশীলন",
-            questions = remember { TenseMasteryData.all.flatMap { it.drillQuestions }.shuffled().take(12) },
+            title = "13 Tenses Mixed Practice · ১৩ টেন্স অনুশীলন",
+            questions = remember { TenseMasteryData.all.flatMap { it.drillQuestions }.shuffled().take(13) },
             tenseIdToMaster = null,
             store = store,
             speaker = speaker,
@@ -331,7 +346,7 @@ fun TenseMasteryScreen(
             Column(Modifier.weight(1f)) {
                 Text("Tense Mastery · টেন্স মাস্টারি", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold)
                 Text(
-                    "All 12 Tenses · ১২টি টেন্সের গঠন, বাংলা ব্যাখ্যা ও অনুশীলন",
+                    "All 13 Tenses (incl. Be Going To) · ১৩টি টেন্সের গঠন, বাংলা ব্যাখ্যা ও অনুশীলন",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -345,20 +360,21 @@ fun TenseMasteryScreen(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
         ) {
             Column(Modifier.padding(16.dp)) {
+                val totalTenses = TenseMasteryData.all.size.coerceAtLeast(13)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Filled.Schedule, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        "$masteredCount / 12 Mastered · ১২টির মধ্যে ${masteredCount}টি সম্পন্ন",
+                        "$masteredCount / $totalTenses Mastered · ${totalTenses}টির মধ্যে ${masteredCount}টি সম্পন্ন",
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f)
                     )
-                    Text("${(masteredCount * 100) / 12}%", fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
+                    Text("${(masteredCount * 100) / totalTenses}%", fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
                 }
                 Spacer(Modifier.height(10.dp))
                 LinearProgressIndicator(
-                    progress = { masteredCount / 12f },
+                    progress = { masteredCount / totalTenses.toFloat() },
                     modifier = Modifier.fillMaxWidth().height(8.dp),
                     strokeCap = StrokeCap.Round,
                     trackColor = MaterialTheme.colorScheme.surface
@@ -371,7 +387,7 @@ fun TenseMasteryScreen(
                 ) {
                     Icon(Icons.Filled.Quiz, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Practice All 12 Tenses · ১২টি টেন্স অনুশীলন করুন")
+                    Text("Practice All 13 Tenses · ১৩টি টেন্স অনুশীলন করুন")
                 }
             }
         }

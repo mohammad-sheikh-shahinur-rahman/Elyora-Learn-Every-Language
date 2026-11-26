@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -160,15 +162,24 @@ fun LearnScreen(
                 }
             }
         }
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(12.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            AssistChip(onClick = { showAlphabet = true }, label = { Text("🔤 Alphabet A–Z") })
+            AssistChip(onClick = { showKana = true }, label = { Text("🌸 Kana (46×2)") })
+            AssistChip(onClick = { showKanji = true }, label = { Text("🗾 Kanji · কাঞ্জি") })
+        }
+        Spacer(Modifier.height(12.dp))
 
         if (learningJa) {
             KanaModuleCard(store, onClick = { showKana = true })
             Spacer(Modifier.height(12.dp))
             KanjiModuleCard(store, onClick = { showKanji = true })
-        }
-        if (learningEn) {
-            Spacer(Modifier.height(12.dp))
+        } else {
             AlphabetModuleCard(store, onClick = { showAlphabet = true })
         }
         Spacer(Modifier.height(24.dp))
