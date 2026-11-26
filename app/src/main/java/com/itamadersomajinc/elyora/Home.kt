@@ -27,6 +27,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
@@ -37,7 +38,6 @@ import androidx.compose.material.icons.filled.Forum
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Headphones
 import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Quiz
@@ -135,7 +135,7 @@ fun HomeScreen(
             titleBn = "পড়া ও ব্যাকরণ",
             percent = readingPct,
             subtitle = "${store.completedGrammar.size}/$grammarTotal লেসন",
-            icon = Icons.Filled.MenuBook,
+            icon = Icons.AutoMirrored.Filled.MenuBook,
             arcColor = cs.primary,
             iconBgStart = cs.primary,
             iconBgEnd = accents.ctaStart,
@@ -220,7 +220,7 @@ fun HomeScreen(
         HubFeature(
             "courses_oxford", "Oxford & Courses", "অক্সফোর্ড ৫০০০ · Genki · JFZ",
             "A1–C2 · Kana · 5000 Kanji",
-            Icons.Filled.MenuBook, accents.sky,
+            Icons.AutoMirrored.Filled.MenuBook, accents.sky,
             onClick = { onNav(Screen.LEARN) }
         ),
         HubFeature(
