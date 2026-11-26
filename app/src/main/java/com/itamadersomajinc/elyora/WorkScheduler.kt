@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -15,15 +16,14 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
+import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.concurrent.TimeUnit
 
 class DailyStudyReminderWorker(
@@ -79,61 +79,98 @@ class QwenModelDownloadWorker(
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
-        val urlStr = inputData.getString(KEY_URL) ?: return Result.failure()
-        val filename = inputData.getString(KEY_FILENAME) ?: return Result.failure()
-        val modelId = inputData.getString(KEY_MODEL_ID) ?: ""
+        val modelId = inputData.getString(KEY_MODEL_ID) ?: return Result.failure()
+        val spec = QwenModelCatalog.byId(modelId)
+        val notifId = 2000 + (spec.id.hashCode() and 0x0FFF)
 
-        val modelsDir = File(applicationContext.filesDir, "models").apply { mkdirs() }
-        val tmpFile = File(modelsDir, "$filename.part")
-        val targetFile = File(modelsDir, filename)
+        ensureChannel()
+        runCatching { setForeground(createForegroundInfo(notifId, spec, 0, "Connecting…")) }
 
-        return try {
-            val conn = (URL(urlStr).openConnection() as HttpURLConnection).apply {
-                connectTimeout = 15_000
-                readTimeout = 30_000
-                instanceFollowRedirects = true
+        var lastNotifUpdateMs = 0L
+        val bridge = ElyoraAppProvider.get(applicationContext).llamaBridge
+        val ok = bridge.runDownloadSuspend(spec) { pct, statusText ->
+            setProgressAsync(workDataOf(KEY_PROGRESS to pct, KEY_MODEL_ID to modelId))
+            val now = System.currentTimeMillis()
+            if (now - lastNotifUpdateMs >= 1000L) {
+                lastNotifUpdateMs = now
+                runCatching { setForeground(createForegroundInfo(notifId, spec, pct, statusText)) }
             }
-            val total = conn.contentLengthLong.coerceAtLeast(1L)
-            if (conn.responseCode !in 200..299) {
-                return Result.failure(workDataOf(KEY_ERROR to "HTTP ${conn.responseCode}"))
-            }
-            conn.inputStream.use { input ->
-                tmpFile.outputStream().use { out ->
-                    val buf = ByteArray(16 * 1024)
-                    var read = 0L
-                    var lastPct = -1
-                    while (true) {
-                        if (isStopped) {
-                            tmpFile.delete()
-                            return Result.failure()
-                        }
-                        val n = input.read(buf)
-                        if (n <= 0) break
-                        out.write(buf, 0, n)
-                        read += n
-                        val pct = ((read * 100L) / total).toInt().coerceIn(0, 100)
-                        if (pct != lastPct) {
-                            lastPct = pct
-                            setProgress(workDataOf(KEY_PROGRESS to pct, KEY_MODEL_ID to modelId))
-                        }
-                    }
-                }
-            }
-            if (tmpFile.length() > 1024L) {
-                if (targetFile.exists()) targetFile.delete()
-                tmpFile.renameTo(targetFile)
-                Result.success(workDataOf(KEY_MODEL_ID to modelId, KEY_PROGRESS to 100))
-            } else {
-                tmpFile.delete()
-                Result.failure(workDataOf(KEY_ERROR to "Downloaded file is incomplete"))
-            }
-        } catch (e: Exception) {
-            tmpFile.delete()
-            Result.failure(workDataOf(KEY_ERROR to (e.localizedMessage ?: "Download failed")))
+        }
+        return if (ok) {
+            postCompletionNotification(notifId + 1, spec)
+            Result.success(workDataOf(KEY_MODEL_ID to modelId, KEY_PROGRESS to 100))
+        } else {
+            Result.failure(workDataOf(KEY_MODEL_ID to modelId))
         }
     }
 
+    private fun ensureChannel() {
+        val nm = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+            ?: return
+        val ch = NotificationChannel(
+            CHANNEL_ID,
+            "AI Model Downloads · মডেল ডাউনলোড",
+            NotificationManager.IMPORTANCE_LOW
+        )
+        nm.createNotificationChannel(ch)
+    }
+
+    private fun createForegroundInfo(
+        notifId: Int,
+        spec: QwenModelSpec,
+        pct: Int,
+        statusText: String
+    ): ForegroundInfo {
+        val cancelIntent = WorkManager.getInstance(applicationContext).createCancelPendingIntent(id)
+        val openIntent = Intent(applicationContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val pi = PendingIntent.getActivity(
+            applicationContext,
+            notifId,
+            openIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val notif = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle("Downloading ${spec.displayName} (${spec.quant})")
+            .setContentText(statusText)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setProgress(100, pct.coerceIn(0, 100), pct == 0)
+            .setContentIntent(pi)
+            .addAction(android.R.drawable.ic_media_pause, "Pause", cancelIntent)
+            .build()
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(notifId, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        } else {
+            ForegroundInfo(notifId, notif)
+        }
+    }
+
+    private fun postCompletionNotification(notifId: Int, spec: QwenModelSpec) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        val nm = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+            ?: return
+        val notif = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle("${spec.displayName} Ready · ডাউনলোড সম্পন্ন")
+            .setContentText("Offline AI Tutor is ready to use without internet.")
+            .setAutoCancel(true)
+            .build()
+        runCatching { nm.notify(notifId, notif) }
+    }
+
     companion object {
+        const val CHANNEL_ID = "elyora_model_downloads"
         const val KEY_URL = "url"
         const val KEY_FILENAME = "filename"
         const val KEY_MODEL_ID = "model_id"
@@ -170,6 +207,7 @@ object WorkScheduler {
         )
         val req = OneTimeWorkRequestBuilder<QwenModelDownloadWorker>()
             .setInputData(input)
+            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
             .setConstraints(
                 Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -183,5 +221,10 @@ object WorkScheduler {
             req
         )
         return req.id
+    }
+
+    fun cancelQwenDownload(context: Context, modelId: String) {
+        WorkManager.getInstance(context.applicationContext)
+            .cancelUniqueWork("qwen_dl_$modelId")
     }
 }

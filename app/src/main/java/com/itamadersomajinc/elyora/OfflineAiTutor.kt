@@ -207,180 +207,205 @@ class LocalLlamaBridge(
 
     fun startInAppDownload(spec: QwenModelSpec) {
         if (activeJobs[spec.id]?.isActive == true) return
-        val job = dlScope.launch {
-            val partFile = File(modelsDir, "${spec.ggufFilename}.part")
-            val targetFile = File(modelsDir, spec.ggufFilename)
-            val existingBytes = if (partFile.exists()) partFile.length() else 0L
-            val expectedTotalFallback = spec.sizeMb.toLong() * 1024L * 1024L
-
-            updateDownloadState(
-                GgufDownloadState(
-                    modelId = spec.id,
-                    isDownloading = true,
-                    downloadedBytes = existingBytes,
-                    totalBytes = expectedTotalFallback,
-                    progressPct = if (expectedTotalFallback > 0) ((existingBytes * 100L) / expectedTotalFallback).toInt().coerceIn(0, 99) else 0,
-                    statusText = if (existingBytes > 0L) "Resuming ${spec.displayName}.gguf…" else "Connecting to HuggingFace…"
-                )
+        val partFile = File(modelsDir, "${spec.ggufFilename}.part")
+        val existingBytes = if (partFile.exists()) partFile.length() else 0L
+        val expectedTotalFallback = spec.sizeMb.toLong() * 1024L * 1024L
+        updateDownloadState(
+            GgufDownloadState(
+                modelId = spec.id,
+                isDownloading = true,
+                downloadedBytes = existingBytes,
+                totalBytes = expectedTotalFallback,
+                progressPct = if (expectedTotalFallback > 0) ((existingBytes * 100L) / expectedTotalFallback).toInt().coerceIn(0, 99) else 0,
+                statusText = if (existingBytes > 0L) "Resuming ${spec.displayName}.gguf…" else "Starting background download…"
             )
+        )
+        WorkScheduler.enqueueQwenDownload(context, spec)
+    }
 
-            var conn: HttpURLConnection? = null
-            try {
-                var currentUrl = spec.huggingFaceUrl
-                var redirects = 0
-                var resumeOffset = existingBytes
-                var responseCode = 0
-                while (redirects < 6) {
-                    conn?.disconnect()
-                    val c = (URL(currentUrl).openConnection() as HttpURLConnection).apply {
-                        connectTimeout = 20_000
-                        readTimeout = 30_000
-                        instanceFollowRedirects = false
-                        setRequestProperty("User-Agent", "Elyora-Android/2.0 (Offline-Qwen-GGUF)")
-                        if (resumeOffset > 0L) {
-                            setRequestProperty("Range", "bytes=$resumeOffset-")
-                        }
+    suspend fun runDownloadSuspend(
+        spec: QwenModelSpec,
+        onProgress: suspend (pct: Int, statusText: String) -> Unit = { _, _ -> }
+    ): Boolean = withContext(Dispatchers.IO) {
+        val partFile = File(modelsDir, "${spec.ggufFilename}.part")
+        val targetFile = File(modelsDir, spec.ggufFilename)
+        val existingBytes = if (partFile.exists()) partFile.length() else 0L
+        val expectedTotalFallback = spec.sizeMb.toLong() * 1024L * 1024L
+
+        val initialStatus = if (existingBytes > 0L) "Resuming ${spec.displayName}.gguf…" else "Connecting to HuggingFace…"
+        val initialPct = if (expectedTotalFallback > 0) ((existingBytes * 100L) / expectedTotalFallback).toInt().coerceIn(0, 99) else 0
+        updateDownloadState(
+            GgufDownloadState(
+                modelId = spec.id,
+                isDownloading = true,
+                downloadedBytes = existingBytes,
+                totalBytes = expectedTotalFallback,
+                progressPct = initialPct,
+                statusText = initialStatus
+            )
+        )
+        onProgress(initialPct, initialStatus)
+
+        var conn: HttpURLConnection? = null
+        try {
+            var currentUrl = spec.huggingFaceUrl
+            var redirects = 0
+            var resumeOffset = existingBytes
+            var responseCode = 0
+            while (redirects < 6) {
+                conn?.disconnect()
+                val c = (URL(currentUrl).openConnection() as HttpURLConnection).apply {
+                    connectTimeout = 20_000
+                    readTimeout = 30_000
+                    instanceFollowRedirects = false
+                    setRequestProperty("User-Agent", "Elyora-Android/2.0 (Offline-Qwen-GGUF)")
+                    if (resumeOffset > 0L) {
+                        setRequestProperty("Range", "bytes=$resumeOffset-")
                     }
-                    responseCode = c.responseCode
-                    if (responseCode in 300..399) {
-                        val loc = c.getHeaderField("Location")
-                        c.disconnect()
-                        if (loc.isNullOrBlank()) error("Redirect without location")
-                        currentUrl = URL(URL(currentUrl), loc).toString()
-                        redirects++
-                        conn = null
-                    } else {
-                        conn = c
-                        break
-                    }
                 }
-
-                val activeConn = conn ?: error("Unable to connect to download host")
-                if (responseCode == 416) {
-                    // Range already satisfied — verify file
-                    resumeOffset = 0L
-                } else if (responseCode !in 200..299) {
-                    error("Server returned HTTP $responseCode")
+                responseCode = c.responseCode
+                if (responseCode in 300..399) {
+                    val loc = c.getHeaderField("Location")
+                    c.disconnect()
+                    if (loc.isNullOrBlank()) error("Redirect without location")
+                    currentUrl = URL(URL(currentUrl), loc).toString()
+                    redirects++
+                    conn = null
+                } else {
+                    conn = c
+                    break
                 }
+            }
 
-                val supportsResume = responseCode == HttpURLConnection.HTTP_PARTIAL && resumeOffset > 0L
-                if (!supportsResume && partFile.exists()) {
-                    partFile.delete()
-                    resumeOffset = 0L
-                }
+            val activeConn = conn ?: error("Unable to connect to download host")
+            if (responseCode == 416) {
+                resumeOffset = 0L
+            } else if (responseCode !in 200..299) {
+                error("Server returned HTTP $responseCode")
+            }
 
-                val contentLen = activeConn.contentLengthLong
-                val totalBytes = when {
-                    supportsResume && contentLen > 0L -> resumeOffset + contentLen
-                    contentLen > 0L -> contentLen
-                    else -> expectedTotalFallback
-                }
+            val supportsResume = responseCode == HttpURLConnection.HTTP_PARTIAL && resumeOffset > 0L
+            if (!supportsResume && partFile.exists()) {
+                partFile.delete()
+                resumeOffset = 0L
+            }
 
-                activeConn.inputStream.use { input ->
-                    FileOutputStream(partFile, supportsResume).use { out ->
-                        val buf = ByteArray(32 * 1024)
-                        var readTotal = resumeOffset
-                        var windowBytes = 0L
-                        var windowStartNs = System.nanoTime()
-                        var lastUiUpdateMs = 0L
+            val contentLen = activeConn.contentLengthLong
+            val totalBytes = when {
+                supportsResume && contentLen > 0L -> resumeOffset + contentLen
+                contentLen > 0L -> contentLen
+                else -> expectedTotalFallback
+            }
 
-                        while (isActive) {
-                            val n = input.read(buf)
-                            if (n <= 0) break
-                            out.write(buf, 0, n)
-                            readTotal += n
-                            windowBytes += n
+            activeConn.inputStream.use { input ->
+                FileOutputStream(partFile, supportsResume).use { out ->
+                    val buf = ByteArray(32 * 1024)
+                    var readTotal = resumeOffset
+                    var windowBytes = 0L
+                    var windowStartNs = System.nanoTime()
+                    var lastUiUpdateMs = 0L
 
-                            val nowMs = System.currentTimeMillis()
-                            if (nowMs - lastUiUpdateMs >= 250L) {
-                                val elapsedSec = ((System.nanoTime() - windowStartNs) / 1_000_000_000.0).coerceAtLeast(0.1)
-                                val speedMb = ((windowBytes / (1024.0 * 1024.0)) / elapsedSec).toFloat()
-                                val pct = if (totalBytes > 0L) ((readTotal * 100L) / totalBytes).toInt().coerceIn(0, 99) else 0
-                                val dlMb = readTotal / (1024L * 1024L)
-                                val totMb = totalBytes / (1024L * 1024L)
-                                updateDownloadState(
-                                    GgufDownloadState(
-                                        modelId = spec.id,
-                                        isDownloading = true,
-                                        downloadedBytes = readTotal,
-                                        totalBytes = totalBytes,
-                                        progressPct = pct,
-                                        speedMbPerSec = speedMb,
-                                        statusText = "$dlMb / $totMb MB ($pct%) · ${String.format(Locale.US, "%.1f", speedMb)} MB/s"
-                                    )
+                    while (isActive) {
+                        val n = input.read(buf)
+                        if (n <= 0) break
+                        out.write(buf, 0, n)
+                        readTotal += n
+                        windowBytes += n
+
+                        val nowMs = System.currentTimeMillis()
+                        if (nowMs - lastUiUpdateMs >= 400L) {
+                            val elapsedSec = ((System.nanoTime() - windowStartNs) / 1_000_000_000.0).coerceAtLeast(0.1)
+                            val speedMb = ((windowBytes / (1024.0 * 1024.0)) / elapsedSec).toFloat()
+                            val pct = if (totalBytes > 0L) ((readTotal * 100L) / totalBytes).toInt().coerceIn(0, 99) else 0
+                            val dlMb = readTotal / (1024L * 1024L)
+                            val totMb = totalBytes / (1024L * 1024L)
+                            val status = "$dlMb / $totMb MB ($pct%) · ${String.format(Locale.US, "%.1f", speedMb)} MB/s"
+                            updateDownloadState(
+                                GgufDownloadState(
+                                    modelId = spec.id,
+                                    isDownloading = true,
+                                    downloadedBytes = readTotal,
+                                    totalBytes = totalBytes,
+                                    progressPct = pct,
+                                    speedMbPerSec = speedMb,
+                                    statusText = status
                                 )
-                                lastUiUpdateMs = nowMs
-                                if (elapsedSec >= 2.0) {
-                                    windowBytes = 0L
-                                    windowStartNs = System.nanoTime()
-                                }
+                            )
+                            onProgress(pct, status)
+                            lastUiUpdateMs = nowMs
+                            if (elapsedSec >= 2.0) {
+                                windowBytes = 0L
+                                windowStartNs = System.nanoTime()
                             }
                         }
                     }
                 }
-
-                if (!isActive) throw CancellationException("Paused")
-
-                if (partFile.length() < 1024L) {
-                    error("Downloaded file incomplete (${partFile.length()} bytes)")
-                }
-                val magicHead = ByteArray(4)
-                partFile.inputStream().use { it.read(magicHead) }
-                if (String(magicHead, Charsets.US_ASCII) != "GGUF") {
-                    partFile.delete()
-                    error("Downloaded file is not a valid GGUF binary")
-                }
-
-                if (targetFile.exists()) targetFile.delete()
-                if (!partFile.renameTo(targetFile)) {
-                    error("Could not finalize ${spec.ggufFilename}")
-                }
-                repository.prefs.setSelectedQwenModel(spec.id)
-                val info = inspectModelFile(spec)
-                updateDownloadState(
-                    GgufDownloadState(
-                        modelId = spec.id,
-                        isDownloading = false,
-                        downloadedBytes = targetFile.length(),
-                        totalBytes = targetFile.length(),
-                        progressPct = 100,
-                        statusText = info.statusText
-                    )
-                )
-            } catch (_: CancellationException) {
-                val partialMb = if (partFile.exists()) partFile.length() / (1024L * 1024L) else 0L
-                updateDownloadState(
-                    GgufDownloadState(
-                        modelId = spec.id,
-                        isDownloading = false,
-                        downloadedBytes = partFile.length(),
-                        totalBytes = expectedTotalFallback,
-                        progressPct = ((partFile.length() * 100L) / expectedTotalFallback.coerceAtLeast(1L)).toInt().coerceIn(0, 99),
-                        statusText = "Paused at ${partialMb} MB · বিরতি দেওয়া হয়েছে"
-                    )
-                )
-            } catch (e: Exception) {
-                updateDownloadState(
-                    GgufDownloadState(
-                        modelId = spec.id,
-                        isDownloading = false,
-                        downloadedBytes = if (partFile.exists()) partFile.length() else 0L,
-                        totalBytes = expectedTotalFallback,
-                        error = e.localizedMessage ?: "Download failed · ডাউনলোড ব্যর্থ হয়েছে",
-                        statusText = "Failed: ${e.localizedMessage ?: "Network error"}"
-                    )
-                )
-            } finally {
-                runCatching { conn?.disconnect() }
-                activeJobs.remove(spec.id)
             }
+
+            if (!isActive) throw CancellationException("Paused")
+
+            if (partFile.length() < 1024L) {
+                error("Downloaded file incomplete (${partFile.length()} bytes)")
+            }
+            val magicHead = ByteArray(4)
+            partFile.inputStream().use { it.read(magicHead) }
+            if (String(magicHead, Charsets.US_ASCII) != "GGUF") {
+                partFile.delete()
+                error("Downloaded file is not a valid GGUF binary")
+            }
+
+            if (targetFile.exists()) targetFile.delete()
+            if (!partFile.renameTo(targetFile)) {
+                error("Could not finalize ${spec.ggufFilename}")
+            }
+            repository.prefs.setSelectedQwenModel(spec.id)
+            val info = inspectModelFile(spec)
+            updateDownloadState(
+                GgufDownloadState(
+                    modelId = spec.id,
+                    isDownloading = false,
+                    downloadedBytes = targetFile.length(),
+                    totalBytes = targetFile.length(),
+                    progressPct = 100,
+                    statusText = info.statusText
+                )
+            )
+            true
+        } catch (_: CancellationException) {
+            val partialMb = if (partFile.exists()) partFile.length() / (1024L * 1024L) else 0L
+            updateDownloadState(
+                GgufDownloadState(
+                    modelId = spec.id,
+                    isDownloading = false,
+                    downloadedBytes = partFile.length(),
+                    totalBytes = expectedTotalFallback,
+                    progressPct = ((partFile.length() * 100L) / expectedTotalFallback.coerceAtLeast(1L)).toInt().coerceIn(0, 99),
+                    statusText = "Paused at ${partialMb} MB · বিরতি দেওয়া হয়েছে"
+                )
+            )
+            false
+        } catch (e: Exception) {
+            updateDownloadState(
+                GgufDownloadState(
+                    modelId = spec.id,
+                    isDownloading = false,
+                    downloadedBytes = if (partFile.exists()) partFile.length() else 0L,
+                    totalBytes = expectedTotalFallback,
+                    error = e.localizedMessage ?: "Download failed · ডাউনলোড ব্যর্থ হয়েছে",
+                    statusText = "Failed: ${e.localizedMessage ?: "Network error"}"
+                )
+            )
+            false
+        } finally {
+            runCatching { conn?.disconnect() }
+            activeJobs.remove(spec.id)
         }
-        activeJobs[spec.id] = job
     }
 
     fun pauseOrCancelDownload(modelId: String) {
         activeJobs[modelId]?.cancel()
         activeJobs.remove(modelId)
+        WorkScheduler.cancelQwenDownload(context, modelId)
     }
 
     private fun updateDownloadState(state: GgufDownloadState) {

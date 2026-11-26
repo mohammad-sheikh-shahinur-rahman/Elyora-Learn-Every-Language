@@ -1,83 +1,147 @@
+<div align="center">
+
+<img src="public/assets/aistudio/elyora-app-icon-512-with-tagline_946d9b04.png" alt="Elyora — Learn Every Language" width="160" />
+
 # Elyora — Learn Every Language
 
-**Elyora — ভাষা শিখুন, বিশ্বকে জানুন** · *Learn every language — explained in yours.*
+**ভাষা শিখুন, বিশ্বকে জানুন · *Learn every language — explained in yours.***
 
-Elyora (`com.itamadersomajinc.elyora`) is a free, ad-free, offline-first Android language-learning app built with **Kotlin & Jetpack Compose (Material 3)**. Pick your native language (12 supported, including **বাংলা** and **English**) and the language you want to learn (also 12) at any time—the entire curriculum, dictionary, grammar explanations, voice tutor, and practice studio work completely offline with zero mandatory backend or sign-in.
+[![Latest Release](https://img.shields.io/github/v/release/mohammad-sheikh-shahinur-rahman/Elyora-Learn-Every-Language?style=for-the-badge&color=6750A4&label=Release)](https://github.com/mohammad-sheikh-shahinur-rahman/Elyora-Learn-Every-Language/releases/latest)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/mohammad-sheikh-shahinur-rahman/Elyora-Learn-Every-Language/build.yml?style=for-the-badge&label=CI%20Build)](https://github.com/mohammad-sheikh-shahinur-rahman/Elyora-Learn-Every-Language/actions)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.2.21-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
+[![Android](https://img.shields.io/badge/Android-8.0%2B%20(API%2026%E2%86%9236)-3DDC84?style=for-the-badge&logo=android&logoColor=black)](https://developer.android.com)
+[![License](https://img.shields.io/badge/License-MIT-teal?style=for-the-badge)](LICENSE)
 
----
+[**Download APK (v2.0.0)**](https://github.com/mohammad-sheikh-shahinur-rahman/Elyora-Learn-Every-Language/releases/latest) · [**Explore Features**](#-learning-modules--practice-studio) · [**Offline AI Tutor**](#-on-device-qwen-ai--background-model-manager) · [**Build Locally**](#-building-locally)
 
-## Key Highlights
-
-- 🤖 **Offline AI Tutor & Manus-Style Voice Chat** — Built-in **Qwen2.5 & Qwen3 (`.gguf`)** model catalog and in-app GGUF downloader (`Qwen3-0.6B-Q4_K_M`, `Qwen3-1.7B-Q4_K_M`, `Qwen2.5-1.5B-Instruct`, `Qwen2.5-0.5B-Instruct`) with GGUF header verification and on-device benchmarking. Includes a hands-free **Manus-style Offline Voice Chat** console featuring an animated Pearl Orb mascot, real-time mic reactivity, barge-in interruption, live subtitles, and synchronized TTS playback.
-- 🎨 **Modern Light & Dark UI + Animated Floating Navbar** — Full **Light** and **Dark** theme support (`Theme.kt`), edge-to-edge Material 3 design, and a custom **Floating Crest Pill Bottom Navigation Bar** with spring icon animations, pulsing review badge, rotating center dotted halo, and quick-launch Practice Studio sheet.
-- 🌐 **Anytime Language Switcher (12 × 12 Tracks)** — Switch native or target languages anytime from the top bar or Quick Studio (`English`, `বাংলা`, `Hindi`, `Japanese`, `Spanish`, `Arabic`, `French`, `German`, `Tamil`, `Telugu`, `Urdu`, `Kannada`) with Bengali explanations, English examples, IPA/romaji, and offline gloss tables.
-- 🚫 **Zero Mandatory Backend & Ad-Free** — No forced cloud login, no Firebase dependency, no ads, and no paywalls.
-
----
-
-## Learning Features & Practice Studio (14+ Modules)
-
-- 🌸 **Kana Mastery** — Hiragana & Katakana (46×2 + voiced variants) with picture mnemonics, audio, learned tracker, and listening/reading quizzes.
-- 🔤 **Alphabet Starter (A–Z)** — Full letter-by-letter starter course with phonetics, sounds, and example words for every language track.
-- 🗾 **Kanji & 5,000 Kanji Words** — Stroke/meaning study plus 5,000 kanji vocabulary words organized into 20 thematic categories.
-- 📚 **Bilingual Core Lessons** — High-frequency vocabulary across greetings, numbers, colors, family, food, animals, actions, adjectives, time, places, weather, and survival phrases with emoji prompts and audio.
-- 🇬🇧 **Oxford 5000 (A1–C1)** — ~4,960 graded Oxford 5000 words with parts of speech, native glosses, examples, and audio.
-- 🏯 **JLPT (N5 → N1) & CEFR (A1 → C2)** — Level-grouped Japanese and English word lists with native meanings.
-- 📗 **Genki 1 & Japanese From Zero** — Structured vocabulary and matching grammar sections for Genki Textbook 1 (12 lessons) and JFZ Book 1 (pre-lessons + 13 lessons).
-- 📖 **Offline Dictionary & SQLite FTS4 Search** — Instant offline search across **25,656 English** and **217,686 Japanese** entries in any supported language.
-- 🧾 **Verb Trainer (4,400+ Verbs)** — Searchable English verb database showing **1st (base), 2nd (past), 3rd (past participle), and 4th (-ing)** forms, irregular badges, audio, and two-way native-language search.
-- 🧠 **Unified SM-2 Spaced Repetition (SRS)** — Again / Hard / Good / Easy grading across every word module with XP, levels, daily streaks, and best-streak tracking.
-- 🗣️ **Phrase Bank & 🎭 Roleplay Conversations** — Real-world chunked sentences with word-by-word breakdowns plus interactive scenario dialogues (hotel, taxi, shopping, dining).
-- 📐 **Grammar Patterns & 210+ Grammar Academy** — Curated grammar patterns (JLPT/CEFR/Genki/JFZ) + 210+ structured Bengali/English grammar lessons, each backed by **10+ example sentences** and interactive multiple-choice drills.
-- ⏳ **13 English Tenses Mastery** — Complete coverage of all 13 English tenses (Present/Past/Future Simple, Continuous, Perfect, Perfect Continuous + *Be Going To*), rules, common-mistake tips, and 12 contextual examples per tense.
-- 🎯 **Practice Studio Tools** — Daily Challenge, Tense Mastery, Grammar Quiz, Sentence Builder, Speaking Practice, Listening Practice, Writing Studio, and Offline AI Voice Chat.
-- 🔊 **Smart Audio & Offline TTS** — Multi-fallback Text-to-Speech (`Speaker.kt`) supporting adjustable speed and offline voice preference.
-- 🔄 **Google Play In-App Updates** — Official Play Core flexible in-app update flow (`com.google.android.play:app-update-ktx`) with Play Store fallback (`Updater.kt`).
+</div>
 
 ---
 
-## Navigation & Screens
+## ✨ Why Elyora?
 
-- **Home** — Daily streak, XP progress, quick language switcher, theme toggle, and 14-tool Practice Studio grid.
-- **Learn** (`Courses · Grammar · AI Chat`) — Alphabet, Kana, Kanji, Core Lessons, Oxford 5000, Genki 1, JFZ, JLPT/CEFR, Phrase Bank, Roleplays, 210+ Grammar Academy, and Offline Qwen AI Tutor / Voice Chat.
-- **Review** (`Review · Words · Verbs`) — Unified SM-2 Flashcard Review, 25k+/217k+ Offline Dictionary, and 4,400+ Verb Trainer.
-- **Center `+` Quick Studio** — Instant launcher for Offline AI Voice Chat (Manus), Daily Challenge, 13 Tenses, Grammar Quiz, Sentence Builder, Speaking, Listening, Writing, and Language Switcher.
-- **Profile** — Native/target language selection, Light/Dark theme switch, offline TTS toggle, daily WorkManager reminders, stats, and Play Store update check.
+**Elyora** (`com.itamadersomajinc.elyora`) is a **100% free, ad-free, offline-first** Android language-learning super-app crafted with **Kotlin & Jetpack Compose (Material 3)**.
+
+Pick **any of 12 native languages** (including **বাংলা** & **English**) and study **any of 12 target languages**—switchable anytime without restarting. Every dictionary lookup, grammar academy lesson, verb conjugation, SM-2 flashcard review, and even the **on-device Qwen AI Voice Tutor** works completely offline with **zero ads, zero paywalls, and zero mandatory sign-in**.
 
 ---
 
-## Supported Languages
+## 📱 App Screenshots
 
-| Role | Languages (12) |
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/01-home.jpg" alt="Home & Practice Studio" width="240" /><br/>
+      <sub><b>Home & 14-Tool Practice Studio</b></sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/02-lessons.jpg" alt="Structured Lessons" width="240" /><br/>
+      <sub><b>Bilingual Core Lessons</b></sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/03-oxford-5000.jpg" alt="Oxford 5000" width="240" /><br/>
+      <sub><b>Oxford 5000 (A1–C1)</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/04-grammar.jpg" alt="Grammar Academy" width="240" /><br/>
+      <sub><b>210+ Grammar Academy</b></sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/05-dictionary.jpg" alt="Offline FTS4 Dictionary" width="240" /><br/>
+      <sub><b>243k+ Offline FTS4 Dictionary</b></sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/06-profile.jpg" alt="Profile & Settings" width="240" /><br/>
+      <sub><b>Profile, Reminders & Theme</b></sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+## 🧠 On-Device Qwen AI & Background Model Manager
+
+Elyora includes a built-in **GGUF Model Manager** and **Manus-style Hands-Free Voice Chat** with an animated Pearl Orb mascot, real-time mic reactivity, barge-in interruption, live subtitles, and synchronized offline TTS.
+
+- **Background Downloads (`WorkManager` + `ForegroundService`):** Large `.gguf` models continue downloading reliably in the background with a live notification progress bar, **Pause / Resume** via HTTP `Range` requests, and automatic **GGUF binary magic-header verification**.
+- **On-Device Benchmarking:** Measure real token speed (`tok/s`) and multilingual accuracy directly on your phone.
+
+| Model | Quant | Size | Min RAM | Speed | Best For |
+|---|---|---:|---:|---:|---|
+| **Qwen3-0.6B** *(Recommended)* | `Q4_K_M` | ~462 MB | 4 GB | ~25 tok/s | Fastest Qwen3 reasoning on 4GB+ phones |
+| **Qwen3-1.7B** | `Q4_K_M` | ~1180 MB | 6 GB | ~14 tok/s | Deep বাংলা, English & multilingual coaching |
+| **Qwen2.5-1.5B-Instruct** | `Q4_K_M` | ~986 MB | 6 GB | ~16 tok/s | Reliable grammar & dialogue coaching |
+| **Qwen2.5-0.5B-Instruct** | `Q4_K_M` | ~398 MB | 4 GB | ~30 tok/s | Ultra-lightweight & instant responses |
+
+---
+
+## 🚀 Learning Modules & Practice Studio
+
+| Category | Modules & Depth |
 |---|---|
-| **Native (Explanation)** | English · বাংলা (Bengali) · Hindi · Japanese · Spanish · Arabic · French · German · Tamil · Telugu · Urdu · Kannada |
-| **Target (Learning)** | English · Japanese · বাংলা (Bengali) · Hindi · Spanish · Arabic · French · German · Tamil · Telugu · Urdu · Kannada |
+| **📖 Dictionaries & Verbs** | **25,656+ English** & **217,686+ Japanese** offline entries (Room + SQLite **FTS4**), **4,400+ Verbs** (`V1 / V2 / V3 / V-ing` + irregular badges) |
+| **🎓 Graded Vocabularies** | **Oxford 5000** (`A1–C1`), **CEFR** (`A1–C2`), **JLPT** (`N5–N1`), **Genki 1** (12 lessons), **Japanese From Zero** (13 lessons) |
+| **🈶 Scripts & Kanji** | **Hiragana & Katakana** (46×2 + voiced variants + mnemonics), **Alphabet Starter (A–Z)**, **Kanji** + **5,000 Kanji Words** (20 categories) |
+| **📐 Grammar & Tenses** | **210+ Grammar Academy** lessons (10+ examples & quizzes each), **All 13 English Tenses** mastery with common-mistake tips |
+| **🎯 Practice Studio** | **Unified SM-2 SRS** flashcards, **Daily Challenge**, **Sentence Builder**, **Speaking Practice**, **Listening Practice**, **Writing Studio**, **Roleplay Dialogues**, **Phrase Bank** |
+| **🎨 UX & Polish** | **Light & Dark** Material 3 themes, **Floating Crest Pill Navbar**, **Responsive Onboarding**, **WorkManager Daily Reminders**, **Play In-App Updates** |
 
 ---
 
-## Technology Stack
+## 🌐 12 × 12 Language Matrix
 
-| Layer | Implementation |
-|---|---|
-| **Language & Build** | Kotlin `2.2.21` · Android Gradle Plugin `9.1.1` · Gradle Kotlin DSL · `minSdk 26` / `targetSdk 36` |
-| **UI & Theme** | Jetpack Compose (BOM `2025.05.00`) · Material 3 · Custom Light/Dark Theme · Spring & Canvas Animations |
-| **Navigation** | Navigation Compose (`2.9.0`) with `@Serializable` type-safe routes |
-| **Local Database & Search** | Room (`2.7.1`) + SQLite FTS4 · KSP (`2.3.4`) |
-| **Preferences & Background** | Jetpack DataStore (`1.1.4`) · WorkManager (`2.10.0`) |
-| **Async & Serialization** | Kotlin Coroutines (`1.9.0`) + StateFlow · `kotlinx.serialization` (`1.8.0`) |
-| **On-Device AI** | Qwen2.5 / Qwen3 Quantized `.gguf` Model Manager, Header Inspector & Manus Voice Console |
-| **Updates** | Google Play In-App Updates (`play:app-update-ktx:2.1.0`) |
+Switch both your **Native (Explanation)** language and **Target (Learning)** language anytime:
+
+> **English** · **বাংলা (Bengali)** · **हिन्दी (Hindi)** · **日本語 (Japanese)** · **Español (Spanish)** · **العربية (Arabic)** · **Français (French)** · **Deutsch (German)** · **தமிழ் (Tamil)** · **తెలుగు (Telugu)** · **اردو (Urdu)** · **ಕನ್ನಡ (Kannada)**
 
 ---
 
-## Building Locally
+## 🏗️ Architecture & Tech Stack
 
-```bash
-gradle :app:assembleDebug
+```mermaid
+flowchart LR
+    UI["Jetpack Compose UI (Material 3)"] --> VM["ViewModels & StateFlow"]
+    VM --> REPO["ElyoraRepository"]
+    REPO --> ROOM["Room + SQLite FTS4 (243k+ Entries)"]
+    REPO --> DS["Jetpack DataStore (Prefs & SRS)"]
+    VM --> AI["LocalLlamaBridge (Qwen GGUF)"]
+    AI --> WM["WorkManager + DataSync Foreground Service"]
+    UI --> TTS["Speaker (Offline Multi-Fallback TTS)"]
 ```
 
-Output signed debug APK: `app/build/outputs/apk/debug/app-debug.apk`
+| Layer | Technology |
+|---|---|
+| **Language & Build** | Kotlin `2.2.21` · AGP `9.1.1` · Gradle `9.3.1` Kotlin DSL · `minSdk 26` / `targetSdk 36` |
+| **UI & Motion** | Jetpack Compose (BOM `2025.05.00`) · Material 3 · Custom Light/Dark Theme · Spring & Canvas Animations |
+| **Navigation** | Navigation Compose (`2.9.0`) with `@Serializable` type-safe routes |
+| **Storage & Search** | Room (`2.7.1`) + SQLite FTS4 · KSP (`2.3.4`) · Jetpack DataStore (`1.1.4`) |
+| **Background & Sync** | WorkManager (`2.10.0`) with `foregroundServiceType="dataSync"` & Notification Progress |
+| **Async & Serialization** | Kotlin Coroutines (`1.9.0`) + StateFlow · `kotlinx.serialization` (`1.8.0`) |
+| **Distribution** | Google Play In-App Updates (`play:app-update-ktx:2.1.0`) · GitHub Actions CI |
 
-## CI & Releases
+---
 
-Every push to `main` (or manual dispatch) triggers [`.github/workflows/build.yml`](.github/workflows/build.yml), which builds the signed release APK (`./gradlew assembleRelease`), uploads it as a GitHub Actions artifact, and creates a GitHub Release tagged `v<versionName>` (configured via `versionCode` / `versionName` in `app/build.gradle.kts`).
+## 🛠️ Building Locally
+
+```bash
+# Clone the repository
+git clone https://github.com/mohammad-sheikh-shahinur-rahman/Elyora-Learn-Every-Language.git
+cd Elyora-Learn-Every-Language
+
+# Run Lint & Build Debug APK
+./gradlew lintDebug assembleDebug
+```
+
+Output APK: `app/build/outputs/apk/debug/app-debug.apk`
+
+---
+
+<div align="center">
+
+**Built with ❤️ by [IT Amadersomaj Inc.](https://github.com/mohammad-sheikh-shahinur-rahman)**  
+Licensed under the [MIT License](LICENSE)
+
+</div>
