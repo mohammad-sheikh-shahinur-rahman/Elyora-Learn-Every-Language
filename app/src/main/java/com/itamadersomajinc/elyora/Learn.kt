@@ -1,0 +1,1001 @@
+package com.itamadersomajinc.elyora
+
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlin.math.min
+
+enum class QuizType { CHOICE, TYPE_WORD, TYPE_AUDIO }
+
+data class QuizQuestion(
+    val type: QuizType = QuizType.CHOICE,
+    val promptText: String?,
+    val promptAudio: String?,
+    val promptIsJa: Boolean,
+    val options: List<QuizOption>,
+    val correct: Int,
+    val answer: String = ""
+)
+
+data class QuizOption(val emoji: String, val label: String)
+
+@Composable
+fun LearnScreen(
+    store: Store,
+    speaker: Speaker,
+    modifier: Modifier = Modifier,
+    onOpenLanguageSwitcher: () -> Unit = {}
+) {
+    var showKana by remember { mutableStateOf(false) }
+    var showKanji by remember { mutableStateOf(false) }
+    var showAlphabet by remember { mutableStateOf(false) }
+    var openLesson by remember { mutableStateOf<Lesson?>(null) }
+    var openCat by remember { mutableStateOf<SentenceCategory?>(null) }
+    var openRoleplay by remember { mutableStateOf<Roleplay?>(null) }
+    val scroll = rememberScrollState()
+
+    val targetLang = store.target
+    val learningJa = targetLang == "ja"
+    val learningEn = targetLang == "en"
+    val learningOther = !learningJa && !learningEn
+
+    when {
+        showKana -> KanaScreen(store, speaker, modifier, onClose = { showKana = false })
+        showKanji -> KanjiScreen(store, speaker, modifier, onClose = { showKanji = false })
+        showAlphabet -> AlphabetScreen(store, speaker, modifier, onClose = { showAlphabet = false })
+        openCat != null -> SentenceCategoryScreen(openCat!!, store, speaker, modifier, onClose = { openCat = null })
+        openRoleplay != null -> RoleplayScreen(openRoleplay!!, store, speaker, modifier, onClose = { openRoleplay = null })
+        openLesson != null -> LessonExplore(store, speaker, openLesson!!, modifier, onClose = { openLesson = null })
+        else -> Column(
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(scroll)
+                .padding(20.dp)
+        ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                "Learn · শিখুন",
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.ExtraBold,
+                modifier = Modifier.weight(1f)
+            )
+            LanguagePillButton(
+                targetCode = store.target,
+                onClick = onOpenLanguageSwitcher
+            )
+        }
+        Text(
+            "Master the writing system, then build vocabulary by topic · বর্ণমালা ও বিষয়ভিত্তিক শব্দ শিখুন।",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.height(14.dp))
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(24.dp),
+            colors = CardDefaults.cardColors(containerColor = LocalElyoraAccents.current.lavender.container)
+        ) {
+            Column {
+                Image(
+                    painter = painterResource(R.drawable.img_lesson_hero),
+                    contentDescription = "Elyora Guided Learning Path",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(132.dp)
+                        .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(Modifier.weight(1f)) {
+                        Text(
+                            "Guided Course Path · ধাপে ধাপে কোর্স",
+                            style = MaterialTheme.typography.titleSmall,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = LocalElyoraAccents.current.lavender.content
+                        )
+                        Text(
+                            "${store.completedLessons.size} completed · ${languageLabel(store.target)} + বাংলা",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = LocalElyoraAccents.current.lavender.content.copy(alpha = 0.8f)
+                        )
+                    }
+                }
+            }
+        }
+        Spacer(Modifier.height(16.dp))
+
+        if (learningJa) {
+            KanaModuleCard(store, onClick = { showKana = true })
+            Spacer(Modifier.height(12.dp))
+            KanjiModuleCard(store, onClick = { showKanji = true })
+        }
+        if (learningEn) {
+            Spacer(Modifier.height(12.dp))
+            AlphabetModuleCard(store, onClick = { showAlphabet = true })
+        }
+        Spacer(Modifier.height(24.dp))
+
+        val jaLessons = Data.allLessons.filter { it.lang == "ja" && it.source.isEmpty() }
+        val enLessons = Data.allLessons.filter { it.lang == "en" && it.source.isEmpty() }
+        val jaExtra = if (learningJa) Genki.lessons + Jfz.lessons + KanjiWords.categories else emptyList()
+        val enExtra = if (learningEn) Oxford.lessons else emptyList()
+        val targetLessons = if (learningOther) remember(targetLang) { TargetContent.lessons(targetLang) } else emptyList()
+        val visible = if (learningOther) targetLessons
+        else (if (learningJa) jaLessons else emptyList()) + (if (learningEn) enLessons else emptyList()) + jaExtra + enExtra
+
+        fun levelGroups(lang: String): List<Pair<String, List<Lesson>>> {
+            val byLevel = (if (lang == "ja") jaLessons else enLessons).groupBy { Levels.ofLesson(it) }
+            return Levels.ORDER.mapNotNull { lv -> byLevel[lv]?.let { lv to it } }
+        }
+
+        Text("Lessons · পাঠসমূহ", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Text(
+            "${store.completedLessons.size}/${visible.size} completed · সম্পন্ন",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.height(10.dp))
+        if (learningOther) {
+            val byLevel = targetLessons.groupBy { Levels.ofLesson(it) }
+            (Levels.ORDER + "").forEach { lv ->
+                val lessons = byLevel[lv]
+                if (!lessons.isNullOrEmpty()) {
+                    LevelHeader(lv.ifEmpty { "Other" }, "${lessons.size} lessons")
+                    lessons.forEach { lesson ->
+                        LessonRow(
+                            lesson = lesson,
+                            done = lesson.id in store.completedLessons,
+                            onClick = { openLesson = lesson }
+                        )
+                        Spacer(Modifier.height(8.dp))
+                    }
+                    Spacer(Modifier.height(8.dp))
+                }
+            }
+        }
+        if (!learningOther && learningJa) {
+            levelGroups("ja").forEach { (lv, lessons) ->
+                LevelHeader(lv, "${lessons.size} lessons")
+                lessons.forEach { lesson ->
+                    LessonRow(
+                        lesson = lesson,
+                        done = lesson.id in store.completedLessons,
+                        onClick = { openLesson = lesson }
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+        if (!learningOther && learningEn && enLessons.isNotEmpty()) {
+            Spacer(Modifier.height(10.dp))
+            levelGroups("en").forEach { (lv, lessons) ->
+                LevelHeader(lv, "${lessons.size} lessons")
+                lessons.forEach { lesson ->
+                    LessonRow(
+                        lesson = lesson,
+                        done = lesson.id in store.completedLessons,
+                        onClick = { openLesson = lesson }
+                    )
+                    Spacer(Modifier.height(8.dp))
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+
+        if (!learningOther && learningJa) {
+            Spacer(Modifier.height(12.dp))
+            SectionHeader("📗 Genki Textbook 1 · গেঙ্কি পাঠ্যবই", "Official Genki 1 vocabulary — 12 lessons with grammar & বাংলা")
+            Genki.lessons.forEach { lesson ->
+                LessonRow(lesson = lesson, done = lesson.id in store.completedLessons, onClick = { openLesson = lesson })
+                Spacer(Modifier.height(8.dp))
+            }
+            Spacer(Modifier.height(12.dp))
+            SectionHeader("📖 Japanese From Zero · জাপানি শূন্য থেকে", "Book 1 vocabulary — pre-lessons plus 13 lessons")
+            Jfz.lessons.forEach { lesson ->
+                LessonRow(lesson = lesson, done = lesson.id in store.completedLessons, onClick = { openLesson = lesson })
+                Spacer(Modifier.height(8.dp))
+            }
+            Spacer(Modifier.height(12.dp))
+            SectionHeader("🗾 5000 Kanji Words · ৫০০০ কাঞ্জি শব্দ", "Kanji vocabulary by theme — 20 categories with বাংলা")
+            KanjiWords.categories.forEach { lesson ->
+                LessonRow(lesson = lesson, done = lesson.id in store.completedLessons, onClick = { openLesson = lesson })
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+        if (!learningOther && learningEn && enExtra.isNotEmpty()) {
+            Spacer(Modifier.height(12.dp))
+            SectionHeader("🇬🇧 Oxford 5000 · অক্সফোর্ড ৫০০০", "A1 to C1 essential words with English & বাংলা meanings")
+            Oxford.lessons.forEach { lesson ->
+                LessonRow(lesson = lesson, done = lesson.id in store.completedLessons, onClick = { openLesson = lesson })
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+
+        val wbLessons = WordBank.lessons.filter { (it.lang == "ja" && learningJa) || (it.lang == "en" && learningEn) }
+        if (wbLessons.isNotEmpty()) {
+            Spacer(Modifier.height(12.dp))
+            SectionHeader("🔥 Vocabulary Bank · শব্দ ভান্ডার", "1,100+ everyday words in 14 topics — দৈনন্দিন শব্দ")
+            wbLessons.forEach { lesson ->
+                LessonRow(lesson = lesson, done = lesson.id in store.completedLessons, onClick = { openLesson = lesson })
+                Spacer(Modifier.height(8.dp))
+            }
+        }
+        Spacer(Modifier.height(12.dp))
+        SectionHeader("🎭 Roleplay Conversations · সংলাপ অনুশীলন", "Practice real two-person dialogues with বাংলা & audio")
+        val rpList = if (learningOther) TargetContent.roleplays(targetLang)
+        else Roleplays.all.filter { (it.lang == "ja" && learningJa) || (it.lang == "en" && learningEn) }
+        rpList.forEach { rp ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { openRoleplay = rp },
+                shape = RoundedCornerShape(18.dp)
+            ) {
+                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(rp.emoji, fontSize = 30.sp)
+                    Spacer(Modifier.width(14.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(rp.title, fontWeight = FontWeight.Bold)
+                        Text(
+                            rp.desc,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1
+                        )
+                        Text(
+                            "${rp.turns.size} stages · ধাপ · ${languageLabel(rp.lang)}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    Text("▶", fontSize = 18.sp)
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+        }
+        Spacer(Modifier.height(24.dp))
+
+        if (!learningOther) {
+            Text("Chunks · প্রয়োজনীয় বাক্যাংশ", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(
+                "Learn in phrases, not single words · পুরো বাক্যাংশে কথা বলা শিখুন।",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(Modifier.height(10.dp))
+            PhraseList(store, speaker)
+            Spacer(Modifier.height(24.dp))
+        }
+
+        Text("💬 Conversations & Sentences · কথোপকথন ও বাক্য", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Text(
+            "Real sentences by category with audio & বাংলা · অডিও ও বাংলা অর্থসহ।",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.height(10.dp))
+        val catList = if (learningOther) TargetContent.sentenceCategories(targetLang)
+        else Sentences.categories.filter { (it.lang == "ja" && learningJa) || (it.lang == "en" && learningEn) }
+        catList.forEach { cat ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { openCat = cat },
+                    shape = RoundedCornerShape(18.dp)
+                ) {
+                    Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(cat.emoji, fontSize = 30.sp)
+                        Spacer(Modifier.width(14.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(cat.title, fontWeight = FontWeight.Bold)
+                            Text(
+                                cat.desc,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1
+                            )
+                            Text(
+                                "${cat.sentences.size} sentences · ${languageLabel(cat.lang)}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Text(cat.sentences.size.toString(), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+            }
+        Spacer(Modifier.height(24.dp))
+        }
+    }
+}
+
+@Composable
+private fun KanaModuleCard(store: Store, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+    ) {
+        Row(
+            Modifier.padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(72.dp)) {
+                androidx.compose.material3.CircularProgressIndicator(
+                    progress = { store.kanaProgress() / 100f },
+                    modifier = Modifier.size(72.dp),
+                    strokeWidth = 8.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surface
+                )
+                Text("${store.kanaProgress()}%", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            }
+            Spacer(Modifier.width(16.dp))
+            Column(Modifier.weight(1f)) {
+                Text("Hiragana & Katakana · হিরাগানা ও কাতাকানা", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(
+                    "46 characters each with mnemonics & sound · প্রতিটি ৪৬টি বর্ণ ও উচ্চারণ।",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "Start kana · কানা শুরু করুন →",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun KanjiModuleCard(store: Store, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+    ) {
+        Row(
+            Modifier.padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(72.dp)) {
+                androidx.compose.material3.CircularProgressIndicator(
+                    progress = { store.kanjiProgress() / 100f },
+                    modifier = Modifier.size(72.dp),
+                    strokeWidth = 8.dp,
+                    color = MaterialTheme.colorScheme.secondary,
+                    trackColor = MaterialTheme.colorScheme.surface
+                )
+                Text("${store.kanjiProgress()}%", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            }
+            Spacer(Modifier.width(16.dp))
+            Column(Modifier.weight(1f)) {
+                Text("Kanji (N5) · কাঞ্জি", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(
+                    "Essential kanji with readings & stories · অর্থ ও পাঠসহ কাঞ্জি।",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "Start kanji · কাঞ্জি শুরু করুন →",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AlphabetModuleCard(store: Store, onClick: () -> Unit) {
+    val learned = AlphabetData.alphabet.count { it.letter in store.learnedKana }
+    val pct = if (AlphabetData.alphabet.isEmpty()) 0 else learned * 100 / AlphabetData.alphabet.size
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiaryContainer)
+    ) {
+        Row(
+            Modifier.padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(72.dp)) {
+                androidx.compose.material3.CircularProgressIndicator(
+                    progress = { pct / 100f },
+                    modifier = Modifier.size(72.dp),
+                    strokeWidth = 8.dp,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    trackColor = MaterialTheme.colorScheme.surface
+                )
+                Text("$pct%", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            }
+            Spacer(Modifier.width(16.dp))
+            Column(Modifier.weight(1f)) {
+                Text("English Alphabet · ইংরেজি বর্ণমালা", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(
+                    "A to Z with sounds, IPA & বাংলা meanings · ধ্বনি ও উদাহরণসহ।",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "Start ABC · ABC শুরু করুন →",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LevelHeader(level: String, subtitle: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(Levels.EMOJI[level] ?: "📘", fontSize = 20.sp)
+        Spacer(Modifier.width(8.dp))
+        Column {
+            Text(Levels.label(level), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+    Spacer(Modifier.height(6.dp))
+}
+
+@Composable
+private fun SectionHeader(title: String, subtitle: String) {
+    Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+    Text(
+        subtitle,
+        style = MaterialTheme.typography.labelSmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+    Spacer(Modifier.height(6.dp))
+}
+
+@Composable
+private fun LessonRow(lesson: Lesson, done: Boolean, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(18.dp)
+    ) {
+        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(lesson.emoji, fontSize = 30.sp)
+            Spacer(Modifier.width(14.dp))
+            Column(Modifier.weight(1f)) {
+                Text(lesson.title, fontWeight = FontWeight.Bold)
+                Text(
+                    lesson.desc,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+                Text(
+                    "${lesson.words.size} words · শব্দ",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            if (done) {
+                Icon(Icons.Filled.CheckCircle, contentDescription = "Done · সম্পন্ন", tint = MaterialTheme.colorScheme.tertiary)
+            } else {
+                Icon(Icons.Filled.PlayArrow, contentDescription = "Start · শুরু")
+            }
+        }
+    }
+}
+
+@Composable
+private fun PhraseList(store: Store, speaker: Speaker) {
+    var expanded by remember { mutableStateOf<String?>(null) }
+    Data.allPhrases.forEach { p ->
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { expanded = if (expanded == p.id) null else p.id },
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(Modifier.padding(14.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(p.emoji, fontSize = 22.sp)
+                    Spacer(Modifier.width(10.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(p.ja, fontWeight = FontWeight.Bold)
+                        if (store.showRomaji) {
+                            Text(p.romaji, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                    FilledIconButton(
+                        onClick = { speak(store, speaker, p.ja, true) },
+                        modifier = Modifier.size(36.dp)
+                    ) {
+                        Icon(Icons.Filled.VolumeUp, contentDescription = "Play", modifier = Modifier.size(18.dp))
+                    }
+                }
+                if (expanded == p.id) {
+                    Spacer(Modifier.height(10.dp))
+                    Text(p.glossFor(store.nativeLang), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+                    Spacer(Modifier.height(6.dp))
+                    Text(
+                        p.chunks,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+    }
+}
+
+@Composable
+fun LessonFlow(store: Store, speaker: Speaker, lesson: Lesson, modifier: Modifier = Modifier, onClose: () -> Unit) {
+    val words = lesson.words
+    val targetJa = lesson.lang != "en"
+
+    fun norm(s: String): String =
+        s.trim().lowercase().replace(Regex("[^a-z0-9 ]"), " ").replace(Regex("\\s+"), " ").trim()
+
+    fun buildQuiz(): List<QuizQuestion> {
+        val rnd = java.util.Random()
+        val pool = if (words.size >= 4) words
+        else if (lesson.lang == "ja" || lesson.lang == "en") Data.allWords
+        else TargetContent.words(lesson.lang)
+        val count = min(10, words.size)
+        val targets = words.shuffled(rnd).take(count)
+        return targets.map { w ->
+            val type = when {
+                !targetJa && store.nativeLang == "hi" && w.hi.isNotEmpty() && rnd.nextFloat() < 0.4f -> QuizType.TYPE_WORD
+                !targetJa && rnd.nextFloat() < 0.3f -> QuizType.TYPE_AUDIO
+                else -> QuizType.CHOICE
+            }
+            when (type) {
+                QuizType.TYPE_WORD -> QuizQuestion(
+                    type = QuizType.TYPE_WORD,
+                    promptText = w.hi,
+                    promptAudio = null,
+                    promptIsJa = false,
+                    options = emptyList(),
+                    correct = -1,
+                    answer = w.en
+                )
+                QuizType.TYPE_AUDIO -> QuizQuestion(
+                    type = QuizType.TYPE_AUDIO,
+                    promptText = null,
+                    promptAudio = w.en,
+                    promptIsJa = false,
+                    options = emptyList(),
+                    correct = -1,
+                    answer = w.en
+                )
+                QuizType.CHOICE -> {
+                    val distractors = pool.filter { it.id != w.id }.shuffled(rnd).take(3)
+                    val options = (distractors + w).shuffled(rnd)
+                    QuizQuestion(
+                        type = QuizType.CHOICE,
+                        promptText = if (targetJa) {
+                            w.kana + (if (store.showRomaji) "\n" + w.romaji else "")
+                        } else {
+                            w.en + "\n" + w.ipa
+                        },
+                        promptAudio = if (targetJa) w.kana else w.en,
+                        promptIsJa = targetJa,
+                        options = options.map { o ->
+                            QuizOption(
+                                emoji = o.emoji,
+                                label = when {
+                                    store.showTranslations -> o.glossFor(store.nativeLang)
+                                    targetJa -> o.romaji
+                                    else -> o.en
+                                }
+                            )
+                        },
+                        correct = options.indexOf(w),
+                        answer = ""
+                    )
+                }
+            }
+        }
+    }
+
+    var quiz by remember { mutableStateOf(buildQuiz()) }
+    var qIndex by remember { mutableStateOf(0) }
+    var picked by remember { mutableStateOf<Int?>(null) }
+    var typed by remember { mutableStateOf("") }
+    var checked by remember { mutableStateOf(false) }
+    var score by remember { mutableStateOf(0) }
+    var finished by remember { mutableStateOf(false) }
+
+    Box(modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+    when {
+        finished -> {
+            ResultStage(
+                score = score,
+                total = quiz.size,
+                lesson = lesson,
+                store = store,
+                onClose = onClose,
+                onAgain = {
+                    quiz = buildQuiz()
+                    qIndex = 0
+                    picked = null
+                    typed = ""
+                    checked = false
+                    score = 0
+                    finished = false
+                }
+            )
+        }
+
+        else -> {
+            val q = quiz[qIndex]
+            LaunchedEffect(quiz, qIndex) {
+                if (q.promptAudio != null) speak(store, speaker, q.promptAudio, q.promptIsJa)
+            }
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(20.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    TextButton(onClick = onClose) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                    Text("Quiz ${qIndex + 1}/${quiz.size}", style = MaterialTheme.typography.labelLarge)
+                    Spacer(Modifier.weight(1f))
+                    Text("⭐ $score", style = MaterialTheme.typography.labelLarge)
+                }
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                ) {
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 28.dp, horizontal = 20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        when (q.type) {
+                            QuizType.TYPE_WORD -> {
+                                Text(
+                                    "Type the English word · ইংরেজি শব্দ লিখুন",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Spacer(Modifier.height(10.dp))
+                                Text(
+                                    q.promptText ?: "",
+                                    fontSize = 30.sp,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            QuizType.TYPE_AUDIO -> {
+                                Text("🔊 Listen and type · শুনে লিখুন", fontSize = 22.sp, textAlign = TextAlign.Center)
+                                Spacer(Modifier.height(8.dp))
+                                FilledIconButton(onClick = { speak(store, speaker, q.promptAudio ?: "", false) }) {
+                                    Icon(Icons.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
+                                }
+                            }
+                            QuizType.CHOICE -> {
+                                if (q.promptText == null) {
+                                    Text("🔊 Listen · শুনুন", fontSize = 26.sp)
+                                    Spacer(Modifier.height(8.dp))
+                                    FilledIconButton(onClick = { speak(store, speaker, q.promptAudio ?: "", q.promptIsJa) }) {
+                                        Icon(Icons.Filled.VolumeUp, contentDescription = "Hear again · আবার শুনুন")
+                                    }
+                                } else {
+                                    Text(q.promptText, fontSize = 34.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+                                }
+                            }
+                        }
+                    }
+                }
+                Spacer(Modifier.height(16.dp))
+
+                if (q.type == QuizType.CHOICE) {
+                    q.options.forEachIndexed { i, opt ->
+                        val isCorrect = i == q.correct
+                        val isPicked = i == picked
+                        val borderColor = when {
+                            picked == null -> Color.Transparent
+                            isCorrect -> Color(0xFF2E9E5B)
+                            isPicked -> Color(0xFFD64545)
+                            else -> Color.Transparent
+                        }
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                                .border(2.dp, borderColor, RoundedCornerShape(16.dp))
+                                .clickable(enabled = picked == null) {
+                                    if (picked == null) {
+                                        picked = i
+                                        if (isCorrect) score++
+                                    }
+                                },
+                            shape = RoundedCornerShape(16.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = if (picked != null && isCorrect) Color(0xFFE4F6EA)
+                                else if (picked != null && isPicked) Color(0xFFFBE5E5)
+                                else MaterialTheme.colorScheme.surface
+                            )
+                        ) {
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(14.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(opt.emoji, fontSize = 26.sp)
+                                Spacer(Modifier.width(12.dp))
+                                Text(
+                                    opt.label,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = if (opt.label.isNotEmpty()) FontWeight.Medium else FontWeight.Normal
+                                )
+                            }
+                        }
+                    }
+
+                    if (picked != null) {
+                        Spacer(Modifier.height(10.dp))
+                        val correctOpt = q.options[q.correct]
+                        Text(
+                            if (picked == q.correct) "✅ Correct! · সঠিক!" else "→ ${correctOpt.emoji} ${correctOpt.label}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Button(
+                            onClick = {
+                                if (qIndex == quiz.lastIndex) {
+                                    store.completeLesson(lesson.id, words.map { it.id })
+                                    finished = true
+                                } else {
+                                    qIndex++
+                                    picked = null
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(if (qIndex == quiz.lastIndex) "Finish · শেষ করুন" else "Next question · পরবর্তী")
+                        }
+                    }
+                } else {
+                    OutlinedTextField(
+                        value = typed,
+                        onValueChange = { typed = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        label = { Text(if (q.type == QuizType.TYPE_AUDIO) "Type what you heard · শুনে লিখুন" else "Type the English word · ইংরেজি লিখুন") },
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    if (!checked) {
+                        Button(
+                            onClick = {
+                                checked = true
+                                if (norm(typed) == norm(q.answer)) score++
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = typed.isNotBlank()
+                        ) {
+                            Text("Check · যাচাই")
+                        }
+                    } else {
+                        val ok = norm(typed) == norm(q.answer)
+                        Text(
+                            if (ok) "✅ Correct! · সঠিক!" else "❌ Answer · উত্তর: ${q.answer}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Button(
+                            onClick = {
+                                if (qIndex == quiz.lastIndex) {
+                                    store.completeLesson(lesson.id, words.map { it.id })
+                                    finished = true
+                                } else {
+                                    qIndex++
+                                    picked = null
+                                    typed = ""
+                                    checked = false
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(if (qIndex == quiz.lastIndex) "Finish · শেষ করুন" else "Next question · পরবর্তী")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    }
+}
+
+@Composable
+private fun ResultStage(
+    score: Int,
+    total: Int,
+    lesson: Lesson,
+    store: Store,
+    onClose: () -> Unit,
+    onAgain: () -> Unit
+) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(28.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text("🎉", fontSize = 72.sp)
+        Spacer(Modifier.height(16.dp))
+        Text("Lesson complete! · পাঠ সম্পন্ন!", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+        Spacer(Modifier.height(8.dp))
+        Text(
+            "Score · স্কোর: $score / $total",
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            "+${lesson.words.size * 5} XP · ${lesson.words.size} new words added to reviews · নতুন শব্দ রিভিশনে যোগ হয়েছে",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(24.dp))
+        Button(onClick = onClose, modifier = Modifier.fillMaxWidth()) { Text("Done · সম্পন্ন") }
+        Spacer(Modifier.height(8.dp))
+        OutlinedButton(onClick = onAgain, modifier = Modifier.fillMaxWidth()) { Text("Practice again · আবার অনুশীলন") }
+    }
+}
+
+@Composable
+fun SentenceCategoryScreen(cat: SentenceCategory, store: Store, speaker: Speaker, modifier: Modifier = Modifier, onClose: () -> Unit) {
+    val isJa = cat.lang != "en"
+    BackHandler(onBack = onClose)
+    Column(
+        modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onClose) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back · পেছনে")
+            }
+            Column(Modifier.weight(1f)) {
+                Text(cat.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold)
+                Text(
+                    "${cat.sentences.size} sentences · বাক্য · ${cat.desc}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+            }
+            Text(cat.emoji, fontSize = 26.sp)
+        }
+        LazyColumn(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 24.dp)
+        ) {
+            items(cat.sentences, key = { it.id }) { s ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Text(s.emoji, fontSize = 24.sp)
+                        Spacer(Modifier.width(10.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(
+                                if (isJa) s.ja else s.en,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                            if (isJa && store.showRomaji) {
+                                Text(
+                                    s.romaji,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Spacer(Modifier.height(2.dp))
+                            Text(s.glossFor(store.nativeLang), style = MaterialTheme.typography.bodyMedium)
+                        }
+                        FilledIconButton(
+                            onClick = { speak(store, speaker, if (isJa) s.ja else s.en, isJa) },
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Icon(Icons.Filled.VolumeUp, contentDescription = "Hear", modifier = Modifier.size(18.dp))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

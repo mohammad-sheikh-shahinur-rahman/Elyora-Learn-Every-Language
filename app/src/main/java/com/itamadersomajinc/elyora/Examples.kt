@@ -1,0 +1,3600 @@
+package com.itamadersomajinc.elyora
+
+/**
+ * Example sentences for every English vocabulary word.
+ *
+ * Words from the English level lessons (A1-C2 / IELTS) and the vocabulary
+ * bank have hand-crafted example sentences. Remaining words (mostly from the
+ * Oxford 5000 list) fall back to part-of-speech template sentences so that
+ * every word always has at least three usage examples.
+ */
+object Examples {
+
+    private val CURATED: Map<String, List<String>> by lazy { mapOf(
+        "a" to listOf("I have a small dog.", "She is a talented artist.", "Give me a hand here."),
+        "a double-edged sword" to listOf("Fame is often a double-edged sword.", "This new law is a double-edged sword.", "His talent can be a double-edged sword."),
+        "a moot point" to listOf("That is a moot point now.", "It's a moot point since we lost.", "Whether it rains is a moot point."),
+        "about" to listOf("Tell me about your day.", "It is about five o'clock.", "I am thinking about it."),
+        "abroad" to listOf("She wants to study abroad next year.", "Have you ever traveled abroad?", "He is currently working abroad."),
+        "accomplish" to listOf("We can accomplish this goal together.", "I didn't accomplish much today.", "How much did you accomplish?"),
+        "accordingly" to listOf("Please read the rules and act accordingly.", "He was warned and acted accordingly.", "The price rose, and budgets changed accordingly."),
+        "achieve" to listOf("You can achieve anything with hard work.", "Did she achieve her targets?", "It takes time to achieve success."),
+        "acknowledge" to listOf("Please acknowledge that you received this.", "He refused to acknowledge the mistake.", "They finally acknowledged the problem."),
+        "active" to listOf("My dog is very active.", "Stay active by walking every day.", "Is the account still active?"),
+        "actor" to listOf("He is a famous Hollywood actor.", "Which actor played the lead role?", "She is a talented stage actor."),
+        "advocate" to listOf("She is a strong advocate for kids.", "He advocates for better healthcare.", "Who is the lead advocate here?"),
+        "afternoon" to listOf("See you tomorrow afternoon.", "I have a meeting this afternoon.", "The afternoon sun is very hot."),
+        "again" to listOf("Can you say that again?", "Let's try it again.", "See you again tomorrow."),
+        "airplane" to listOf("The airplane landed on time.", "I have never flown in an airplane.", "The airplane is taking off now."),
+        "airport" to listOf("I will meet you at the airport.", "The airport was crowded today.", "We arrived at the airport early."),
+        "albeit" to listOf("It was a fun trip, albeit expensive.", "He agreed, albeit with some hesitation.", "The progress is slow, albeit steady."),
+        "also" to listOf("I also like pizza.", "He is also a teacher.", "She also speaks French."),
+        "always" to listOf("I always wake up early.", "She is always happy.", "It always rains in April."),
+        "ambiguous" to listOf("The instructions were too ambiguous.", "His answer remained ambiguous.", "The ending of the movie was ambiguous."),
+        "ambition" to listOf("Her ambition is to become CEO.", "He lacks any real ambition.", "Ambition drives him to work hard."),
+        "amendment" to listOf("The law needs a small amendment.", "They proposed an amendment to the contract.", "This amendment changes the whole deal."),
+        "an" to listOf("I ate an apple today.", "It was an honest mistake.", "Do you have an idea?"),
+        "analysis" to listOf("The blood analysis came back negative.", "This data analysis takes a long time.", "Her analysis of the book was brilliant."),
+        "and" to listOf("I like tea and coffee.", "She sang and danced.", "Bread and butter are here."),
+        "angry" to listOf("Why are you so angry?", "He got angry at the driver.", "She looked angry during the meeting."),
+        "answer" to listOf("Please answer the phone.", "Do you know the answer?", "His answer was very surprising."),
+        "ant" to listOf("An ant is carrying a crumb.", "Look at that tiny ant.", "The ant colony is huge."),
+        "any" to listOf("Do you have any milk?", "Is there any hope?", "I don't see any."),
+        "apartment" to listOf("I live in a small apartment.", "Her apartment is near the park.", "We are renting a new apartment."),
+        "app" to listOf("I downloaded a new fitness app.", "This app saves a lot of time.", "Which app do you use most?"),
+        "apple" to listOf("I ate a red apple.", "Do you want an apple?", "The apple is very juicy."),
+        "arcade" to listOf("Let's go to the game arcade.", "The arcade has many old games.", "We spent all our coins at the arcade."),
+        "architect" to listOf("He is a famous modern architect.", "The architect designed the new library.", "She wants to be an architect."),
+        "arguably" to listOf("This is arguably the best pizza here.", "He is arguably the fastest player.", "It is arguably the most difficult part."),
+        "argue" to listOf("They always argue about the laundry.", "Please do not argue with me.", "We shouldn't argue in public."),
+        "argument" to listOf("We had a huge argument yesterday.", "Your argument makes a lot of sense.", "They settled their argument quickly."),
+        "arm" to listOf("He broke his arm playing soccer.", "She held the baby in her arm.", "My arm is falling asleep."),
+        "arrive" to listOf("What time does the train arrive?", "We will arrive at noon.", "When did the guests arrive?"),
+        "article" to listOf("I read an interesting article today.", "This article explains the new law.", "She wrote an article for the paper."),
+        "as a result" to listOf("He lied and, as a result, lost trust.", "It rained, and as a result, we stayed home.", "She studied hard; as a result, she passed."),
+        "ascertain" to listOf("We need to ascertain the cause.", "I cannot ascertain the exact date.", "He tried to ascertain her location."),
+        "assert" to listOf("You must assert your rights.", "She continued to assert her innocence.", "He asserts that the plan works."),
+        "assumption" to listOf("That is a very bold assumption.", "My assumption was completely wrong.", "Don't make an assumption about her."),
+        "astronaut" to listOf("The astronaut floated in space.", "He dreams of becoming an astronaut.", "The astronaut landed on the moon."),
+        "at" to listOf("Meet me at the station.", "He is at work now.", "I am at the door."),
+        "at the expense of" to listOf("He won at the expense of others.", "Don't grow at the expense of quality.", "Success came at the expense of sleep."),
+        "athlete" to listOf("She is a professional Olympic athlete.", "He is a very talented athlete.", "The athlete trained every single morning."),
+        "attitude" to listOf("He has a very positive attitude.", "Her attitude toward work is great.", "Change your attitude or leave."),
+        "aunt" to listOf("My aunt lives in New York.", "She is my father's sister and aunt.", "My aunt baked a chocolate cake."),
+        "author" to listOf("Who is the author of this book?", "The author signed my copy.", "She is a best-selling author."),
+        "baby" to listOf("The baby is sleeping soundly.", "My sister just had a baby.", "The baby is learning to walk."),
+        "back" to listOf("Please come back home soon.", "My back hurts from the chair.", "He patted me on the back."),
+        "backpack" to listOf("Put your books in your backpack.", "Her backpack is too heavy.", "I bought a new leather backpack."),
+        "bad" to listOf("This milk smells really bad.", "I have a bad headache.", "That was a very bad idea."),
+        "bad-tasting" to listOf("This medicine is very bad-tasting.", "I hate this bad-tasting soup.", "The tea was surprisingly bad-tasting."),
+        "baker" to listOf("The baker makes fresh sourdough.", "He is the best baker in town.", "Ask the baker for a loaf."),
+        "bakery" to listOf("The bakery smells like cinnamon.", "Let's go to the local bakery.", "She opened a small French bakery."),
+        "balanced" to listOf("I try to eat a balanced diet.", "The budget is finally balanced.", "She has a very balanced perspective."),
+        "balcony" to listOf("I love reading on my balcony.", "Put the plants on the balcony.", "The cat jumped off the balcony."),
+        "banana" to listOf("Eat a banana for a snack.", "This banana is too green.", "I sliced a banana for cereal."),
+        "bank" to listOf("I need to visit the bank.", "The bank is closed on Sundays.", "Put the money in the bank."),
+        "bat" to listOf("He swung the bat hard.", "A bat flew into the cave.", "We need a new baseball bat."),
+        "bath" to listOf("I need a warm bath.", "The baby is in the bath.", "Take a bath before dinner."),
+        "bathroom" to listOf("Where is the nearest bathroom?", "The bathroom floor is wet.", "Please clean the guest bathroom."),
+        "be" to listOf("I want to be a doctor.", "Be careful with that glass.", "Please be quiet in the library."),
+        "bear" to listOf("We saw a bear in woods.", "That bear is very large.", "Do not feed the wild bear."),
+        "beautiful" to listOf("This sunset is absolutely beautiful.", "She wore a beautiful red dress.", "The garden looks beautiful today."),
+        "because" to listOf("I slept because I was tired.", "She cried because she lost it.", "He smiled because he was happy."),
+        "bed" to listOf("I am going to bed now.", "The dog sleeps on my bed.", "Make your bed every morning."),
+        "bedroom" to listOf("My bedroom is very small.", "She painted her bedroom blue.", "He is tidying his bedroom."),
+        "beef" to listOf("I prefer beef over chicken.", "We are having roast beef.", "This beef steak is tender."),
+        "beer" to listOf("He ordered a cold beer.", "Do you like craft beer?", "I only drink beer occasionally."),
+        "begin" to listOf("Let us begin the meeting.", "When does the movie begin?", "The show will begin shortly."),
+        "behaviour" to listOf("His behaviour was very strange.", "Good behaviour earns a reward.", "The child's behaviour improved."),
+        "between" to listOf("Sit between us.", "It is between two cities.", "Choose between these two."),
+        "big" to listOf("That is a big house.", "He has big plans for summer.", "I made a big mistake."),
+        "bike" to listOf("I ride my bike to work.", "My bike has a flat tire.", "She bought a new electric bike."),
+        "bird" to listOf("A bird is on the fence.", "That bird sings every morning.", "The blue bird flew away."),
+        "birthday" to listOf("Happy birthday to my sister!", "When is your birthday?", "We had a big birthday party."),
+        "blizzard" to listOf("The blizzard stopped the traffic.", "We were trapped in a blizzard.", "A blizzard is coming tonight."),
+        "blood" to listOf("He has a blood test tomorrow.", "Blood is red in color.", "Stop the blood with a bandage."),
+        "blouse" to listOf("She wore a white blouse.", "This silk blouse is expensive.", "Wash the blouse by hand."),
+        "boat" to listOf("The boat is on the lake.", "We rented a small fishing boat.", "He steered the boat carefully."),
+        "body" to listOf("Exercise is good for the body.", "The body needs plenty of water.", "He has a strong body."),
+        "bone" to listOf("The dog chewed a bone.", "He broke a bone in his arm.", "This fish has many bones."),
+        "book" to listOf("I need to book a flight.", "Read this book for class.", "Can you book the table?"),
+        "bookstore" to listOf("Let's meet at the bookstore.", "This bookstore has great coffee.", "I spent hours in the bookstore."),
+        "bored" to listOf("I'm bored with this movie.", "He looked bored during the meeting.", "The kids are getting bored."),
+        "boring" to listOf("That lecture was so boring.", "This book is a bit boring.", "Stop telling boring stories."),
+        "brain" to listOf("Exercise is good for your brain.", "Use your brain to solve this.", "My brain feels like mush."),
+        "bread" to listOf("Please buy a loaf of bread.", "I love the smell of fresh bread.", "Do you want toasted bread?"),
+        "breakfast" to listOf("What did you have for breakfast?", "I usually skip breakfast.", "Breakfast is served until ten."),
+        "bridge" to listOf("Walk across the bridge slowly.", "The bridge is closed for repairs.", "We crossed the bridge together."),
+        "bring about" to listOf("New laws can bring about change.", "What brought about this decision?", "Hard work brings about success."),
+        "broadcast" to listOf("The news is broadcast live.", "They broadcast the game nationwide.", "When will the report broadcast?"),
+        "brother" to listOf("My brother lives in London.", "Do you have a younger brother?", "He is my only brother."),
+        "budget" to listOf("We are on a tight budget.", "I need to plan my budget.", "This project is over budget."),
+        "builder" to listOf("The builder is arriving tomorrow.", "We hired a professional builder.", "He is a skilled house builder."),
+        "bus" to listOf("I take the bus to work.", "The bus is running late.", "Wait for the next bus."),
+        "bus stop" to listOf("Meet me at the bus stop.", "There is a bus stop nearby.", "He waited at the bus stop."),
+        "busy" to listOf("I have a very busy day.", "The street is always busy.", "Are you busy right now?"),
+        "but" to listOf("I like it but it's pricey.", "He is small but strong.", "I tried but I failed."),
+        "butcher shop" to listOf("I bought steak at the butcher shop.", "The butcher shop closes at five.", "Visit the local butcher shop."),
+        "butter" to listOf("Put some butter on the toast.", "Do we have any salted butter?", "The butter is in the fridge."),
+        "butterfly" to listOf("A butterfly landed on the flower.", "Look at that colorful butterfly.", "The butterfly flew away quickly."),
+        "button" to listOf("Press the red button now.", "My shirt is missing a button.", "Push the button to start."),
+        "buy" to listOf("Where can I buy tickets?", "I want to buy a car.", "Did you buy any milk?"),
+        "by" to listOf("I go to work by bus.", "The book was written by him.", "Stand by the door."),
+        "by the same token" to listOf("He is smart; by the same token, he is arrogant.", "It is fast; by the same token, it is risky.", "She is kind; by the same token, she is firm."),
+        "cafe" to listOf("Let's meet at the cafe.", "This cafe has great pastries.", "I read books at the cafe."),
+        "camp" to listOf("We plan to camp here.", "They set up camp by the river.", "Do you like to camp?"),
+        "campaign" to listOf("The political campaign starts tomorrow.", "This ad campaign is very successful.", "She led the cleaning campaign."),
+        "can" to listOf("Can you help me move this?", "I can speak a little Spanish.", "We can meet after work."),
+        "cap" to listOf("Put the cap back on the pen.", "I bought a new baseball cap.", "The bottle cap is too tight."),
+        "car" to listOf("My car is in the shop.", "We took the car to the city.", "She drives an electric car."),
+        "career" to listOf("He wants a career in law.", "It takes time to build a career.", "She is changing her career path."),
+        "carry out" to listOf("Please carry out my instructions.", "They will carry out the plan.", "We need to carry out a test."),
+        "cat" to listOf("The cat is sleeping on the sofa.", "My cat likes to chase birds.", "Do you have a pet cat?"),
+        "ceiling" to listOf("There is a leak in the ceiling.", "The ceiling is very high here.", "Paint the ceiling white."),
+        "chair" to listOf("Take a seat in this chair.", "This office chair is very comfortable.", "Please move the chair aside."),
+        "channel" to listOf("Change the channel to the news.", "Which channel is the game on?", "I found a great cooking channel."),
+        "character" to listOf("He is a strong character.", "This movie has a great lead character.", "She is a very honest character."),
+        "cheap" to listOf("This watch was very cheap.", "Cheap flights are hard to find.", "I bought some cheap snacks."),
+        "cheese" to listOf("I love cheddar cheese.", "Put some cheese on the pizza.", "Do you like goat cheese?"),
+        "chef" to listOf("The chef cooked a great meal.", "He is a professional pastry chef.", "Ask the chef for the recipe."),
+        "chest" to listOf("He felt a pain in his chest.", "The treasure was in the chest.", "Put the book on my chest."),
+        "chest of drawers" to listOf("Put your socks in the chest of drawers.", "This chest of drawers is too heavy.", "I bought a wooden chest of drawers."),
+        "chicken" to listOf("We are having roast chicken tonight.", "The chicken is crossing the road.", "Do you prefer chicken or beef?"),
+        "child" to listOf("The child is playing with toys.", "Every child needs a good education.", "She is an only child."),
+        "children's room" to listOf("The children's room is a mess.", "We painted the children's room blue.", "There are toys in the children's room."),
+        "chocolate" to listOf("I want some dark chocolate.", "This chocolate cake is delicious.", "Do you like milk chocolate?"),
+        "city" to listOf("New York is a huge city.", "I love living in the city.", "Which city are you visiting?"),
+        "claim" to listOf("He tried to claim the prize.", "You can claim your expenses here.", "She made a bold claim."),
+        "clarify" to listOf("Could you clarify your point?", "I need to clarify the rules.", "Please clarify the instructions."),
+        "class" to listOf("I have an English class today.", "The class starts at nine.", "She is the best in the class."),
+        "climate" to listOf("This region has a tropical climate.", "The climate is getting warmer.", "We prefer a cold climate."),
+        "climate change" to listOf("Climate change affects the whole planet.", "We must fight climate change.", "What causes climate change?"),
+        "close" to listOf("Please close the door.", "The store is close to my house.", "We are very close friends."),
+        "cloudy" to listOf("It looks too cloudy for a picnic.", "The sky is cloudy today.", "It’s a cloudy afternoon."),
+        "coach" to listOf("My coach is very strict.", "She is the soccer coach.", "He works as a life coach."),
+        "coat" to listOf("Put on your winter coat.", "This coat is too big.", "Hang your coat on the rack."),
+        "coffee" to listOf("I need some coffee now.", "Do you drink black coffee?", "Let's grab a coffee together."),
+        "coherence" to listOf("The essay lacks overall coherence.", "Her argument had no coherence.", "We need more coherence here."),
+        "coherent" to listOf("The plan is finally coherent.", "He was barely coherent after sleep.", "Please give me a coherent answer."),
+        "cold" to listOf("It is freezing cold outside.", "I have a bad cold.", "The water feels very cold."),
+        "cold wind" to listOf("A cold wind blew north.", "The cold wind bit my cheeks.", "I can't stand this cold wind."),
+        "collaborate" to listOf("Let's collaborate on this project.", "We need to collaborate more.", "They collaborate with local artists."),
+        "colleague" to listOf("She is a trusted colleague.", "My colleague is on vacation.", "I work with a helpful colleague."),
+        "come" to listOf("Please come to the party.", "When will you come home?", "Come here for a second."),
+        "come up with" to listOf("Come up with a plan.", "She came up with an idea.", "Can you come up with a solution?"),
+        "community" to listOf("We live in a small community.", "This is a friendly community.", "They support the local community."),
+        "commute" to listOf("My commute takes one hour.", "I hate my daily commute.", "Do you commute by train?"),
+        "company" to listOf("He started a software company.", "I enjoy your company.", "The company is hiring new staff."),
+        "comprehensive" to listOf("This is a comprehensive guide.", "The report was very comprehensive.", "We need a comprehensive list."),
+        "computer" to listOf("My computer is very slow.", "Turn off the computer now.", "I bought a new computer."),
+        "concede" to listOf("He had to concede defeat.", "I concede that you are right.", "They refused to concede the point."),
+        "conclusion" to listOf("I reached a different conclusion.", "The conclusion was quite surprising.", "What is your final conclusion?"),
+        "confidence" to listOf("She has a lot of confidence.", "I have confidence in you.", "This will boost your confidence."),
+        "conflict" to listOf("We have a schedule conflict.", "This is a major conflict.", "They tried to resolve the conflict."),
+        "consciousness" to listOf("He slowly regained consciousness.", "She lost consciousness for a moment.", "It affects human consciousness."),
+        "consensus" to listOf("They finally reached a consensus.", "There is no general consensus.", "We need a group consensus."),
+        "consequently" to listOf("It rained, consequently the game stopped.", "He lied and consequently lost trust.", "She failed, consequently she retook it."),
+        "considerable" to listOf("This requires a considerable amount of time.", "There is considerable interest in this.", "He spent a considerable sum."),
+        "consist" to listOf("The cake consists of flour and eggs.", "These kits consist of five basic tools.", "Most meals consist of rice and fish."),
+        "constitution" to listOf("He has a very strong constitution.", "The constitution protects our basic rights.", "The new constitution was signed today."),
+        "contend" to listOf("They contend that the price is too high.", "She will contend for the gold medal.", "I contend that we need more time."),
+        "contribute" to listOf("Everyone should contribute to the project.", "He contributes money to the local shelter.", "Do you want to contribute an idea?"),
+        "convenience store" to listOf("I stopped at the convenience store for milk.", "The convenience store is open twenty-four hours.", "Is there a convenience store nearby?"),
+        "conversely" to listOf("He loves tea; conversely, she prefers coffee.", "Some like heat; conversely, others hate it.", "It's fast, but conversely, it's very expensive."),
+        "cooking" to listOf("My mother is great at cooking pasta.", "Cooking dinner takes a long time.", "I enjoy cooking for my friends."),
+        "cool" to listOf("The weather is finally getting cool.", "That is a really cool jacket.", "Let's wait for the engine to cool."),
+        "correlation" to listOf("There is a correlation between diet and health.", "I see no correlation between the two events.", "This study shows a strong correlation."),
+        "corroborate" to listOf("The witness could corroborate his story.", "New evidence will corroborate the claim.", "Can you corroborate her version of events?"),
+        "cough" to listOf("He has a loud, dry cough.", "Please cover your mouth when you cough.", "This syrup helps soothe a cough."),
+        "could" to listOf("Could you open the window?", "He could be at home.", "I could not find my keys."),
+        "country" to listOf("Which country are you from?", "They moved to a different country.", "The country is known for its mountains."),
+        "course" to listOf("I am taking a course in history.", "The golf course is closed today.", "Please stay on the main course."),
+        "cousin" to listOf("My cousin lives in New York.", "She is my favorite female cousin.", "Do you have any cousins?"),
+        "cow" to listOf("The cow is eating the grass.", "A cow provides milk for the farm.", "Look at that big brown cow."),
+        "crisis" to listOf("The government is facing a financial crisis.", "We need a plan to handle this crisis.", "It was a personal crisis for him."),
+        "criteria" to listOf("What are the criteria for this job?", "He meets all the necessary criteria.", "The criteria for selection are very strict."),
+        "crocodile" to listOf("A crocodile is hiding in the river.", "Be careful of the crocodile.", "The crocodile has very sharp teeth."),
+        "culture" to listOf("I love learning about different culture.", "Food is a big part of culture.", "They are adjusting to the new culture."),
+        "curry" to listOf("This chicken curry is very spicy.", "I ordered a vegetable curry.", "Do you like Indian curry?"),
+        "custom" to listOf("It is a local custom to bow.", "This custom has existed for centuries.", "We followed the traditional wedding custom."),
+        "dancing" to listOf("She is very good at dancing.", "We spent the night dancing.", "Dancing is a great way to exercise."),
+        "data" to listOf("We need to analyze the data.", "The data shows a clear trend.", "Where can I find the raw data?"),
+        "daughter" to listOf("Their daughter starts school tomorrow.", "She is the only daughter.", "My daughter loves to paint."),
+        "daughter-in-law" to listOf("My daughter-in-law is a doctor.", "She gets along with her daughter-in-law.", "I bought a gift for my daughter-in-law."),
+        "day" to listOf("I had a long day at work.", "What day is it today?", "It was a rainy day in London."),
+        "deadline" to listOf("The deadline is tomorrow at noon.", "We missed the filing deadline.", "Can we extend the deadline?"),
+        "debt" to listOf("He is struggling to pay his debt.", "They are finally out of debt.", "National debt is rising quickly."),
+        "decline" to listOf("Sales began to decline last month.", "He decided to decline the offer.", "The population continues to decline."),
+        "deer" to listOf("A deer ran across the road.", "Look at that deer in the woods.", "Deer love eating garden plants."),
+        "degree" to listOf("She has a degree in history.", "It was a first-degree burn.", "He is a degree away from finishing."),
+        "degrees" to listOf("It is thirty degrees outside today.", "Water boils at one hundred degrees.", "The angle is forty-five degrees."),
+        "delegate" to listOf("I need to delegate more tasks.", "He was chosen as the delegate.", "Please delegate this to the team."),
+        "delicious" to listOf("This chocolate cake is delicious.", "The dinner smelled delicious.", "That was a delicious meal."),
+        "delineate" to listOf("Please delineate the boundary lines.", "The map helps delineate the border.", "He failed to delineate the goals."),
+        "demonstrate" to listOf("Can you demonstrate how it works?", "The teacher will demonstrate the experiment.", "He demonstrated his skill on stage."),
+        "dentist" to listOf("I have a dentist appointment tomorrow.", "The dentist cleaned my teeth.", "My dentist is very gentle."),
+        "department store" to listOf("We bought a dress at the department store.", "The department store is having a sale.", "Meet me at the department store."),
+        "desert" to listOf("It rarely rains in the desert.", "The Sahara is a vast desert.", "They got lost in the desert."),
+        "desk" to listOf("My desk is covered in papers.", "Put the lamp on your desk.", "He sat at his desk all day."),
+        "dessert" to listOf("What should we have for dessert?", "I want ice cream for dessert.", "This apple tart is a great dessert."),
+        "development" to listOf("The city is seeing rapid development.", "This is a new product development.", "Child development is a complex topic."),
+        "diet" to listOf("I am on a strict diet.", "A balanced diet is important.", "She changed her diet to feel better."),
+        "difficult" to listOf("This math problem is very difficult.", "It was a difficult decision to make.", "Learning a language is difficult."),
+        "dinner" to listOf("What is for dinner tonight?", "We had dinner at seven.", "Let's go out for dinner."),
+        "direction" to listOf("Which direction are we heading?", "Follow the direction of the arrow.", "He gave us the wrong direction."),
+        "discovery" to listOf("The discovery changed science forever.", "This was a surprising discovery.", "They made a discovery in the cave."),
+        "discrepancy" to listOf("There is a discrepancy in the bill.", "We found a discrepancy in the data.", "Explain the discrepancy in your story."),
+        "do" to listOf("What do you do for a living?", "I can do the laundry now.", "Just do your best today."),
+        "doctor" to listOf("The doctor gave me some medicine.", "I need to see a doctor.", "She is a qualified doctor."),
+        "doctrine" to listOf("The party's core doctrine is changing.", "He follows a strict religious doctrine.", "That political doctrine is outdated now."),
+        "dog" to listOf("My dog loves chasing tennis balls.", "Who is walking the dog today?", "I need to feed the dog."),
+        "dolphin" to listOf("A dolphin jumped out of the water.", "Dolphins are very intelligent animals.", "We saw a dolphin near the boat."),
+        "donation" to listOf("I made a small cash donation.", "Thank you for your generous donation.", "The charity accepted the clothing donation."),
+        "door" to listOf("Please close the door behind you.", "Someone is knocking at the front door.", "The door is locked from inside."),
+        "down" to listOf("Sit down, please.", "The sun goes down.", "Put the bag down."),
+        "download" to listOf("I need to download the app.", "The download is taking too long.", "Where can I download the file?"),
+        "downpour" to listOf("We got soaked in the downpour.", "The sudden downpour ruined the party.", "A heavy downpour flooded the street."),
+        "dress" to listOf("She wore a blue summer dress.", "This dress is too long for me.", "You should wear a formal dress."),
+        "drink" to listOf("Would you like something to drink?", "I need a cold drink now.", "He took a sip of his drink."),
+        "driver" to listOf("The taxi driver was very friendly.", "Is he a licensed truck driver?", "The driver stopped at the red light."),
+        "duck" to listOf("A duck is swimming in the pond.", "Look at that yellow rubber duck.", "The duck waddled across the grass."),
+        "eagle" to listOf("An eagle soared above the mountains.", "The eagle has very sharp vision.", "I saw an eagle in the tree."),
+        "ear" to listOf("She whispered something in my ear.", "My left ear is hurting today.", "He has a keen ear for music."),
+        "earrings" to listOf("These gold earrings were a gift.", "She is wearing small pearl earrings.", "I lost one of my earrings."),
+        "earth" to listOf("The earth orbits around the sun.", "We must protect the earth's resources.", "Plants grow in the rich earth."),
+        "easy" to listOf("This math test was very easy.", "It is easy to get lost here.", "Following the recipe is quite easy."),
+        "eat" to listOf("What do you want to eat?", "I like to eat fresh fruit.", "Let's eat dinner at six tonight."),
+        "economy" to listOf("The global economy is struggling now.", "He studied the local economy.", "Low interest rates help the economy."),
+        "egg" to listOf("I had a boiled egg for breakfast.", "Do we have any eggs left?", "She cracked an egg into the bowl."),
+        "eight" to listOf("The meeting starts at eight o'clock.", "He has eight apples in his bag.", "My sister is eight years old."),
+        "elephant" to listOf("An elephant has a long trunk.", "We saw a wild elephant today.", "Elephants are the largest land animals."),
+        "elevator" to listOf("The elevator is out of order.", "Take the elevator to the fifth floor.", "I prefer the stairs to the elevator."),
+        "eleven" to listOf("There are eleven players on the team.", "The child is eleven years old.", "I have eleven emails to answer."),
+        "eloquent" to listOf("She gave an eloquent speech today.", "His writing style is very eloquent.", "He is an eloquent public speaker."),
+        "elucidate" to listOf("Could you please elucidate that point?", "The teacher tried to elucidate the concept.", "Further details will elucidate the matter."),
+        "emphasize" to listOf("Please emphasize the main points.", "I want to emphasize this detail.", "Let me emphasize the risk."),
+        "energy" to listOf("I have no energy today.", "This drink gives me energy.", "Solar energy is getting cheaper."),
+        "entrance" to listOf("Where is the main entrance?", "Meet me at the entrance.", "The entrance was blocked by snow."),
+        "environment" to listOf("We must protect our environment.", "It is a stressful environment.", "Plants need a warm environment."),
+        "equality" to listOf("They fight for gender equality.", "We believe in legal equality.", "Equality is a basic human right."),
+        "ethics" to listOf("This is a question of ethics.", "Medical ethics are very strict.", "He studies professional ethics."),
+        "evaluate" to listOf("We need to evaluate the results.", "I cannot evaluate your work yet.", "Let us evaluate the options."),
+        "evening" to listOf("I will call you this evening.", "The evening was very quiet.", "What are your evening plans?"),
+        "every day" to listOf("I drink coffee every day.", "She walks her dog every day.", "I learn English every day."),
+        "evidence" to listOf("There is no evidence here.", "The police found new evidence.", "Do you have any evidence?"),
+        "exacerbate" to listOf("Stress can exacerbate the pain.", "Don't exacerbate the problem.", "Cold weather will exacerbate it."),
+        "exam" to listOf("I have a math exam.", "The exam was very difficult.", "When is your final exam?"),
+        "excited" to listOf("I am excited for the trip.", "She is excited about her job.", "We are excited to meet you."),
+        "exercise" to listOf("I need more daily exercise.", "This exercise is too hard.", "Do you exercise every morning?"),
+        "exhibition" to listOf("The art exhibition opens today.", "I enjoyed the photo exhibition.", "Which exhibition is the best?"),
+        "existential" to listOf("He is having an existential crisis.", "It is an existential threat.", "They discussed existential philosophy."),
+        "expense" to listOf("Travel is a huge expense.", "This was an unexpected expense.", "We need to cut expenses."),
+        "expensive" to listOf("This car is too expensive.", "Dinner was very expensive.", "I can't afford expensive clothes."),
+        "experience" to listOf("I have five years of experience.", "It was a great experience.", "Do you have any experience?"),
+        "experiment" to listOf("The science experiment failed.", "We tried a new experiment.", "This is just a social experiment."),
+        "extrapolate" to listOf("We can extrapolate the data.", "Do not extrapolate the results.", "Try to extrapolate the trend."),
+        "eye" to listOf("Something is in my eye.", "Keep an eye on him.", "She has a blue eye."),
+        "face" to listOf("Wash your face with water.", "He has a smiling face.", "I cannot face the truth."),
+        "facilitate" to listOf("This tool will facilitate work.", "A guide can facilitate travel.", "Let me facilitate the meeting."),
+        "family" to listOf("I love my big family.", "My family lives in Spain.", "We have a family dinner."),
+        "far" to listOf("The park is too far.", "How far is it?", "Go far away."),
+        "farmer" to listOf("The farmer grows organic corn.", "My uncle is a dairy farmer.", "The farmer feeds the cows."),
+        "fast" to listOf("This car is very fast.", "Don't walk too fast.", "He is a fast learner."),
+        "father" to listOf("My father works in a bank.", "He is a great father.", "Call your father tonight."),
+        "feasibility" to listOf("We are checking the project's feasibility.", "The feasibility study is complete.", "Is this plan even feasible?"),
+        "festival" to listOf("The music festival starts tomorrow.", "We love the autumn festival.", "I bought food at the festival."),
+        "fever" to listOf("The baby has a high fever.", "Drink water to break the fever.", "I feel warm and have a fever."),
+        "finance" to listOf("She studies corporate finance.", "Personal finance is very important.", "He works in the finance department."),
+        "finger" to listOf("I cut my index finger.", "Put your finger on the map.", "She wore a ring on her finger."),
+        "finish" to listOf("Please finish your homework now.", "I will finish the book tonight.", "Did you finish the race?"),
+        "firefighter" to listOf("The firefighter saved the cat.", "He is a brave firefighter.", "Firefighters wear heavy gear."),
+        "fish" to listOf("I love eating grilled fish.", "There are fish in the pond.", "Can you fish in this lake?"),
+        "fisherman" to listOf("The fisherman caught a huge bass.", "My grandfather was a fisherman.", "The fisherman cast his net."),
+        "five" to listOf("I have five gold coins.", "It takes five minutes to walk.", "Give me five dollars, please."),
+        "flight attendant" to listOf("The flight attendant served drinks.", "She is training as a flight attendant.", "Ask the flight attendant for help."),
+        "floor" to listOf("The floor is made of wood.", "I dropped my phone on the floor.", "We live on the second floor."),
+        "flower" to listOf("This flower smells very sweet.", "She picked a yellow flower.", "Water the flowers every morning."),
+        "fluctuate" to listOf("Prices fluctuate every single day.", "Temperatures fluctuate during the spring.", "My mood tends to fluctuate."),
+        "fog" to listOf("The fog covered the mountain.", "I can't see through the fog.", "Thick fog slowed down traffic."),
+        "foggy" to listOf("It is a very foggy morning.", "The valley looked foggy today.", "Driving is hard in foggy weather."),
+        "foot" to listOf("He stepped on my left foot.", "My foot hurts after the hike.", "The ruler is one foot long."),
+        "for" to listOf("This gift is for you.", "I waited for two hours.", "Is this for sale?"),
+        "for instance" to listOf("Use a tool, for instance, a hammer.", "For instance, we could go swimming.", "Take a fruit, for instance, an apple."),
+        "forest" to listOf("We walked through the dark forest.", "Many animals live in the forest.", "The forest is very quiet here."),
+        "four" to listOf("There are four chairs at the table.", "I have four siblings.", "The cake is cut into four pieces."),
+        "fox" to listOf("A red fox ran past.", "The fox is very clever.", "We saw a fox in the garden."),
+        "friday" to listOf("We go to the cinema every Friday.", "Friday is my favorite day.", "The report is due this Friday."),
+        "friend" to listOf("She is my best friend.", "I need a friend to talk to.", "We have been friends for years."),
+        "frog" to listOf("A small green frog jumped away.", "The frog sat on a leaf.", "I saw a frog in the pond."),
+        "from" to listOf("I am from Canada.", "This gift is from Sarah.", "Walk away from the edge."),
+        "fruit" to listOf("Do you like fresh fruit?", "Apples are my favorite fruit.", "Eat more fruit every day."),
+        "fun" to listOf("This party is so much fun.", "We had fun at the beach.", "Learning English is really fun."),
+        "furthermore" to listOf("It is cheap; furthermore, it is fast.", "The room is small; furthermore, it is cold.", "He is smart; furthermore, he is hardworking."),
+        "gallery" to listOf("The art gallery is open today.", "We visited a local photo gallery.", "This gallery has a new exhibit."),
+        "game" to listOf("Let's play a board game.", "The game ends at midnight.", "Who won the football game?"),
+        "garden" to listOf("My grandmother has a beautiful garden.", "We planted roses in the garden.", "The garden needs more water."),
+        "generous" to listOf("He is very generous with his time.", "Thank you for your generous gift.", "She is a generous person."),
+        "get" to listOf("I need to get some milk.", "Did you get my email?", "It is getting late now."),
+        "get up" to listOf("I usually get up at six.", "What time do you get up?", "Help me get up from the floor."),
+        "give up" to listOf("Don't give up on your dreams.", "I will never give up now.", "He decided to give up smoking."),
+        "glasses" to listOf("I can't find my reading glasses.", "Do these glasses look good?", "She wears glasses for reading."),
+        "global" to listOf("Global warming is a serious issue.", "We live in a global economy.", "This is a global problem."),
+        "gloves" to listOf("Wear your gloves in the snow.", "My gloves are too small.", "These leather gloves are expensive."),
+        "go" to listOf("I have to go now.", "Let's go to the park.", "Where do you want to go?"),
+        "go out" to listOf("Do you want to go out?", "They go out every Friday night.", "I don't feel like going out."),
+        "goal" to listOf("My goal is to learn English.", "He scored a goal in the game.", "What is your main goal here?"),
+        "goat" to listOf("The goat is eating the grass.", "I saw a goat on the hill.", "That goat is very stubborn."),
+        "good" to listOf("This is a very good book.", "Have a good day!", "He is a good student."),
+        "good afternoon" to listOf("Good afternoon, how are you?", "Good afternoon, class!", "Good afternoon, Mr. Smith."),
+        "good evening" to listOf("Good evening, everyone.", "Good evening, may I help you?", "Good evening to you all."),
+        "good morning" to listOf("Good morning, sleep well?", "Good morning, time to wake up.", "Good morning, how is your day?"),
+        "goodbye" to listOf("It is time to say goodbye.", "Goodbye, see you tomorrow!", "She waved goodbye to me."),
+        "gradual" to listOf("There was a gradual change in weather.", "The recovery was a gradual process.", "We saw a gradual increase in sales."),
+        "grandchild" to listOf("She loves her only grandchild.", "He is his favorite grandchild.", "The grandchild is visiting today."),
+        "granddaughter" to listOf("My granddaughter is starting school today.", "She is a spoiled granddaughter.", "I bought a gift for my granddaughter."),
+        "grandfather" to listOf("My grandfather tells great stories.", "He is a retired grandfather.", "I visit my grandfather on Sundays."),
+        "grandmother" to listOf("My grandmother bakes the best cookies.", "She is a loving grandmother.", "I live with my grandmother."),
+        "grandparents" to listOf("My grandparents live in the countryside.", "They are very proud grandparents.", "We visit our grandparents every summer."),
+        "grandson" to listOf("He is a talented grandson.", "My grandson loves playing soccer.", "I have one grandson and two granddaughters."),
+        "grapes" to listOf("These green grapes are very sweet.", "Do you prefer red or green grapes?", "I bought a bunch of grapes."),
+        "grass" to listOf("The grass needs to be cut.", "Don't walk on the grass.", "The dew is on the grass."),
+        "green tea" to listOf("I drink green tea every morning.", "Green tea is very healthy.", "Would you like some green tea?"),
+        "greengrocer" to listOf("The greengrocer has fresh apples today.", "I buy my fruit from the greengrocer.", "The local greengrocer is very friendly."),
+        "guest" to listOf("We have a guest for dinner.", "Please make the guest feel welcome.", "She is a guest in our house."),
+        "guide" to listOf("He is a professional tour guide.", "The guide showed us the castle.", "Read the user guide first."),
+        "habit" to listOf("Biting nails is a bad habit.", "I have a habit of waking up early.", "It is hard to break a habit."),
+        "hair" to listOf("She has long brown hair.", "My hair needs a trim.", "He has curly hair."),
+        "hair salon" to listOf("I have an appointment at the hair salon.", "This hair salon is very expensive.", "Where is the nearest hair salon?"),
+        "hairdresser" to listOf("My hairdresser is very talented.", "I need to call the hairdresser.", "The hairdresser cut my hair short."),
+        "hand" to listOf("Please give me a hand with this.", "Wash your hands before eating.", "He held her hand tightly."),
+        "handbag" to listOf("She left her handbag on the bus.", "This leather handbag was a gift.", "Put your phone in your handbag."),
+        "happy" to listOf("I am so happy for you.", "They look like a happy couple.", "This news makes me very happy."),
+        "hat" to listOf("Put on a hat for the sun.", "He wears a black hat.", "This hat is too small for me."),
+        "have" to listOf("Do you have any siblings?", "I have a lot of work today.", "We have a meeting at noon."),
+        "head" to listOf("My head hurts from the noise.", "He shook his head in disagreement.", "Put your head on the pillow."),
+        "headache" to listOf("I have a terrible headache.", "This loud music is giving me a headache.", "Aspirin helps with a headache."),
+        "headline" to listOf("The headline was very shocking.", "I read the headline in the news.", "That is a misleading headline."),
+        "healthy" to listOf("Eating vegetables is a healthy habit.", "She looks very healthy and fit.", "I want to live a healthy life."),
+        "heart" to listOf("My heart is beating fast.", "He has a very kind heart.", "Exercise is good for your heart."),
+        "heavy" to listOf("This box is too heavy.", "It was a heavy rain.", "My bag feels very heavy."),
+        "hello" to listOf("Hello, how are you today?", "Hello, please come inside.", "Hello, is anyone there?"),
+        "help" to listOf("Can you help me move?", "I need some help here.", "Please help me find it."),
+        "hence" to listOf("He lied, hence the trust.", "It rained, hence the delay.", "She's sick, hence the absence."),
+        "here" to listOf("Come here right now.", "It is cold here.", "Put it here."),
+        "hi" to listOf("Hi, what is your name?", "Hi, how is it going?", "Just say hi to them."),
+        "high" to listOf("The prices are too high.", "That is a high wall.", "The bird flew high."),
+        "high heels" to listOf("She wore red high heels.", "High heels hurt my feet.", "Put on your high heels."),
+        "hill" to listOf("The house is on a hill.", "We ran down the hill.", "It is a steep hill."),
+        "hold" to listOf("Please hold the door open.", "Can you hold my bag?", "Hold this for a second."),
+        "honest" to listOf("Be honest with me now.", "He is an honest man.", "Give me your honest opinion."),
+        "honey bee" to listOf("A honey bee stung me.", "The honey bee is yellow.", "Look at that honey bee."),
+        "horse" to listOf("He rides a brown horse.", "The horse ran very fast.", "Can I feed the horse?"),
+        "hospital" to listOf("She works at the hospital.", "The hospital is nearby.", "He is in the hospital."),
+        "host" to listOf("Our host was very friendly.", "Who is the party host?", "The host welcomed the guests."),
+        "hot" to listOf("The coffee is too hot.", "It is hot outside today.", "This soup is very hot."),
+        "hotel" to listOf("We stayed at a hotel.", "Which hotel is the best?", "The hotel has a pool."),
+        "hotel staff" to listOf("The hotel staff were helpful.", "Ask the hotel staff for help.", "The hotel staff is professional."),
+        "hour" to listOf("I will be there in an hour.", "It takes one hour.", "Wait for another hour."),
+        "house" to listOf("This is a big house.", "We are staying at home.", "My house is painted white."),
+        "humid" to listOf("The air feels very humid.", "It is humid in Florida.", "I hate humid weather."),
+        "humidity" to listOf("The humidity is very high.", "Low humidity dries the skin.", "Humidity makes me feel sticky."),
+        "hundred" to listOf("It costs one hundred dollars.", "There are a hundred birds.", "I have a hundred ideas."),
+        "hungry" to listOf("I am getting very hungry.", "Are you hungry for lunch?", "The baby is hungry now."),
+        "husband" to listOf("Her husband is a doctor.", "My husband loves cooking.", "He is a kind husband."),
+        "hypothesis" to listOf("My hypothesis was actually wrong.", "Test your hypothesis now.", "The hypothesis needs more proof."),
+        "hypothesize" to listOf("Scientists hypothesize about the origin.", "Let us hypothesize the result.", "I hypothesize it will rain."),
+        "ice" to listOf("Put some ice in it.", "The lake is made of ice.", "I need more ice cubes."),
+        "ice cream" to listOf("Do you want chocolate ice cream?", "I love eating ice cream in summer.", "The ice cream is melting fast."),
+        "ideology" to listOf("Their political ideology is very strict.", "It is a complex social ideology.", "He questioned the party's core ideology."),
+        "if" to listOf("If it rains, stay home.", "I will go if you go.", "Tell me if you need help."),
+        "immigration" to listOf("The new immigration laws are confusing.", "Immigration helps grow the local economy.", "She is studying international immigration patterns."),
+        "implement" to listOf("We need to implement the new plan.", "When will they implement the changes?", "The company implemented a strict policy."),
+        "implication" to listOf("This decision has a serious implication.", "What is the implication of that?", "He ignored the legal implication."),
+        "improve" to listOf("I want to improve my English.", "This cream will improve your skin.", "We must improve our sales targets."),
+        "in" to listOf("The keys are in my bag.", "He lives in a city.", "I will be there in ten."),
+        "in addition" to listOf("In addition, we offer free shipping.", "She speaks French and, in addition, Spanish.", "In addition, the hotel has a gym."),
+        "in conclusion" to listOf("In conclusion, we need more funding.", "In conclusion, the project was a success.", "In conclusion, please sign the form."),
+        "in contrast" to listOf("He is tall; in contrast, his brother is short.", "In contrast, the city is very noisy.", "The red one is bright; in contrast, the blue is dark."),
+        "in essence" to listOf("In essence, it is a simple machine.", "It is, in essence, a waste of time.", "In essence, we are all the same."),
+        "in light of" to listOf("In light of the news, we paused.", "In light of the cost, we cancelled.", "The plan changed in light of the rain."),
+        "in other words" to listOf("In other words, you are fired.", "In other words, it is too expensive.", "It is free; in other words, no cost."),
+        "in the long run" to listOf("In the long run, this saves money.", "It will be better in the long run.", "In the long run, health is wealth."),
+        "income" to listOf("My monthly income is quite low.", "They have a very high annual income.", "He earns a steady income now."),
+        "inevitably" to listOf("The price will inevitably go up.", "Inevitably, we ran out of time.", "Mistakes will inevitably happen during the process."),
+        "inherent" to listOf("There is an inherent risk in climbing.", "Patience is inherent to her personality.", "This system has an inherent flaw."),
+        "insect" to listOf("A small insect landed on my arm.", "Which insect is this?", "Ants are very hardworking insects."),
+        "interesting" to listOf("That is an interesting point of view.", "I read an interesting book yesterday.", "The movie was not very interesting."),
+        "internet" to listOf("The internet is down again today.", "I found the answer on the internet.", "Do you have an internet connection?"),
+        "intersection" to listOf("Turn left at the next intersection.", "There was a crash at the intersection.", "Wait for the light at the intersection."),
+        "interview" to listOf("I have a job interview tomorrow.", "The interview lasted for one hour.", "She felt nervous during the interview."),
+        "intricate" to listOf("The dress has an intricate pattern.", "This is a very intricate puzzle.", "The watch has an intricate mechanism."),
+        "investment" to listOf("Buying a house is a good investment.", "He made a risky stock investment.", "This project requires a large investment."),
+        "irrefutable" to listOf("The evidence against him is irrefutable.", "This is an irrefutable fact.", "Her logic was completely irrefutable."),
+        "island" to listOf("They live on a small tropical island.", "We took a boat to the island.", "The island is famous for its beaches."),
+        "issue" to listOf("We need to fix this issue.", "Is there a technical issue?", "That is a major issue."),
+        "jacket" to listOf("Put on your winter jacket.", "This jacket is too small.", "I left my jacket here."),
+        "jeans" to listOf("These jeans are very tight.", "Do you like these jeans?", "I bought new blue jeans."),
+        "job" to listOf("He started a new job.", "I love my current job.", "Is it a full-time job?"),
+        "journey" to listOf("It was a long journey.", "Enjoy your journey to Italy.", "The journey took five hours."),
+        "judiciary" to listOf("The judiciary is independent here.", "He works in the judiciary.", "The judiciary handles the appeals."),
+        "juice" to listOf("I want some orange juice.", "This apple juice is sweet.", "Do you have any juice?"),
+        "jurisdiction" to listOf("That is outside my jurisdiction.", "Who has jurisdiction over this?", "The court has legal jurisdiction."),
+        "just" to listOf("I just got home.", "Just wait a moment.", "It is just a game."),
+        "justice" to listOf("We all seek social justice.", "The judge ensured justice.", "There is no justice here."),
+        "justify" to listOf("How can you justify this?", "You must justify the cost.", "I cannot justify the expense."),
+        "kimono" to listOf("She wore a silk kimono.", "The kimono has floral patterns.", "He bought a traditional kimono."),
+        "kitchen" to listOf("The kitchen is very clean.", "Meet me in the kitchen.", "Who is in the kitchen?"),
+        "knee" to listOf("I hurt my left knee.", "He fell on his knee.", "My knee is swelling up."),
+        "know" to listOf("Do you know her name?", "I don't know the answer.", "We know how to fix it."),
+        "knowledge" to listOf("She has a lot of knowledge.", "Knowledge is power in life.", "Use your knowledge of law."),
+        "laboratory" to listOf("The samples are in the laboratory.", "We work in the laboratory.", "This is a chemistry laboratory."),
+        "lake" to listOf("The lake is very calm.", "We went swimming in the lake.", "Let's boat on the lake."),
+        "language" to listOf("Which language do you speak?", "Learning a language takes time.", "English is a global language."),
+        "last month" to listOf("I visited Paris last month.", "She quit her job last month.", "It rained a lot last month."),
+        "last week" to listOf("We met him last week.", "I bought this last week.", "Last week was very busy."),
+        "lawyer" to listOf("I need to call my lawyer.", "She is a corporate lawyer.", "The lawyer gave some advice."),
+        "leaf" to listOf("A yellow leaf fell down.", "Look at this green leaf.", "Every leaf is falling now."),
+        "learn" to listOf("I want to learn Spanish.", "You learn fast in school.", "We learn from our mistakes."),
+        "leave" to listOf("Please leave the door open.", "I have to leave now.", "When did they leave home?"),
+        "left" to listOf("Turn left here.", "There is nothing left.", "He left the room."),
+        "leg" to listOf("My leg is cramping up.", "He broke his right leg.", "The table has one leg."),
+        "legislation" to listOf("The new legislation is strict.", "They are drafting the legislation.", "This legislation affects all citizens."),
+        "liaise" to listOf("I will liaise with the team.", "We need to liaise with them.", "Please liaise with your manager."),
+        "library" to listOf("I am going to the library.", "The library is very quiet.", "Can you find a library book?"),
+        "lifestyle" to listOf("She has a very healthy lifestyle.", "This lifestyle is too expensive.", "I want a slower lifestyle."),
+        "light" to listOf("Please turn on the light.", "This room is very light.", "The light is too bright."),
+        "like" to listOf("I like eating fresh fruit.", "Do you like this song?", "She looks like her mother."),
+        "likewise" to listOf("Nice to meet you; likewise.", "He smiled and she did likewise.", "I feel likewise about this."),
+        "lion" to listOf("The lion is very loud.", "We saw a lion today.", "A lion is a big cat."),
+        "listen" to listOf("Please listen to me.", "I like to listen to music.", "Listen to the sound."),
+        "lively" to listOf("The party was very lively.", "This is a lively city.", "He is a lively child."),
+        "loan" to listOf("I need a small loan.", "Can you loan me ten dollars?", "He paid off the loan."),
+        "local" to listOf("I shop at the local store.", "We live in a local park.", "The local news is boring."),
+        "lonely" to listOf("He feels very lonely here.", "It is a lonely road.", "I get lonely at night."),
+        "long" to listOf("It was a long trip.", "She has very long hair.", "That is a long story."),
+        "look into" to listOf("I will look into it.", "We must look into the cost.", "Let me look into that."),
+        "low" to listOf("The battery is very low.", "Keep your voice low.", "The water level is low."),
+        "luggage" to listOf("My luggage is very heavy.", "Where is your luggage?", "We lost our luggage."),
+        "lunch" to listOf("What is for lunch today?", "Let us eat lunch together.", "I had a quick lunch."),
+        "lungs" to listOf("Take a deep breath into your lungs.", "Smoking damages your lungs.", "My lungs feel tight."),
+        "magnitude" to listOf("They felt the earthquake's magnitude.", "We underestimated the magnitude.", "The magnitude was quite large."),
+        "maintain" to listOf("You must maintain the car.", "It is hard to maintain order.", "Maintain a steady pace."),
+        "make" to listOf("Can you make some coffee?", "I will make a cake.", "Let us make a plan."),
+        "manager" to listOf("Talk to your store manager.", "The manager is in a meeting.", "She is a great manager."),
+        "mandarin orange" to listOf("I ate a mandarin orange.", "This mandarin orange is sweet.", "Do you like mandarin oranges?"),
+        "map" to listOf("I cannot read this map.", "Look at the city map.", "We need a map."),
+        "marginal" to listOf("There is a marginal difference.", "The gain was marginal.", "It is a marginal cost."),
+        "market" to listOf("I am going to the market.", "The fish market is busy.", "Prices are high at the market."),
+        "masterpiece" to listOf("This painting is a true masterpiece.", "He considers this movie his masterpiece.", "The chef created a culinary masterpiece."),
+        "may" to listOf("May I come in please?", "It may rain this afternoon.", "You may leave the room."),
+        "meat" to listOf("Do you eat red meat?", "I'll buy some ground meat today.", "This meat is cooked perfectly."),
+        "medicine" to listOf("Take your medicine after dinner.", "This medicine makes me sleepy.", "Where is the cough medicine?"),
+        "meeting" to listOf("The meeting starts at ten.", "I have a meeting tomorrow.", "Our meeting was cancelled today."),
+        "melon" to listOf("This honeydew melon is very sweet.", "I sliced the melon for snacks.", "Do you like watermelon or melon?"),
+        "message" to listOf("Send me a quick message.", "I got your text message.", "Did he leave a message?"),
+        "methodology" to listOf("Their research methodology is flawed.", "Explain your methodology to the class.", "We need a new testing methodology."),
+        "meticulous" to listOf("She is meticulous about her work.", "He is a meticulous cleaner.", "The artist was very meticulous."),
+        "midnight" to listOf("I stayed up until midnight.", "The party ended at midnight.", "It is almost midnight now."),
+        "might" to listOf("It might be too expensive.", "We might go to Italy.", "She might be sleeping now."),
+        "milk" to listOf("Please buy some almond milk.", "The milk has gone sour.", "Do you want milk in your coffee?"),
+        "million" to listOf("She won a million dollars.", "There are a million stars.", "It takes a million years."),
+        "minute" to listOf("Wait for one more minute.", "I'll be there in a minute.", "Give me a minute to think."),
+        "mirror" to listOf("Look in the mirror please.", "The mirror is cracked.", "He stared at the mirror."),
+        "miso soup" to listOf("I love hot miso soup.", "Miso soup is a great starter.", "Order the miso soup here."),
+        "mitigate" to listOf("We need to mitigate the risk.", "This plan will mitigate the damage.", "How can we mitigate the cost?"),
+        "monday" to listOf("I hate Monday mornings.", "See you on Monday morning.", "Monday is the busiest day."),
+        "money" to listOf("I don't have much money.", "How much money is that?", "Save your money for later."),
+        "monkey" to listOf("The monkey ate a banana.", "Look at that funny monkey.", "Monkeys are very intelligent animals."),
+        "month" to listOf("I'll see you next month.", "February is a short month.", "I started this job last month."),
+        "mood" to listOf("He is in a bad mood.", "Music always improves my mood.", "She is in a great mood."),
+        "moon" to listOf("The moon is very bright tonight.", "Look at the crescent moon.", "The moon orbits the Earth."),
+        "morality" to listOf("They debated the morality of the law.", "Her morality is very strict.", "This story tests human morality."),
+        "moreover" to listOf("It is cold; moreover, it is raining.", "Moreover, the price is too high.", "He is smart; moreover, he is kind."),
+        "morning" to listOf("I exercise every morning.", "Good morning to everyone here.", "The morning air is fresh."),
+        "mother" to listOf("My mother is a teacher.", "Call your mother this evening.", "Her mother lives in Spain."),
+        "mountain" to listOf("We climbed a tall mountain.", "The mountain is covered in snow.", "Which mountain is the highest?"),
+        "mouse" to listOf("My computer mouse is broken.", "There is a mouse in the kitchen.", "The mouse ate the cheese."),
+        "mouth" to listOf("Close your mouth when chewing.", "He has a small mouth.", "Brush your teeth and mouth."),
+        "movie" to listOf("Let's watch a movie tonight.", "That movie was very scary.", "I love this old movie."),
+        "movie theater" to listOf("Meet me at the movie theater.", "The movie theater is crowded.", "I work at the movie theater."),
+        "muscle" to listOf("He has a strong muscle.", "My leg muscle is sore.", "Exercise helps build muscle."),
+        "museum" to listOf("We visited the art museum.", "The museum is closed today.", "I love visiting the museum."),
+        "music" to listOf("I listen to music daily.", "The music is too loud.", "She loves classical music."),
+        "musician" to listOf("My brother is a talented musician.", "The musician played the violin.", "She wants to be a musician."),
+        "must" to listOf("You must wear a seatbelt.", "I must finish this project.", "We must be very quiet."),
+        "narrow" to listOf("This street is very narrow.", "The path became too narrow.", "It is a narrow bridge."),
+        "nature" to listOf("I love spending time in nature.", "Nature is beautiful in spring.", "We must protect nature."),
+        "near" to listOf("My house is near here.", "Stay near the exit.", "Is there a bank near?"),
+        "neck" to listOf("He wore a scarf on his neck.", "My neck feels very stiff.", "She has a long neck."),
+        "necklace" to listOf("She wears a gold necklace.", "This necklace is very expensive.", "I bought her a pearl necklace."),
+        "necktie" to listOf("He is wearing a red necktie.", "I cannot tie a necktie.", "A necktie is formal wear."),
+        "negligible" to listOf("The difference is negligible.", "The cost increase was negligible.", "It is a negligible amount."),
+        "negotiate" to listOf("We need to negotiate the price.", "Can you negotiate a deal?", "They are trying to negotiate."),
+        "negotiation" to listOf("The negotiation took three hours.", "We are in a tough negotiation.", "The negotiation failed yesterday."),
+        "neighbour" to listOf("My neighbour is very friendly.", "The neighbour's dog barks loud.", "He is a helpful neighbour."),
+        "never" to listOf("I have never been there.", "He never listens.", "Never give up."),
+        "new" to listOf("I bought a new car.", "This is a new phone.", "We have a new teacher."),
+        "news" to listOf("Have you heard the news?", "The news was shocking.", "I watch the evening news."),
+        "newspaper" to listOf("He reads the newspaper daily.", "I found a job in the newspaper.", "Put the newspaper on the table."),
+        "next month" to listOf("I will travel next month.", "The project ends next month.", "We move house next month."),
+        "next week" to listOf("See you next week.", "I have a test next week.", "It will rain next week."),
+        "nice to meet you" to listOf("Hello, nice to meet you.", "It is nice to meet you.", "Nice to meet you too."),
+        "night" to listOf("The night is very dark.", "I can't sleep at night.", "See you tomorrow night."),
+        "night town" to listOf("The night town is very bright.", "I love the energy of night town.", "We explored the night town."),
+        "nine" to listOf("I have nine apples.", "He is nine years old.", "The class starts at nine."),
+        "no" to listOf("No, I cannot go.", "There is no time.", "No, that is wrong."),
+        "nonetheless" to listOf("It was raining; nonetheless, we went.", "He is tired, nonetheless he works.", "It is expensive, nonetheless I bought it."),
+        "noon" to listOf("Let's meet at noon.", "Lunch is served at noon.", "The sun is high at noon."),
+        "nose" to listOf("My nose is running.", "She has a small nose.", "He hit his nose."),
+        "not" to listOf("I am not feeling well.", "Do not touch that button.", "It is not too late."),
+        "notion" to listOf("That is a strange notion.", "I have no notion of it.", "The notion seems impractical."),
+        "notwithstanding" to listOf("Notwithstanding the rain, we played.", "He won, notwithstanding the odds.", "Notwithstanding the cost, it is worth it."),
+        "novel" to listOf("I am reading a novel.", "She wrote a historical novel.", "This is a long novel."),
+        "now" to listOf("I need to go now.", "Where are you now?", "We can start now."),
+        "nurse" to listOf("The nurse helped the patient.", "She is a registered nurse.", "Call the nurse for help."),
+        "obtain" to listOf("Where can I obtain a visa?", "You must obtain a permit.", "He tried to obtain more info."),
+        "of" to listOf("This is a cup of tea.", "He is a friend of mine.", "The color of the car is red."),
+        "office" to listOf("My office is downtown.", "She works in a quiet office.", "Please come to my office."),
+        "office worker" to listOf("He is a typical office worker.", "The office worker felt tired.", "She is an office worker here."),
+        "often" to listOf("How often do you exercise?", "I often go there.", "We often eat out."),
+        "oil" to listOf("Add some olive oil.", "The car is leaking oil.", "This pan needs more oil."),
+        "old" to listOf("My dog is very old.", "This is an old house.", "He is an old friend."),
+        "older brother" to listOf("My older brother is a doctor.", "He is my older brother.", "I fight with my older brother."),
+        "older sister" to listOf("My older sister lives here.", "She is my older sister.", "I love my older sister."),
+        "on" to listOf("The book is on the table.", "Put your coat on now.", "I am on my way."),
+        "on balance" to listOf("On balance, it was a success.", "On balance, the plan worked.", "On balance, we are happy."),
+        "on the contrary" to listOf("On the contrary, it is hot.", "On the contrary, I disagree.", "On the contrary, she is kind."),
+        "on the verge of" to listOf("She is on the verge of crying.", "We are on the verge of winning.", "It is on the verge of breaking."),
+        "once" to listOf("I have been there once.", "Once a week is enough.", "Do it only once."),
+        "one" to listOf("I only have one dollar.", "One person is waiting.", "This is the one I want."),
+        "online" to listOf("I bought this online.", "The class is held online.", "Are you online right now?"),
+        "only" to listOf("I only have five dollars.", "She is the only child.", "It only takes a minute."),
+        "only child" to listOf("I am an only child.", "She grew up as an only child.", "He is an only child."),
+        "open" to listOf("Please open the window.", "The store is now open.", "Open your book to page ten."),
+        "opinion" to listOf("What is your honest opinion?", "In my opinion, this is better.", "Everyone has a different opinion."),
+        "optimize" to listOf("We need to optimize the site.", "Please optimize your workflow.", "This tool helps optimize speed."),
+        "or" to listOf("Do you want tea or coffee?", "You can walk or take a bus.", "Red or blue, pick one."),
+        "out of the blue" to listOf("He called me out of the blue.", "That happened completely out of the blue.", "She arrived out of the blue."),
+        "outlet" to listOf("Where is the nearest power outlet?", "This store is a great outlet.", "I need a new electrical outlet."),
+        "over" to listOf("The cat jumped over it.", "It is over now.", "Come over to my house."),
+        "oversee" to listOf("She will oversee the new project.", "He oversees a team of ten.", "Who is overseeing the construction site?"),
+        "owl" to listOf("An owl hooted in the woods.", "That owl has very large eyes.", "Owls hunt for food at night."),
+        "pain" to listOf("My lower back is in pain.", "The pain went away quickly.", "He felt a sharp pain here."),
+        "painter" to listOf("The painter finished the living room.", "She is a talented oil painter.", "We hired a professional house painter."),
+        "painting" to listOf("This painting is worth a lot.", "She is painting the fence white.", "I love that oil painting here."),
+        "palm" to listOf("He held the coin in his palm.", "We sat under a palm tree.", "The palm of my hand itches."),
+        "paper" to listOf("Can I have a piece of paper?", "This paper is very thin.", "I read it in the paper."),
+        "paradigm" to listOf("This is a new business paradigm.", "The paradigm shifted after the war.", "We need a new social paradigm."),
+        "paradox" to listOf("It seems like a strange paradox.", "That is a classic logical paradox.", "Life is full of paradoxes."),
+        "paramount" to listOf("Safety is of paramount importance.", "Quality is paramount to our success.", "This issue is paramount right now."),
+        "parents" to listOf("My parents live in New York.", "Her parents are very supportive.", "Do your parents know about this?"),
+        "park" to listOf("Let's go to the park today.", "You cannot park your car here.", "The kids are playing in the park."),
+        "partner" to listOf("She is my business partner.", "He is a great dancing partner.", "I live with my long-term partner."),
+        "passport" to listOf("Do not lose your passport.", "I need to renew my passport.", "Show your passport at the gate."),
+        "password" to listOf("I forgot my computer password.", "Please enter your secret password.", "Your password must be eight characters."),
+        "pasta" to listOf("I love pasta with red sauce.", "We are cooking pasta for dinner.", "This pasta is slightly overcooked."),
+        "patience" to listOf("Please have some patience with me.", "Teaching kids requires a lot of patience.", "My patience is running very thin."),
+        "pay" to listOf("When do you get paid?", "I will pay for the coffee.", "How much do they pay you?"),
+        "peach" to listOf("This peach is very juicy.", "I love the smell of peaches.", "Do you want a fresh peach?"),
+        "peak" to listOf("We reached the mountain peak.", "Traffic hits its peak at noon.", "He is at his career peak."),
+        "pen" to listOf("Can I borrow your blue pen?", "This pen has run out of ink.", "Sign the form with a pen."),
+        "penguin" to listOf("The penguin waddles on the ice.", "Penguins cannot fly in the air.", "Look at that cute little penguin."),
+        "pepper" to listOf("Add some black pepper to this.", "This pepper is way too spicy.", "Do you like bell pepper?"),
+        "perception" to listOf("My perception of him changed quickly.", "Public perception of the company is poor.", "She has a keen perception of detail."),
+        "person" to listOf("He is a very kind person.", "Which person is in charge here?", "I am just one person."),
+        "personality" to listOf("She has a very bubbly personality.", "His personality clashes with mine.", "They have similar personalities."),
+        "perspective" to listOf("Try to see it from my perspective.", "Travel gives you a new perspective.", "His perspective on life is unique."),
+        "phenomenon" to listOf("This is a strange natural phenomenon.", "Social media is a global phenomenon.", "The northern lights are a rare phenomenon."),
+        "phone" to listOf("My phone is out of battery.", "Please put your phone away.", "I left my phone at home."),
+        "photo" to listOf("This photo was taken last year.", "Can you take a photo of us?", "Look at this old photo."),
+        "photographer" to listOf("The photographer took a great shot.", "She is a professional wedding photographer.", "I hired a photographer for the event."),
+        "pig" to listOf("The pig is eating an apple.", "Farms usually have many pigs.", "A pig can be very smart."),
+        "pilot" to listOf("The pilot landed the plane safely.", "He wants to be a pilot.", "Ask the pilot about the weather."),
+        "pineapple" to listOf("Do you like pineapple on pizza?", "I bought a fresh pineapple.", "Pineapples grow in warm climates."),
+        "pivotal" to listOf("This was a pivotal moment in history.", "Her role was pivotal to the project.", "It was a pivotal decision for them."),
+        "plane" to listOf("The plane departs at six o'clock.", "We are boarding the plane now.", "He flew by plane to London."),
+        "planet" to listOf("Mars is a red planet.", "Earth is our home planet.", "Which planet is furthest from the sun?"),
+        "plateau" to listOf("The hikers reached a high plateau.", "The land levels out into a plateau.", "My progress has hit a plateau."),
+        "platform" to listOf("Stand back from the platform edge.", "This app is a great platform.", "He spoke from a wooden platform."),
+        "play" to listOf("Do you want to play soccer?", "We saw a play at the theater.", "Let the children play outside."),
+        "please" to listOf("Please pass me the salt.", "Please sit down and be quiet.", "Could you please help me?"),
+        "plot" to listOf("The movie has a complex plot.", "They are plotting a garden.", "I didn't understand the plot."),
+        "pocket" to listOf("Put your keys in your pocket.", "He has a hole in his pocket.", "I found a coin in my pocket."),
+        "poetry" to listOf("She loves reading romantic poetry.", "This class studies modern poetry.", "His poetry is very emotional."),
+        "point out" to listOf("Please point out the mistake.", "He pointed out the exit.", "I want to point out one thing."),
+        "police officer" to listOf("The police officer stopped the car.", "Ask a police officer for help.", "He is a dedicated police officer."),
+        "police station" to listOf("Go to the nearest police station.", "The police station is on Main Street.", "She works at the local police station."),
+        "policy" to listOf("Company policy forbids smoking here.", "What is the return policy?", "We need a new security policy."),
+        "politician" to listOf("That politician makes a lot of promises.", "She is a well-known politician.", "I don't trust that politician."),
+        "pollution" to listOf("Air pollution is bad in cities.", "Plastic causes water pollution.", "We must reduce ocean pollution."),
+        "population" to listOf("The city's population is growing.", "The world population is huge.", "What is the population of Japan?"),
+        "pork" to listOf("I don't eat pork.", "This pork roast tastes great.", "Do you like grilled pork?"),
+        "post office" to listOf("The post office closes at five.", "I'm going to the post office.", "Where is the nearest post office?"),
+        "postulate" to listOf("Scientists postulate a new theory.", "We postulate that heat rises.", "He postulated a different result."),
+        "poverty" to listOf("Many people live in extreme poverty.", "The government fights child poverty.", "Poverty affects millions of people."),
+        "practice" to listOf("I need to practice piano.", "Practice makes perfect.", "She has a medical practice."),
+        "pragmatic" to listOf("We need a pragmatic solution.", "He takes a pragmatic approach.", "Be pragmatic about the budget."),
+        "precedent" to listOf("This case sets a legal precedent.", "There is no precedent for this.", "We must follow the existing precedent."),
+        "precipitate" to listOf("The cold air will precipitate rain.", "Certain chemicals precipitate a reaction.", "These events precipitate a crisis."),
+        "prevalence" to listOf("The prevalence of flu is rising.", "Study the prevalence of the disease.", "There is a high prevalence of obesity."),
+        "price" to listOf("The price of gas is high.", "What is the retail price?", "This price is too expensive."),
+        "prioritize" to listOf("You should prioritize your health.", "I need to prioritize my tasks.", "Let's prioritize the most urgent work."),
+        "professor" to listOf("My history professor is very strict.", "She is a university professor.", "The professor gave a long lecture."),
+        "profit" to listOf("The company made a huge profit", "We need to increase our profit", "Small businesses struggle to make profit"),
+        "profound" to listOf("His words had a profound effect", "It was a profound discovery", "She felt a profound sense of loss"),
+        "programmer" to listOf("He works as a Java programmer", "The programmer fixed the bug", "She is a talented young programmer"),
+        "project" to listOf("This project is due on Friday", "We started a new school project", "The project took three months"),
+        "promotion" to listOf("She finally got a promotion", "He is hoping for a promotion", "The company offered her a promotion"),
+        "propensity" to listOf("He has a propensity for lying", "She has a propensity for risk", "Dogs have a propensity to bark"),
+        "prosecution" to listOf("The prosecution called a new witness", "The prosecution failed to prove it", "He is facing criminal prosecution"),
+        "protect" to listOf("Wear sunscreen to protect your skin", "This case will protect the phone", "Parents want to protect their children"),
+        "put off" to listOf("Don't put off your homework", "We had to put off the trip", "She keeps putting off the doctor"),
+        "quiet" to listOf("Please be quiet in the library", "It is very quiet in here", "The house was finally quiet"),
+        "rabbit" to listOf("The rabbit ate a carrot", "My pet rabbit is very soft", "A rabbit hopped across the yard"),
+        "railway" to listOf("The railway runs through the city", "I work for the national railway", "The railway station is crowded"),
+        "rain" to listOf("I hope it doesn't rain today", "The rain stopped an hour ago", "We love the smell of rain"),
+        "rainbow" to listOf("Look at that beautiful rainbow", "A rainbow appeared after the storm", "Can you see the rainbow?"),
+        "raincoat" to listOf("Put on your yellow raincoat", "I forgot my raincoat at home", "This raincoat keeps me dry"),
+        "rainy" to listOf("It is a rainy afternoon", "We stayed inside on rainy days", "I love rainy weather"),
+        "ramen" to listOf("I want some spicy ramen", "This ramen shop is very popular", "She cooked ramen for dinner"),
+        "rationale" to listOf("What is the rationale for this?", "He explained his rationale clearly", "The rationale behind the decision was simple"),
+        "read" to listOf("I like to read novels", "Did you read the news?", "She can read very fast"),
+        "reading" to listOf("I am reading a great book", "Reading helps you learn English", "She spends her weekends reading"),
+        "really" to listOf("Do you really mean it?", "It is really hot today.", "I really like this."),
+        "recycle" to listOf("Please recycle those plastic bottles.", "We should recycle more at home.", "Do you know where to recycle?"),
+        "referendum" to listOf("The citizens voted in a referendum.", "The referendum changed the law.", "They are holding a national referendum."),
+        "refrigerator" to listOf("Put the milk in the refrigerator.", "Is there any food in the refrigerator?", "The refrigerator is making a loud noise."),
+        "refute" to listOf("He tried to refute the claim.", "The lawyer will refute the evidence.", "New data may refute that theory."),
+        "relationship" to listOf("They have a very strong relationship.", "My relationship with my boss is good.", "Trust is key in any relationship."),
+        "relative" to listOf("My favorite relative lives in Italy.", "Are you a relative of hers?", "She is a distant relative of mine."),
+        "relax" to listOf("I just want to relax today.", "This music helps me relax.", "You need to relax your shoulders."),
+        "reliability" to listOf("I doubt the reliability of this car.", "He is known for his reliability.", "We need to check its reliability."),
+        "reporter" to listOf("The reporter asked a tough question.", "She works as a news reporter.", "The reporter is covering the story."),
+        "require" to listOf("This job may require travel.", "Most plants require plenty of sunlight.", "Do you require any further help?"),
+        "research" to listOf("I am doing research for school.", "More research is needed on this.", "She does a lot of research."),
+        "resource" to listOf("The library is a great resource.", "We have limited water resources.", "Use every resource available to you."),
+        "respect" to listOf("Please show some respect for others.", "I have a lot of respect for him.", "They respect the local traditions."),
+        "rest" to listOf("You need to get some rest.", "I will take a short rest.", "Let the dough rest for an hour."),
+        "restaurant" to listOf("Let's go to a Japanese restaurant.", "This restaurant has great reviews.", "The restaurant is closed on Mondays."),
+        "restroom" to listOf("Where is the nearest restroom?", "The restroom is down the hall.", "I need to find a restroom."),
+        "result" to listOf("The result was a complete surprise.", "This is the result of hard work.", "What was the result of the game?"),
+        "return home" to listOf("I will return home after work.", "When did you return home?", "It is time to return home."),
+        "rice" to listOf("Do you prefer brown or white rice?", "I cook rice every single day.", "We had rice with the fish."),
+        "rice ball" to listOf("I bought a rice ball for lunch.", "Do you like this rice ball?", "This rice ball tastes very salty."),
+        "rice field" to listOf("They work in the rice field.", "The rice field is very green.", "We walked past the rice field."),
+        "right" to listOf("Turn right at the corner.", "You are right about that.", "Use your right hand."),
+        "rigorous" to listOf("This is a rigorous training program.", "He follows a rigorous diet.", "The test was incredibly rigorous."),
+        "ring" to listOf("She wears a gold wedding ring.", "Give me a ring tomorrow.", "The bell began to ring loudly."),
+        "river" to listOf("The river flows through the city.", "We swam in the cold river.", "The river is very deep here."),
+        "road" to listOf("This road leads to the city.", "There is a hole in the road.", "Stay on the main road."),
+        "rock" to listOf("He sat on a large rock.", "The climbers climbed the rock wall.", "I found a strange rock."),
+        "roof" to listOf("There is a cat on the roof.", "Rain is leaking through the roof.", "We fixed the roof yesterday."),
+        "room" to listOf("Is there a room available?", "This room is too small.", "Clean your room right now."),
+        "routine" to listOf("My morning routine is very simple.", "He has a strict daily routine.", "I need a new workout routine."),
+        "run" to listOf("Can you run faster than me?", "I run five miles every morning.", "Let's go for a quick run."),
+        "sad" to listOf("This movie has a sad ending.", "Why do you look so sad?", "It is sad that they left."),
+        "salary" to listOf("My monthly salary is quite low.", "She earns a high annual salary.", "He negotiated a better salary."),
+        "salient" to listOf("What are the salient points here?", "Focus on the most salient features.", "He ignored the most salient facts."),
+        "salt" to listOf("Pass me the salt, please.", "This soup has too much salt.", "Add a pinch of salt."),
+        "saturday" to listOf("We are going out this Saturday.", "Saturday is my favorite day.", "I work every single Saturday."),
+        "say" to listOf("What did you say to him?", "Say it one more time.", "They say it will rain."),
+        "scared" to listOf("I am scared of spiders.", "The loud noise scared the baby.", "She felt scared in the dark."),
+        "scarf" to listOf("Wear a warm scarf outside.", "Her silk scarf is very colorful.", "He tied a scarf around his neck."),
+        "schedule" to listOf("My schedule is full today.", "Check the bus schedule online.", "We are behind schedule again."),
+        "school" to listOf("I walk to school every day.", "The school is closed on Sundays.", "She is a high school teacher."),
+        "scientist" to listOf("The scientist discovered a new species.", "She is a brilliant research scientist.", "The scientist explained the theory."),
+        "screen" to listOf("My phone screen is cracked.", "He stared at the computer screen.", "Don't touch the screen."),
+        "sculpture" to listOf("That sculpture is made of bronze.", "The museum has a huge sculpture.", "She creates abstract sculptures."),
+        "sea" to listOf("The sea is very calm today.", "We spent the day by the sea.", "Salt water from the sea stung."),
+        "seat" to listOf("Please take a seat over there.", "Is this seat taken?", "He sat in the back seat."),
+        "see" to listOf("I can see you now.", "Let me see your homework.", "Do you see that bird?"),
+        "sell" to listOf("They sell fresh bread here.", "I want to sell my car.", "Does this shop sell milk?"),
+        "set up" to listOf("Help me set up the tent.", "He set up the new printer.", "Let's set up a meeting."),
+        "seven" to listOf("I woke up at seven.", "There are seven days in a week.", "He is seven years old."),
+        "shall" to listOf("Shall we dance together?", "I shall return shortly.", "Where shall we meet?"),
+        "sheep" to listOf("The sheep are eating grass.", "I saw a flock of sheep.", "That sheep looks lost."),
+        "ship" to listOf("The ship left the port.", "He works on a cargo ship.", "The ship is very large."),
+        "shirt" to listOf("This white shirt is too big.", "I need a new dress shirt.", "Put on a clean shirt."),
+        "shoe store" to listOf("The shoe store is closed.", "Let's go to the shoe store.", "Which shoe store is the best?"),
+        "shoes" to listOf("My shoes are too tight.", "Take off your shoes inside.", "She bought new running shoes."),
+        "shop" to listOf("This coffee shop is cozy.", "I need to shop for food.", "The gift shop sells cards."),
+        "shop clerk" to listOf("The shop clerk was very helpful.", "Ask the shop clerk for help.", "The shop clerk rang up items."),
+        "short" to listOf("The movie was very short.", "He is too short for this.", "Life is short, enjoy it."),
+        "shorts" to listOf("Wear shorts in the summer.", "These shorts are too long.", "He bought a pair of shorts."),
+        "should" to listOf("You should eat more vegetables.", "We should leave right now.", "Should I call them back?"),
+        "shoulder" to listOf("He carried the bag on his shoulder.", "My shoulder hurts today.", "She tapped him on the shoulder."),
+        "shower" to listOf("I need to take a shower.", "The shower is too hot.", "He took a quick shower."),
+        "shrine" to listOf("They visited the ancient shrine.", "This shrine is very peaceful.", "People leave flowers at the shrine."),
+        "siblings" to listOf("Do you have any siblings?", "My siblings live in Ohio.", "She is the youngest of three siblings."),
+        "sick" to listOf("I feel sick today.", "He is sick with the flu.", "Call in sick to work."),
+        "significance" to listOf("Does this date have any significance?", "I don't see the significance of this.", "The event had great historical significance."),
+        "significant" to listOf("That is a significant amount of money.", "There is a significant difference here.", "He made a significant improvement."),
+        "similarly" to listOf("She smiled, and he similarly grinned.", "Similarly, we must consider the cost.", "It works similarly to a phone."),
+        "singer" to listOf("She is a professional singer.", "Who is your favorite singer?", "The singer hit a high note."),
+        "singing" to listOf("Stop singing in the shower!", "She loves singing in the choir.", "I heard someone singing nearby."),
+        "sister" to listOf("My sister is a doctor.", "Do you have an older sister?", "I live with my sister."),
+        "sit" to listOf("Please sit in this chair.", "Can we sit over there?", "Just sit and relax for a while."),
+        "six" to listOf("I woke up at six.", "There are six eggs left.", "He is six years old."),
+        "size" to listOf("What size shoe do you wear?", "This shirt is too small in size.", "I need a larger size."),
+        "skepticism" to listOf("He reacted with some skepticism.", "Her plan was met with skepticism.", "I view the claim with skepticism."),
+        "skill" to listOf("Cooking is a useful skill.", "He has a great technical skill.", "You need skill to play chess."),
+        "skin" to listOf("Use lotion for dry skin.", "Her skin is very pale.", "Wash your skin with soap."),
+        "skirt" to listOf("She is wearing a long skirt.", "That skirt looks great on you.", "I bought a new denim skirt."),
+        "sky" to listOf("Look at the blue sky.", "The sky is turning grey.", "Birds fly across the sky."),
+        "sleep" to listOf("I need some sleep.", "Did you sleep well last night?", "Go to sleep right now."),
+        "slow" to listOf("Please drive a bit slower.", "The internet is very slow today.", "He is a slow reader."),
+        "small" to listOf("This room is too small.", "I want a small coffee.", "It is a small mistake."),
+        "snake" to listOf("Look at that green snake.", "A snake is slithering away.", "I am afraid of snakes."),
+        "snow" to listOf("There is fresh snow outside.", "I love playing in the snow.", "The snow is falling quickly."),
+        "snowy" to listOf("It was a cold, snowy night.", "We live in a snowy region.", "The mountain peak is snowy."),
+        "so" to listOf("It was raining so I stayed.", "I am so tired today.", "I am so happy today."),
+        "social media" to listOf("I don't use social media much.", "She posted it on social media.", "Social media can be very distracting."),
+        "society" to listOf("We live in a modern society.", "He wants to help society.", "This is a common rule in society."),
+        "socks" to listOf("Where are my clean socks?", "These wool socks are very warm.", "I need to buy new socks."),
+        "sofa" to listOf("Please sit on the sofa.", "The sofa is very comfortable.", "He fell asleep on the sofa."),
+        "soil" to listOf("This soil is great for plants.", "The soil is very dry here.", "Put the seeds in the soil."),
+        "some" to listOf("I need some water.", "Can you bring some snacks?", "Some people are waiting."),
+        "sometimes" to listOf("Sometimes I feel sad.", "It sometimes snows here.", "Sometimes he is late."),
+        "son" to listOf("My son starts school tomorrow.", "He is the only son.", "Their son lives in London."),
+        "son-in-law" to listOf("My son-in-law is a doctor.", "He likes his son-in-law.", "The son-in-law helped us move."),
+        "sorry" to listOf("I am sorry for being late.", "Sorry, I didn't see you.", "He felt sorry for the dog."),
+        "soup" to listOf("This tomato soup is delicious.", "I want a bowl of soup.", "The soup is too hot."),
+        "souvenir" to listOf("I bought a souvenir from Paris.", "This keychain is a great souvenir.", "Did you get any souvenirs?"),
+        "sovereignty" to listOf("The nation fought for its sovereignty.", "They claim sovereignty over the land.", "Sovereignty is key to independence."),
+        "sparrow" to listOf("A small sparrow landed here.", "The sparrow is singing loudly.", "I saw a sparrow in the tree."),
+        "speak" to listOf("Can you speak English?", "Please speak more slowly.", "I need to speak with him."),
+        "sport" to listOf("What is your favorite sport?", "Basketball is a popular sport.", "He plays sport every weekend."),
+        "squirrel" to listOf("A squirrel is climbing the tree.", "The squirrel found a nut.", "Look at that funny squirrel."),
+        "stairs" to listOf("Please go up the stairs.", "He ran down the stairs.", "The stairs are made of wood."),
+        "stand" to listOf("Please stand in the line.", "I cannot stand for long.", "Where do you stand now?"),
+        "star" to listOf("Look at that bright star.", "He is a movie star.", "The stars are beautiful tonight."),
+        "station" to listOf("Meet me at the train station.", "Which station is closest to you?", "The bus station is very crowded."),
+        "stipulate" to listOf("The rules stipulate a strict deadline.", "Does the contract stipulate a price?", "Please stipulate the terms of payment."),
+        "stomach" to listOf("My stomach hurts after that meal.", "I have a nervous stomach today.", "He has a stomach flu."),
+        "stone" to listOf("This wall is made of stone.", "She found a smooth river stone.", "Don't throw stones in the pond."),
+        "storm" to listOf("A huge storm is coming tonight.", "We stayed inside during the storm.", "The storm knocked down a tree."),
+        "story" to listOf("Tell me a story about childhood.", "That is a very sad story.", "Her story doesn't sound true."),
+        "strawberry" to listOf("I want a strawberry milkshake.", "This strawberry is very sweet.", "Do you like strawberry jam?"),
+        "streamline" to listOf("We need to streamline our process.", "This update will streamline the workflow.", "Let's streamline the check-out system."),
+        "street" to listOf("I live on a quiet street.", "Look both ways before crossing the street.", "The street is blocked by cars."),
+        "stress" to listOf("Work is causing me a lot of stress.", "I can't handle this much stress.", "Try to reduce your daily stress."),
+        "strong" to listOf("He is strong enough to lift it.", "This coffee is way too strong.", "She has a strong personality."),
+        "stubborn" to listOf("My cat is very stubborn.", "Stop being so stubborn about it.", "He is too stubborn to apologize."),
+        "student" to listOf("She is a hardworking medical student.", "Every student must bring a pen.", "I was a student ten years ago."),
+        "study" to listOf("I need to study for the exam.", "Where do you usually study?", "She is studying French at college."),
+        "subject" to listOf("Math is my favorite school subject.", "Let's change the subject now.", "This is a very complex subject."),
+        "subsequently" to listOf("He resigned and subsequently left town.", "The error occurred and subsequently crashed.", "She failed and subsequently tried again."),
+        "substantial" to listOf("There is a substantial amount of debt.", "We made substantial progress today.", "The house suffered substantial damage."),
+        "substantiate" to listOf("Can you substantiate your claim?", "He had no evidence to substantiate it.", "Please substantiate your theory with data."),
+        "sugar" to listOf("Do you take sugar in your tea?", "This cake has too much sugar.", "Please pass me the sugar bowl."),
+        "sum up" to listOf("To sum up, we need more time.", "Can you sum up the main points?", "Let me sum up the meeting."),
+        "sun" to listOf("The sun is very bright today.", "Don't look directly at the sun.", "The sun sets in the west."),
+        "sunday" to listOf("I usually relax on Sunday.", "Sunday is my favorite day.", "We visit grandma every Sunday."),
+        "sunny" to listOf("It is a beautiful sunny day.", "I love sunny weather in July.", "Wear a hat if it's sunny."),
+        "sunny then rain" to listOf("It will be sunny then rain.", "Expect sunny then rain tomorrow.", "The forecast says sunny then rain."),
+        "sunshine" to listOf("I love feeling the warm sunshine.", "The room is filled with sunshine.", "We spent the day in sunshine."),
+        "supermarket" to listOf("I need to go to the supermarket.", "The supermarket is open until midnight.", "Meet me at the supermarket entrance."),
+        "support" to listOf("I really appreciate your emotional support.", "Does this phone support wireless charging?", "They support the local football team."),
+        "sushi" to listOf("Let's order some salmon sushi.", "I love eating fresh sushi.", "Do you like sushi with ginger?"),
+        "sustainability" to listOf("The company focuses on environmental sustainability.", "Sustainability is key for our future.", "They are teaching us about sustainability."),
+        "sustainable" to listOf("We need more sustainable energy sources.", "Is this packaging truly sustainable?", "They use sustainable farming methods."),
+        "sweater" to listOf("Put on a sweater, it's cold.", "This wool sweater is very soft.", "I bought a new blue sweater."),
+        "swim" to listOf("Can you swim in this lake?", "I like to swim every morning.", "Let's go for a quick swim."),
+        "swimsuit" to listOf("Don't forget to pack your swimsuit.", "This swimsuit is a bit too small.", "She bought a new red swimsuit."),
+        "synthesize" to listOf("We need to synthesize the data.", "Scientists can synthesize this protein.", "It's hard to synthesize these ideas."),
+        "t-shirt" to listOf("I am wearing a white t-shirt.", "This t-shirt is made of cotton.", "Where is my favorite t-shirt?"),
+        "table" to listOf("Please put the keys on the table.", "This dining table is made of oak.", "The table is too small for us."),
+        "take" to listOf("Take your umbrella with you.", "I take the bus daily.", "Please take a deep breath."),
+        "taxi" to listOf("I will call a taxi for you.", "The taxi is waiting outside.", "How much is the taxi fare?"),
+        "tea" to listOf("Would you like some green tea?", "I drink tea every morning.", "This tea is way too hot."),
+        "teach" to listOf("Can you teach me how to cook?", "She will teach English next year.", "I want to teach my kids."),
+        "teacher" to listOf("My math teacher is very strict.", "He is a great primary school teacher.", "Ask your teacher for help."),
+        "television" to listOf("Turn off the television now.", "My television is too small.", "Do you have a television?"),
+        "temperature" to listOf("The temperature is dropping fast.", "Check the room temperature.", "He has a high temperature."),
+        "temple" to listOf("We visited an ancient temple.", "The temple is very quiet.", "They are building a new temple."),
+        "ten" to listOf("I have ten dollars left.", "It takes ten minutes walking.", "He is ten years old."),
+        "tenuous" to listOf("Their connection is quite tenuous.", "This is a tenuous link.", "The evidence is very tenuous."),
+        "thank you" to listOf("Thank you for your help.", "Thank you for the gift.", "No, thank you very much."),
+        "that" to listOf("I want that red dress.", "That is a great idea.", "Who told you that?"),
+        "the" to listOf("The sun is very bright.", "Pass me the remote control.", "The store closes at nine."),
+        "the crux of the matter" to listOf("That is the crux of the matter.", "We found the crux of the matter.", "Let's address the crux of the matter."),
+        "theme" to listOf("The party has a beach theme.", "What is the main theme?", "This movie has a dark theme."),
+        "then" to listOf("First eat, then sleep.", "What happened then?", "Then we went home."),
+        "theory" to listOf("My theory is that he lied.", "That is a wild theory.", "The theory seems plausible now."),
+        "there" to listOf("Look over there.", "There is a big dog.", "I will go there."),
+        "these" to listOf("These shoes are too small.", "Do these look good?", "I bought these yesterday."),
+        "think" to listOf("I think we should leave.", "Do you think it will rain?", "I need time to think."),
+        "thirsty" to listOf("I am very thirsty today.", "Are you feeling thirsty?", "Drink water if you are thirsty."),
+        "thirteen" to listOf("There are thirteen people here.", "She is thirteen years old.", "I have thirteen emails to send."),
+        "those" to listOf("Those apples look ripe.", "Who are those people?", "Put those books away."),
+        "thousand" to listOf("A thousand people came.", "It costs a thousand euros.", "He ran a thousand meters."),
+        "three" to listOf("I have three dogs.", "Give me three more minutes.", "They have three children."),
+        "throat" to listOf("My throat feels very sore.", "He has a lump in his throat.", "Drink tea for your throat."),
+        "thunder" to listOf("I can hear the thunder.", "The thunder was very loud.", "Thunder follows the lightning."),
+        "thursday" to listOf("See you next Thursday.", "Thursday is my busiest day.", "It happened last Thursday."),
+        "thus" to listOf("Thus, the plan failed.", "He lied and thus lost trust.", "It is thus decided."),
+        "ticket" to listOf("Do you have your ticket?", "I bought a train ticket.", "Show me your ticket, please."),
+        "tiger" to listOf("The tiger is hunting now.", "Look at that orange tiger.", "Tigers live in the jungle."),
+        "time" to listOf("What time is it now?", "I have no time today.", "It is time to go."),
+        "tired" to listOf("I am too tired to cook.", "You look really tired today.", "He was tired after the gym."),
+        "to" to listOf("I want to go home.", "Give the book to her.", "We walked to the park."),
+        "today" to listOf("What are you doing today?", "I have a meeting today.", "Today is a very busy day."),
+        "toe" to listOf("I stubbed my big toe.", "She has a sore toe.", "He hurt his toe running."),
+        "toilet" to listOf("Where is the nearest toilet?", "The toilet is down the hall.", "Please clean the guest toilet."),
+        "tomorrow" to listOf("I will see you tomorrow.", "Is the meeting tomorrow morning?", "Let's go to the park tomorrow."),
+        "tongue" to listOf("He burnt his tongue on tea.", "The dog licked my tongue.", "Hold your tongue for a second."),
+        "too" to listOf("It is too hot outside.", "This shirt is too big.", "I want to come too."),
+        "tooth" to listOf("I have a loose tooth.", "My front tooth really hurts.", "He went to the dentist."),
+        "tourist" to listOf("She is just a tourist here.", "The city is full of tourists.", "He looks like a typical tourist."),
+        "tower" to listOf("The clock tower is very old.", "That tower is way too high.", "We climbed the watch tower."),
+        "town" to listOf("This is a small quiet town.", "I live in a nearby town.", "Let's go downtown for dinner."),
+        "tradition" to listOf("It is a family tradition.", "We keep the holiday tradition.", "That tradition is very old."),
+        "train" to listOf("I take the train daily.", "The train was ten minutes late.", "Which train goes to London?"),
+        "travel" to listOf("I love to travel alone.", "They travel for work often.", "Do you travel by plane?"),
+        "treaty" to listOf("The two countries signed a treaty.", "It was a peace treaty.", "They broke the old treaty."),
+        "tree" to listOf("The cat is in the tree.", "That tree grows very fast.", "We sat under a large tree."),
+        "trend" to listOf("That fashion trend is over.", "It is a growing trend.", "I don't follow every trend."),
+        "trousers" to listOf("These trousers are too long.", "He wore black trousers today.", "Where are my grey trousers?"),
+        "trust" to listOf("I trust him with my life.", "You cannot trust his word.", "Trust your gut feeling here."),
+        "tsunami" to listOf("The tsunami hit the coast.", "A tsunami is a giant wave.", "They warned us about the tsunami."),
+        "tuesday" to listOf("I have a test on Tuesday.", "We meet every other Tuesday.", "Tuesday is the worst day."),
+        "turn down" to listOf("Please turn down the music.", "He turned down the job offer.", "Turn down the heat a bit."),
+        "turtle" to listOf("That turtle moves very slowly.", "I saw a turtle on the beach.", "Turtles have hard shells."),
+        "twelve" to listOf("It is twelve o'clock already.", "She bought twelve red roses.", "There are twelve eggs in the carton."),
+        "twenty" to listOf("It costs twenty dollars.", "He is twenty years old.", "I have twenty pages to read."),
+        "twice" to listOf("I called him twice.", "Brush your teeth twice daily.", "It happened twice."),
+        "two" to listOf("I have two sisters.", "Can I have two coffees?", "It takes two hours to get there."),
+        "typhoon" to listOf("The typhoon hit the coast yesterday.", "We stayed inside during the typhoon.", "A strong typhoon is coming tomorrow."),
+        "ubiquitous" to listOf("Smartphones are ubiquitous these days.", "Coffee shops are ubiquitous in this city.", "Plastic waste is ubiquitous in the ocean."),
+        "umbrella" to listOf("Take an umbrella with you.", "My umbrella is broken.", "She opened her black umbrella."),
+        "uncle" to listOf("My uncle lives in New York.", "He is my father's brother.", "I visited my uncle last weekend."),
+        "under" to listOf("The cat is under the bed.", "Put it under the table.", "I am under pressure."),
+        "understand" to listOf("I don't understand this word.", "Do you understand the rules?", "I understand how you feel."),
+        "unequivocal" to listOf("His answer was an unequivocal yes.", "The evidence provided unequivocal proof.", "She gave an unequivocal command."),
+        "university" to listOf("She is studying at the university.", "Which university do you attend?", "He graduated from a top university."),
+        "up" to listOf("Look up at the sky.", "Wake up, it is late.", "Lift the box up."),
+        "use" to listOf("Can I use your phone?", "I use this app every day.", "How do you use this tool?"),
+        "usually" to listOf("I usually drink tea.", "He usually arrives at six.", "We usually walk home."),
+        "vacuum cleaner" to listOf("The vacuum cleaner is too loud.", "I need a new vacuum cleaner.", "Put the vacuum cleaner away."),
+        "validity" to listOf("The ticket lost its validity.", "I question the validity of this claim.", "Check the validity of the passport."),
+        "variable" to listOf("The weather is a constant variable.", "Price is a key variable here.", "This experiment has one main variable."),
+        "vegetable garden" to listOf("We have a small vegetable garden.", "He works in the vegetable garden.", "Plant the seeds in the vegetable garden."),
+        "vegetables" to listOf("Eat more green vegetables.", "I bought some fresh vegetables.", "Do you like cooked vegetables?"),
+        "verdict" to listOf("The jury reached a verdict.", "We are waiting for the verdict.", "The verdict was a surprise."),
+        "very" to listOf("This room is very cold.", "He is very tall.", "I am very tired."),
+        "viable" to listOf("This is not a viable plan.", "We need a viable solution.", "Is this project still viable?"),
+        "virtue" to listOf("Patience is a great virtue.", "She values honesty as a virtue.", "Kindness is her greatest virtue."),
+        "volcano" to listOf("The volcano erupted last year.", "Is that volcano still active?", "We hiked up the volcano."),
+        "volunteer" to listOf("I want to volunteer today.", "She is a hospital volunteer.", "Do you want to volunteer?"),
+        "waist" to listOf("This belt is too tight.", "The dress fits her waist.", "He wore a wide belt."),
+        "wait" to listOf("Please wait for the bus.", "I cannot wait any longer.", "Just wait a few minutes."),
+        "waiter" to listOf("The waiter brought the food.", "Our waiter was very friendly.", "Call the waiter over here."),
+        "wake up" to listOf("I wake up at six.", "Please wake up the kids.", "What time do you wake up?"),
+        "walk" to listOf("Let's take a short walk.", "I walk to work daily.", "Can you walk the dog?"),
+        "wall" to listOf("The wall is painted white.", "Hang the picture on the wall.", "There is a wall here."),
+        "wallet" to listOf("My wallet is completely empty.", "He lost his leather wallet.", "Put the money in your wallet."),
+        "want" to listOf("I want a glass of water.", "Do you want some cake?", "They want to go home."),
+        "wardrobe" to listOf("My wardrobe is full of clothes.", "She bought a new wardrobe.", "Put it in the wardrobe."),
+        "warm" to listOf("The soup is very warm.", "Keep the baby warm.", "It is a warm day."),
+        "wash" to listOf("Wash your hands with soap.", "I need to wash my car.", "Did you wash the dishes?"),
+        "washbasin" to listOf("The washbasin is leaking water.", "Put the soap in the washbasin.", "Scrub the washbasin today."),
+        "washing machine" to listOf("The washing machine is loud.", "Put the towels in the machine.", "My washing machine is broken."),
+        "waste" to listOf("Do not waste your time.", "This is a waste of money.", "Stop wasting the water."),
+        "water" to listOf("Can I have some water?", "The water is too cold.", "Drink plenty of water today."),
+        "watermelon" to listOf("I love eating cold watermelon.", "Slice the watermelon into cubes.", "Watermelon is my favorite fruit."),
+        "weak" to listOf("My legs feel very weak.", "This glue is too weak.", "He is too weak to walk."),
+        "wear" to listOf("What should I wear tonight?", "I wear glasses for reading.", "Don't wear those old shoes."),
+        "weather" to listOf("The weather is lovely today.", "I hate this rainy weather.", "What's the weather like tomorrow?"),
+        "website" to listOf("Their website is very slow.", "Check the website for prices.", "I found it on a website."),
+        "wednesday" to listOf("See you on Wednesday morning.", "Wednesday is my busiest day.", "We meet every Wednesday."),
+        "week" to listOf("I'll be away next week.", "It has been a long week.", "I work forty hours a week."),
+        "weekend" to listOf("What are your weekend plans?", "I relaxed over the weekend.", "The weekend goes by fast."),
+        "well" to listOf("He plays piano well.", "I don't feel well.", "Everything will be well."),
+        "whale" to listOf("We saw a huge whale.", "That whale is swimming away.", "Blue whales are truly massive."),
+        "what" to listOf("What is your name?", "What are you doing?", "I don't know what to say."),
+        "when" to listOf("When do you wake up?", "Call me when you arrive.", "I was young when it happened."),
+        "where" to listOf("Where do you live?", "I know where it is.", "Put it where it belongs."),
+        "whereas" to listOf("He likes tea, whereas she prefers coffee.", "I'm tall, whereas my dad is short.", "This is cheap, whereas that is expensive."),
+        "whereby" to listOf("It's a system whereby we share tasks.", "He created a process whereby data is saved.", "We need a law whereby people can vote."),
+        "while" to listOf("Read while I am cooking.", "He slept while it rained.", "Listen while I explain."),
+        "whilst" to listOf("Don't talk whilst you are eating.", "I listened whilst she spoke.", "Read the book whilst you wait."),
+        "who" to listOf("Who is that man?", "I know who did it.", "Who wants some cake?"),
+        "why" to listOf("Why are you laughing?", "Tell me why you left.", "Why did this happen?"),
+        "wide" to listOf("The river is very wide.", "Open your eyes wide.", "This road is too wide."),
+        "wife" to listOf("My wife is a doctor.", "He loves his wife dearly.", "His wife is a great cook."),
+        "will" to listOf("I will call you tomorrow.", "It will be here soon.", "They will arrive at six."),
+        "wind" to listOf("The wind is blowing hard.", "A cold wind hit us.", "The wind knocked over the tree."),
+        "window" to listOf("Please close the bedroom window.", "Look out the window.", "The window is broken."),
+        "windy" to listOf("It is too windy to play.", "Today is a very windy day.", "Keep your hat on, it's windy."),
+        "with" to listOf("I am with my friend.", "Cut it with these scissors.", "Come with me please."),
+        "with a pinch of salt" to listOf("Take his stories with a pinch of salt.", "I take the news with a pinch of salt.", "Listen to her with a pinch of salt."),
+        "wolf" to listOf("The wolf howled at the moon.", "A wolf entered the village.", "Wolves hunt in large packs."),
+        "work" to listOf("I have too much work.", "Where do you work?", "It is time to go to work."),
+        "work out" to listOf("I work out at the gym.", "We need to work this out.", "Does this plan work out?"),
+        "worried" to listOf("I am worried about the exam.", "She looked very worried today.", "Don't be worried about me."),
+        "would" to listOf("Would you like some tea?", "I would go if I could.", "That would be very helpful."),
+        "write" to listOf("Please write your name here.", "I need to write an email.", "Do you write poetry?"),
+        "year" to listOf("Happy New Year to all!", "I lived there for one year.", "This year has been great."),
+        "yes" to listOf("Yes, I agree.", "Yes, please help me.", "Yes, it is raining."),
+        "yesterday" to listOf("I saw him yesterday afternoon.", "Yesterday was a holiday.", "It rained all day yesterday."),
+        "younger brother" to listOf("My younger brother is annoying.", "He has one younger brother.", "I play soccer with my younger brother."),
+        "younger sister" to listOf("Her younger sister is five.", "My younger sister lives in London.", "I help my younger sister study.")
+    ) }
+
+    private val CURATED_HI: Map<String, List<String>> by lazy { mapOf(
+        "a" to listOf("मेरे पास एक छोटा कुत्ता है.", "वह एक प्रतिभाशाली कलाकार हैं.", "मुझे यहाँ एक हाथ दो."),
+        "a double-edged sword" to listOf("प्रसिद्धि अक्सर दोधारी तलवार होती है।", "यह नया कानून दोधारी तलवार है.", "उनकी प्रतिभा दोधारी तलवार हो सकती है।"),
+        "a moot point" to listOf("यह अब एक विवादास्पद मुद्दा है.", "हमारे हारने के बाद से यह एक विवादास्पद मुद्दा है।", "बारिश होगी या नहीं यह एक विवादास्पद मुद्दा है।"),
+        "about" to listOf("अपने दिन के बारे में मुझे बताओ।", "करीब पांच बजे का समय है.", "मैं इसके बारे में सोच रहा हूँ।"),
+        "abroad" to listOf("वह अगले साल विदेश में पढ़ाई करना चाहती है।", "क्या आपने कभी विदेश यात्रा की है?", "वह फिलहाल विदेश में काम कर रहे हैं."),
+        "accomplish" to listOf("हम मिलकर इस लक्ष्य को पूरा कर सकते हैं।'", "मैंने आज बहुत कुछ हासिल नहीं किया।", "आपने कितना पूरा किया?"),
+        "accordingly" to listOf("कृपया नियम पढ़ें और तदनुसार कार्य करें।", "उन्हें चेतावनी दी गई और तदनुसार कार्रवाई की गई।", "कीमतें बढ़ीं, और बजट तदनुसार बदल गया।"),
+        "achieve" to listOf("आप कड़ी मेहनत से कुछ भी हासिल कर सकते हैं।", "क्या उसने अपने लक्ष्य हासिल किये?", "सफलता पाने में समय लगता है."),
+        "acknowledge" to listOf("कृपया स्वीकार करें कि आपको यह प्राप्त हुआ।", "उन्होंने गलती मानने से इनकार कर दिया.", "आख़िरकार उन्होंने समस्या स्वीकार कर ली।"),
+        "active" to listOf("मेरा कुत्ता बहुत सक्रिय है.", "प्रतिदिन पैदल चलकर सक्रिय रहें।", "क्या खाता अभी भी सक्रिय है?"),
+        "actor" to listOf("वह हॉलीवुड के मशहूर अभिनेता हैं.", "किस अभिनेता ने मुख्य भूमिका निभाई?", "वह एक प्रतिभाशाली मंच अभिनेत्री हैं।"),
+        "advocate" to listOf("वह बच्चों की प्रबल समर्थक हैं।", "वह बेहतर स्वास्थ्य देखभाल की वकालत करते हैं।", "यहां प्रमुख वकील कौन है?"),
+        "afternoon" to listOf("कल दोपहर को मिलते हैं.", "आज दोपहर को मेरी एक बैठक है.", "दोपहर का सूरज बहुत गर्म है."),
+        "again" to listOf("क्या आप फिर से कह सकते हैं?", "आइए इसे फिर से प्रयास करें.", "कल फिर मिलेंगे."),
+        "airplane" to listOf("हवाई जहाज़ समय पर उतरा।", "मैंने कभी हवाई जहाज़ में उड़ान नहीं भरी है।", "हवाई जहाज अब उड़ान भर रहा है."),
+        "airport" to listOf("मैं आपसे हवाई अड्डे पर मिलूंगा.", "आज हवाईअड्डे पर बहुत भीड़ थी.", "हम हवाई अड्डे पर जल्दी पहुँच गये।"),
+        "albeit" to listOf("महंगी होते हुए भी यह एक मज़ेदार यात्रा थी।", "कुछ झिझक के साथ ही सही, वह सहमत हो गया।", "प्रगति धीमी है, यद्यपि स्थिर है।"),
+        "also" to listOf("मुझे पिज़्ज़ा भी पसंद है.", "वह एक शिक्षक भी हैं.", "वह फ्रेंच भी बोलती है।"),
+        "always" to listOf("मैं हमेशा जल्दी उठता हूं.", "वह हमेशा खुश रहती है.", "अप्रैल में हमेशा बारिश होती है।"),
+        "ambiguous" to listOf("निर्देश बहुत अस्पष्ट थे.", "उनका उत्तर अस्पष्ट रहा.", "फ़िल्म का अंत अस्पष्ट था।"),
+        "ambition" to listOf("उनकी महत्वाकांक्षा सीईओ बनने की है।", "उसके पास किसी वास्तविक महत्वाकांक्षा का अभाव है।", "महत्वाकांक्षा उसे कड़ी मेहनत करने के लिए प्रेरित करती है।"),
+        "amendment" to listOf("कानून में एक छोटे संशोधन की जरूरत है.", "उन्होंने अनुबंध में संशोधन का प्रस्ताव रखा।", "यह संशोधन पूरे सौदे को बदल देता है।"),
+        "an" to listOf("मैंने आज एक सेब खाया.", "यह एक ईमानदार गलती थी.", "आप एक विचार है?"),
+        "analysis" to listOf("रक्त विश्लेषण नकारात्मक आया।", "इस डेटा विश्लेषण में काफी समय लगता है।", "पुस्तक का उनका विश्लेषण शानदार था।"),
+        "and" to listOf("मुझे चाय और कॉफ़ी पसंद है.", "उसने गाया और नृत्य किया।", "रोटी और मक्खन यहाँ हैं."),
+        "angry" to listOf("आप इतना गुस्सा क्यों कर रहे हैं?", "उन्हें ड्राइवर पर गुस्सा आया.", "मुलाकात के दौरान वह गुस्से में दिखीं."),
+        "answer" to listOf("कृपया फ़ोन का उत्तर दें.", "क्या आप जवाब जानते हैं?", "उनका जवाब बेहद हैरान करने वाला था."),
+        "ant" to listOf("एक चींटी एक टुकड़ा ले जा रही है।", "उस छोटी चींटी को देखो.", "चींटियों की बस्ती बहुत बड़ी है।"),
+        "any" to listOf("क्या आपके पास दूध है?", "क्या कोई उम्मीद है?", "मुझे कोई नजर नहीं आ रहा."),
+        "apartment" to listOf("मैं एक छोटे से अपार्टमेंट में रहता हूँ।", "उसका अपार्टमेंट पार्क के पास है।", "हम एक नया अपार्टमेंट किराए पर ले रहे हैं।"),
+        "app" to listOf("मैंने एक नया फिटनेस ऐप डाउनलोड किया।", "यह ऐप काफी समय बचाता है।", "आप कौन सा ऐप सबसे ज्यादा इस्तेमाल करते हैं?"),
+        "apple" to listOf("मैंने एक लाल सेब खाया.", "क्या आप एक सेब चाहते हैं?", "सेब बहुत रसीला होता है."),
+        "arcade" to listOf("आइए गेम आर्केड पर चलते हैं।", "आर्केड में कई पुराने खेल हैं।", "हमने अपने सारे सिक्के आर्केड में खर्च कर दिए।"),
+        "architect" to listOf("वह एक प्रसिद्ध आधुनिक वास्तुकार हैं।", "वास्तुकार ने नई लाइब्रेरी का डिज़ाइन तैयार किया।", "वह आर्किटेक्ट बनना चाहती है."),
+        "arguably" to listOf("यह यकीनन यहां का सबसे अच्छा पिज़्ज़ा है।", "वह यकीनन सबसे तेज़ खिलाड़ी है।", "यह यकीनन सबसे कठिन हिस्सा है।"),
+        "argue" to listOf("वे हमेशा कपड़े धोने को लेकर बहस करते रहते हैं।", "कृपया मुझसे बहस न करें.", "हमें सार्वजनिक रूप से बहस नहीं करनी चाहिए."),
+        "argument" to listOf("कल हमारे बीच बहुत बड़ी बहस हुई.", "आपका तर्क बहुत मायने रखता है.", "उन्होंने अपना तर्क शीघ्रता से सुलझा लिया।"),
+        "arm" to listOf("फुटबॉल खेलते समय उसका हाथ टूट गया।", "उसने बच्चे को अपनी बांह में पकड़ रखा था।", "मेरा हाथ सो रहा है."),
+        "arrive" to listOf("ट्रेन कितने बजे आती है?", "हम दोपहर को पहुंचेंगे.", "मेहमान कब आये?"),
+        "article" to listOf("मैंने आज एक दिलचस्प लेख पढ़ा।", "यह लेख नए कानून की व्याख्या करता है.", "उसने अखबार के लिए एक लेख लिखा।"),
+        "as a result" to listOf("उसने झूठ बोला और परिणामस्वरूप, विश्वास खो दिया।", "बारिश हुई और परिणामस्वरूप, हम घर पर ही रहे।", "उसने कठिन अध्ययन किया; परिणामस्वरूप, वह उत्तीर्ण हो गयी।"),
+        "ascertain" to listOf("हमें कारण का पता लगाना होगा.", "मैं सही तारीख का पता नहीं लगा सकता.", "उन्होंने उसकी लोकेशन पता करने की कोशिश की."),
+        "assert" to listOf("आपको अपने अधिकारों का दावा करना होगा.", "वह अपनी बेगुनाही का दावा करती रही।", "उनका दावा है कि योजना काम करती है।"),
+        "assumption" to listOf("यह बहुत साहसिक धारणा है.", "मेरी धारणा बिल्कुल ग़लत थी.", "उसके बारे में कोई धारणा मत बनाओ."),
+        "astronaut" to listOf("अंतरिक्ष यात्री अंतरिक्ष में तैरने लगा।", "वह अंतरिक्ष यात्री बनने का सपना देखता है।", "अंतरिक्ष यात्री चंद्रमा पर उतरा।"),
+        "at" to listOf("मुझसे स्टेशन पर मिलो.", "वह अभी काम पर है.", "मैं दरवाजे पर हूं."),
+        "at the expense of" to listOf("वह दूसरों की कीमत पर जीते।", "गुणवत्ता की कीमत पर विकास न करें।", "सफलता नींद की कीमत पर मिली।"),
+        "athlete" to listOf("वह एक पेशेवर ओलंपिक एथलीट हैं।", "वह बहुत प्रतिभाशाली एथलीट हैं.", "एथलीट ने हर सुबह प्रशिक्षण लिया।"),
+        "attitude" to listOf("उनका रवैया बहुत सकारात्मक है.", "काम के प्रति उनका नजरिया बहुत अच्छा है.", "अपना रवैया बदलो या छोड़ दो."),
+        "aunt" to listOf("मेरी मौसी न्यूयॉर्क में रहती हैं।", "वह मेरे पिता की बहन और मौसी हैं.", "मेरी चाची ने चॉकलेट केक बनाया।"),
+        "author" to listOf("इस पुस्तक के लेखक कौन हैं?", "लेखक ने मेरी प्रति पर हस्ताक्षर किये।", "वह सबसे ज्यादा बिकने वाली लेखिका हैं।"),
+        "baby" to listOf("बच्चा गहरी नींद में सो रहा है.", "मेरी बहन को अभी-अभी बच्चा हुआ है।", "बच्चा चलना सीख रहा है."),
+        "back" to listOf("कृपया जल्दी घर वापस आएँ।", "कुर्सी से मेरी पीठ दर्द करती है.", "उसने मेरी पीठ थपथपाई."),
+        "backpack" to listOf("अपनी किताबें अपने बैकपैक में रखें।", "उसका बैकपैक बहुत भारी है.", "मैंने एक नया चमड़े का बैकपैक खरीदा।"),
+        "bad" to listOf("इस दूध से बहुत बुरी गंध आती है.", "मुझे बुरा सिरदर्द हो रहा है।", "यह बहुत बुरा विचार था."),
+        "bad-tasting" to listOf("इस दवा का स्वाद बहुत ख़राब है.", "मुझे इस ख़राब स्वाद वाले सूप से नफरत है।", "चाय का स्वाद आश्चर्यजनक रूप से ख़राब था।"),
+        "baker" to listOf("बेकर ताज़ा आटा बनाता है।", "वह शहर का सबसे अच्छा बेकर है।", "बेकर से एक रोटी माँगो।"),
+        "bakery" to listOf("बेकरी से दालचीनी जैसी गंध आती है।", "चलो स्थानीय बेकरी पर चलते हैं।", "उसने एक छोटी सी फ्रेंच बेकरी खोली।"),
+        "balanced" to listOf("मैं संतुलित आहार खाने की कोशिश करता हूं.", "अंततः बजट संतुलित हो गया।", "उनका नजरिया बहुत संतुलित है."),
+        "balcony" to listOf("मुझे अपनी बालकनी पर पढ़ना अच्छा लगता है।", "बालकनी पर पौधे लगाएं.", "बिल्ली बालकनी से कूद गई."),
+        "banana" to listOf("नाश्ते में केला खायें।", "यह केला बहुत हरा है.", "मैंने अनाज के लिए एक केला काटा।"),
+        "bank" to listOf("मुझे बैंक जाना है.", "रविवार को बैंक बंद रहता है.", "पैसा बैंक में डालो."),
+        "bat" to listOf("उन्होंने जोर से बल्ला घुमाया.", "एक चमगादड़ गुफा में उड़ गया।", "हमें एक नया बेसबॉल बैट चाहिए।"),
+        "bath" to listOf("मुझे गर्म स्नान की जरूरत है.", "बच्चा स्नान में है.", "रात के खाने से पहले नहा लें."),
+        "bathroom" to listOf("निकटतम बाथरूम कहाँ है?", "बाथरूम का फर्श गीला है.", "कृपया अतिथि बाथरूम साफ़ करें।"),
+        "be" to listOf("में डाक्टर बनना चाहता हूँ।", "उस गिलास से सावधान रहें.", "कृपया पुस्तकालय में शांत रहें।"),
+        "bear" to listOf("हमने जंगल में एक भालू देखा।", "वह भालू बहुत बड़ा है.", "जंगली भालू को भोजन न दें."),
+        "beautiful" to listOf("यह सूर्यास्त बिल्कुल सुंदर है.", "उन्होंने खूबसूरत लाल रंग की ड्रेस पहनी थी.", "आज बगीचा सुंदर लग रहा है."),
+        "because" to listOf("मैं सो गया क्योंकि मैं थका हुआ था।", "वह रोई क्योंकि उसने इसे खो दिया था।", "वह मुस्कुराया क्योंकि वह खुश था।"),
+        "bed" to listOf("अब मैं सोने जा रहा हूँ।", "कुत्ता मेरे बिस्तर पर सोता है.", "हर सुबह अपना बिस्तर बनाओ."),
+        "bedroom" to listOf("मेरा शयनकक्ष बहुत छोटा है.", "उसने अपने शयनकक्ष को नीले रंग से रंग दिया।", "वह अपने शयनकक्ष की सफ़ाई कर रहा है।"),
+        "beef" to listOf("मैं चिकन के बजाय बीफ़ पसंद करता हूँ।", "हम भुना हुआ मांस खा रहे हैं।", "यह बीफ़ स्टेक कोमल है."),
+        "beer" to listOf("उसने ठंडी बियर का ऑर्डर दिया।", "क्या आपको क्राफ्ट बियर पसंद है?", "मैं बीयर कभी-कभार ही पीता हूं।"),
+        "begin" to listOf("चलिए मीटिंग शुरू करते हैं.", "फिल्म कब शुरू होती है?", "कुछ ही देर में शो शुरू होगा."),
+        "behaviour" to listOf("उसका व्यवहार बहुत अजीब था.", "अच्छे व्यवहार से पुरस्कार मिलता है।", "बच्चे के व्यवहार में सुधार हुआ."),
+        "between" to listOf("हमारे बीच बैठो.", "यह दो शहरों के बीच है.", "इन दोनों में से चुनें."),
+        "big" to listOf("वह बहुत बड़ा घर है.", "गर्मियों के लिए उसकी बड़ी योजनाएँ हैं।", "मुझसे बहुत बड़ी गलती हो गयी."),
+        "bike" to listOf("मैं काम पर अपनी बाइक से जाता हूं।", "मेरी बाइक का टायर फट गया है.", "उसने एक नई इलेक्ट्रिक बाइक खरीदी।"),
+        "bird" to listOf("एक पक्षी बाड़ पर है.", "वह पक्षी हर सुबह गाता है।", "नीला पक्षी उड़ गया."),
+        "birthday" to listOf("मेरी बहन को जन्मदिन मुबारक हो!", "आपका जन्मदिन कब है?", "हमने एक बड़ी जन्मदिन की पार्टी की थी।"),
+        "blizzard" to listOf("बर्फ़ीले तूफ़ान ने यातायात रोक दिया।", "हम बर्फ़ीले तूफ़ान में फँस गए थे।", "आज रात बर्फ़ीला तूफ़ान आने वाला है."),
+        "blood" to listOf("कल उसका रक्त परीक्षण है।", "खून का रंग लाल होता है.", "खून को पट्टी से रोकें।"),
+        "blouse" to listOf("उन्होंने सफेद ब्लाउज पहना था.", "ये सिल्क ब्लाउज महंगा है.", "ब्लाउज को हाथ से धोएं."),
+        "boat" to listOf("नाव झील पर है.", "हमने मछली पकड़ने वाली एक छोटी नाव किराए पर ली।", "उसने नाव सावधानी से चलायी।"),
+        "body" to listOf("व्यायाम शरीर के लिए अच्छा है।", "शरीर को पानी की भरपूर जरूरत होती है.", "उसके पास एक मजबूत शरीर है."),
+        "bone" to listOf("कुत्ते ने एक हड्डी चबा ली.", "उसके हाथ की हड्डी टूट गई.", "इस मछली में बहुत सारी हड्डियाँ होती हैं।"),
+        "book" to listOf("मुझे एक फ्लाइट बुक करनी है.", "कक्षा के लिए यह पुस्तक पढ़ें.", "क्या आप टेबल बुक कर सकते हैं?"),
+        "bookstore" to listOf("चलो किताबों की दुकान पर मिलते हैं।", "इस किताब की दुकान में बढ़िया कॉफ़ी है।", "मैंने किताबों की दुकान में घंटों बिताए।"),
+        "bored" to listOf("मैं इस फिल्म से बोर हो गया हूं.", "मुलाकात के दौरान वह ऊबे हुए लग रहे थे.", "बच्चे बोर हो रहे हैं."),
+        "boring" to listOf("वह व्याख्यान बहुत उबाऊ था.", "यह किताब थोड़ी उबाऊ है.", "उबाऊ कहानियाँ सुनाना बंद करो।"),
+        "brain" to listOf("व्यायाम आपके मस्तिष्क के लिए अच्छा है।", "इसे सुलझाने के लिए अपने दिमाग का इस्तेमाल करें.", "मेरा दिमाग गूदे जैसा महसूस होता है।"),
+        "bread" to listOf("कृपया एक पाव रोटी खरीदें।", "मुझे ताज़ी रोटी की महक बहुत पसंद है।", "क्या आप टोस्टेड ब्रेड चाहते हैं?"),
+        "breakfast" to listOf("आप नाश्ते के लिए क्या लिया है?", "मैं आमतौर पर नाश्ता छोड़ देता हूं।", "नाश्ता दस बजे तक परोसा जाता है।"),
+        "bridge" to listOf("धीरे-धीरे पुल पार करें।", "पुल मरम्मत के लिए बंद है.", "हमने एक साथ पुल पार किया।"),
+        "bring about" to listOf("नये कानून बदलाव ला सकते हैं.", "यह निर्णय किस कारण से आया?", "कड़ी मेहनत से सफलता मिलती है।"),
+        "broadcast" to listOf("समाचार का सीधा प्रसारण किया जाता है।", "उन्होंने देश भर में खेल का प्रसारण किया।", "रिपोर्ट कब प्रसारित होगी?"),
+        "brother" to listOf("मेरा भाई लंदन में रहता है.", "क्या आपका कोई छोटा भाई है?", "वह मेरा इकलौता भाई है."),
+        "budget" to listOf("हमारा बजट सीमित है।", "मुझे अपने बजट की योजना बनानी होगी.", "यह परियोजना बजट से अधिक है."),
+        "builder" to listOf("बिल्डर कल आ रहा है.", "हमने एक पेशेवर बिल्डर को काम पर रखा।", "वह एक कुशल घर निर्माता हैं।"),
+        "bus" to listOf("मैं काम पर जाने के लिए बस लेता हूँ।", "बस देर से चल रही है.", "अगली बस का इंतज़ार करें."),
+        "bus stop" to listOf("बस स्टॉप पर मुझसे मिलो.", "पास में ही एक बस स्टॉप है.", "वह बस स्टॉप पर इंतजार कर रहा था।"),
+        "busy" to listOf("मेरा दिन बहुत व्यस्त है.", "सड़क हमेशा व्यस्त रहती है.", "क्या आप इस समय व्यस्त हैं?"),
+        "but" to listOf("मुझे यह पसंद है लेकिन यह महंगा है।", "वह छोटा है लेकिन मजबूत है.", "मैंने कोशिश की लेकिन मैं असफल रहा."),
+        "butcher shop" to listOf("मैंने कसाई की दुकान से स्टेक खरीदा।", "कसाई की दुकान पाँच बजे बंद हो जाती है।", "स्थानीय कसाई की दुकान पर जाएँ।"),
+        "butter" to listOf("टोस्ट पर थोड़ा सा मक्खन लगा दीजिये.", "क्या हमारे पास कोई नमकीन मक्खन है?", "मक्खन फ्रिज में है."),
+        "butterfly" to listOf("एक तितली फूल पर उतरी।", "उस रंगीन तितली को देखो.", "तितली तेजी से उड़ गई."),
+        "button" to listOf("अब लाल बटन दबाएँ.", "मेरी शर्ट का एक बटन गायब है.", "प्रारंभ करने के लिए बटन दबाएँ."),
+        "buy" to listOf("मैं टिकट कहाँ से खरीद सकता हूँ?", "मैं एक कार खरीदना चाहता हूँ.", "क्या आपने कोई दूध खरीदा?"),
+        "by" to listOf("मैं बस से काम करने के लिए जाता हूँ।", "पुस्तक उनके द्वारा लिखी गई थी।", "दरवाजे के पास खड़े रहो."),
+        "by the same token" to listOf("वह चतुर है; उसी प्रकार, वह अहंकारी है।", "यह तेज़ है; उसी प्रकार, यह जोखिम भरा है।", "वह दयालु है; उसी प्रकार, वह दृढ़ है।"),
+        "cafe" to listOf("चलो कैफे में मिलते हैं.", "इस कैफ़े में बढ़िया पेस्ट्री हैं।", "मैं कैफे में किताबें पढ़ता हूं।"),
+        "camp" to listOf("हम यहां शिविर लगाने की योजना बना रहे हैं।", "उन्होंने नदी के किनारे डेरा डाला।", "क्या आपको शिविर लगाना पसंद है?"),
+        "campaign" to listOf("राजनीतिक अभियान कल से शुरू होगा.", "यह विज्ञापन अभियान बहुत सफल है.", "उन्होंने सफाई अभियान का नेतृत्व किया."),
+        "can" to listOf("क्या आप इसे स्थानांतरित करने में मेरी मदद कर सकते हैं?", "मैं थोड़ा स्पैनिश बोल सकता हूं.", "हम काम के बाद मिल सकते हैं."),
+        "cap" to listOf("टोपी को वापस पेन पर रख दें।", "मैंने एक नई बेसबॉल कैप खरीदी।", "बोतल का ढक्कन बहुत टाइट है."),
+        "car" to listOf("मेरी कार दुकान में है.", "हम कार लेकर शहर चले गये।", "वह इलेक्ट्रिक कार चलाती हैं."),
+        "career" to listOf("वह वकालत में करियर बनाना चाहते हैं।", "करियर बनाने में समय लगता है.", "वह अपने करियर की राह बदल रही हैं."),
+        "carry out" to listOf("कृपया मेरे निर्देशों का पालन करें.", "वे योजना को क्रियान्वित करेंगे।", "हमें एक परीक्षण करने की जरूरत है."),
+        "cat" to listOf("बिल्ली सोफ़े पर सो रही है.", "मेरी बिल्ली को पक्षियों का पीछा करना पसंद है।", "क्या आपके पास पालतू बिल्ली है?"),
+        "ceiling" to listOf("छत में रिसाव है.", "यहां की छत बहुत ऊंची है.", "छत को सफेद रंग से रंगें।"),
+        "chair" to listOf("इस कुर्सी पर बैठो.", "यह ऑफिस कुर्सी बहुत आरामदायक है।", "कृपया कुर्सी को एक तरफ हटा दें."),
+        "channel" to listOf("समाचार के लिए चैनल बदलें.", "गेम किस चैनल पर है?", "मुझे खाना पकाने का एक बढ़िया चैनल मिला।"),
+        "character" to listOf("वह एक मजबूत किरदार है.", "इस फिल्म में एक बेहतरीन मुख्य किरदार है।", "वह बहुत ईमानदार किरदार है."),
+        "cheap" to listOf("यह घड़ी बहुत सस्ती थी.", "सस्ती उड़ानें मिलना कठिन है।", "मैंने कुछ सस्ते स्नैक्स खरीदे।"),
+        "cheese" to listOf("मुझे चेडर चीज़ बहुत पसंद है।", "पिज़्ज़ा पर थोड़ा पनीर डालें.", "क्या आपको बकरी पनीर पसंद है?"),
+        "chef" to listOf("शेफ ने बढ़िया खाना बनाया.", "वह एक पेशेवर पेस्ट्री शेफ हैं।", "रेसिपी के लिए शेफ से पूछें।"),
+        "chest" to listOf("उसके सीने में दर्द महसूस हुआ.", "खजाना संदूक में था.", "किताब मेरे सीने पर रख दो।"),
+        "chest of drawers" to listOf("अपने मोज़े दराज के संदूक में रखें।", "दराजों का यह संदूक बहुत भारी है।", "मैंने दराजों का एक लकड़ी का संदूक खरीदा।"),
+        "chicken" to listOf("हम आज रात भुना हुआ चिकन खा रहे हैं।", "मुर्गी सड़क पार कर रही है.", "क्या आप चिकन या बीफ़ पसंद करते हैं?"),
+        "child" to listOf("बच्चा खिलौनों से खेल रहा है.", "हर बच्चे को अच्छी शिक्षा की जरूरत है.", "वह एकमात्र बच्चा है।"),
+        "children's room" to listOf("बच्चों का कमरा अस्त-व्यस्त है।", "हमने बच्चों के कमरे को नीला रंग दिया।", "बच्चों के कमरे में खिलौने हैं."),
+        "chocolate" to listOf("मुझे कुछ डार्क चॉकलेट चाहिए.", "यह चॉकलेट केक बहुत स्वादिष्ट है.", "क्या आपको मिल्क चॉकलेट पसंद है?"),
+        "city" to listOf("न्यूयॉर्क एक बहुत बड़ा शहर है.", "मुझे शहर में रहना पसंद है.", "आप किस शहर में जा रहे हैं?"),
+        "claim" to listOf("उसने पुरस्कार का दावा करने की कोशिश की।", "आप यहां अपने खर्चों का दावा कर सकते हैं।", "उन्होंने एक साहसिक दावा किया."),
+        "clarify" to listOf("क्या आप अपनी बात स्पष्ट कर सकते हैं?", "मुझे नियम स्पष्ट करने होंगे.", "कृपया निर्देश स्पष्ट करें."),
+        "class" to listOf("आज मेरी अंग्रेजी की कक्षा है।", "क्लास नौ बजे शुरू होती है.", "वह कक्षा में सर्वश्रेष्ठ है।"),
+        "climate" to listOf("इस क्षेत्र की जलवायु उष्णकटिबंधीय है।", "जलवायु गर्म होती जा रही है.", "हम ठंडी जलवायु पसंद करते हैं।"),
+        "climate change" to listOf("जलवायु परिवर्तन पूरे ग्रह को प्रभावित करता है।", "हमें जलवायु परिवर्तन से लड़ना होगा।", "जलवायु परिवर्तन का क्या कारण है?"),
+        "close" to listOf("कृपया दरवाज़ा बंद करें।", "दुकान मेरे घर के नजदीक है.", "हम बहुत करीबी दोस्त हैं."),
+        "cloudy" to listOf("पिकनिक के लिए बहुत अधिक बादल लग रहे हैं।", "आज आसमान में बादल छाए हुए हैं.", "यह एक बादल भरी दोपहर है।"),
+        "coach" to listOf("मेरे कोच बहुत सख्त हैं.", "वह फुटबॉल कोच हैं.", "वह एक जीवन प्रशिक्षक के रूप में काम करते हैं।"),
+        "coat" to listOf("अपना शीतकालीन कोट पहनें.", "यह कोट बहुत बड़ा है.", "अपना कोट रैक पर लटकाओ।"),
+        "coffee" to listOf("मुझे अब कुछ कॉफ़ी चाहिए।", "क्या आप ब्लैक कॉफ़ी पीते हैं?", "चलो साथ में कॉफ़ी पीते हैं।"),
+        "coherence" to listOf("निबंध में समग्रता का अभाव है।", "उसके तर्क में कोई सुसंगति नहीं थी।", "हमें यहां और अधिक सुसंगति की आवश्यकता है।"),
+        "coherent" to listOf("योजना अंततः सुसंगत है.", "नींद के बाद वह बमुश्किल सुसंगत था।", "कृपया मुझे एक सुसंगत उत्तर दें."),
+        "cold" to listOf("बाहर कड़ाके की ठंड पड़ रही है.", "मुझे बहुत जोरों का ज़ुकाम हुआ है।", "पानी बहुत ठंडा लगता है."),
+        "cold wind" to listOf("उत्तर की ओर ठंडी हवा चली।", "ठंडी हवा ने मेरे गालों को काट लिया।", "मैं इस ठंडी हवा को बर्दाश्त नहीं कर सकता."),
+        "collaborate" to listOf("आइए इस परियोजना पर सहयोग करें।", "हमें और अधिक सहयोग करने की जरूरत है.", "वे स्थानीय कलाकारों के साथ सहयोग करते हैं।"),
+        "colleague" to listOf("वह एक भरोसेमंद सहकर्मी हैं.", "मेरा सहकर्मी छुट्टी पर है.", "मैं एक मददगार सहकर्मी के साथ काम करता हूं।"),
+        "come" to listOf("कृपया पार्टी में आएं.", "आप घर कब आओगे?", "एक क्षण के लिए यहाँ आओ."),
+        "come up with" to listOf("एक योजना लेकर आओ.", "वह एक विचार लेकर आई।", "क्या आप कोई समाधान निकाल सकते हैं?"),
+        "community" to listOf("हम एक छोटे से समुदाय में रहते हैं।", "यह एक मैत्रीपूर्ण समुदाय है.", "वे स्थानीय समुदाय का समर्थन करते हैं।"),
+        "commute" to listOf("मेरी यात्रा में एक घंटा लगता है।", "मुझे अपने दैनिक आवागमन से नफरत है।", "क्या आप ट्रेन से यात्रा करते हैं?"),
+        "company" to listOf("उन्होंने एक सॉफ्टवेयर कंपनी शुरू की.", "मैं आपकी कंपनी का आनंद लेता हूं.", "कंपनी नए स्टाफ की भर्ती कर रही है."),
+        "comprehensive" to listOf("यह एक व्यापक मार्गदर्शिका है.", "रिपोर्ट बहुत व्यापक थी.", "हमें एक व्यापक सूची की आवश्यकता है."),
+        "computer" to listOf("मेरा कंप्यूटर बहुत धीमा है.", "अब कंप्यूटर बंद कर दें.", "मैंने एक नया कंप्यूटर खरीदा."),
+        "concede" to listOf("उन्हें हार माननी पड़ी.", "मैं मानता हूं कि आप सही हैं.", "उन्होंने बात मानने से इनकार कर दिया."),
+        "conclusion" to listOf("मैं एक अलग नतीजे पर पहुंचा.", "निष्कर्ष काफी आश्चर्यजनक था.", "आपका अंतिम निष्कर्ष क्या है?"),
+        "confidence" to listOf("उनमें बहुत आत्मविश्वास है.", "मुझे आप पर भरोसा है.", "इससे आपका आत्मविश्वास बढ़ेगा."),
+        "conflict" to listOf("हमारे पास एक शेड्यूल संघर्ष है।", "यह एक बड़ा संघर्ष है.", "उन्होंने विवाद सुलझाने की कोशिश की."),
+        "consciousness" to listOf("उसे धीरे-धीरे होश आया।", "वह एक पल के लिए होश खो बैठी.", "यह मानव चेतना को प्रभावित करता है।"),
+        "consensus" to listOf("आख़िरकार वे आम सहमति पर पहुँचे।", "कोई आम सहमति नहीं है.", "हमें समूह सर्वसम्मति की आवश्यकता है।"),
+        "consequently" to listOf("बारिश आ गई, फलस्वरूप खेल रुक गया.", "उसने झूठ बोला और परिणामस्वरूप विश्वास खो दिया।", "वह असफल रही, परिणामस्वरूप उसने इसे वापस ले लिया।"),
+        "considerable" to listOf("इसके लिए काफी समय की आवश्यकता होती है।", "इसमें काफी दिलचस्पी है.", "उन्होंने काफी रकम खर्च की."),
+        "consist" to listOf("केक में आटा और अंडे होते हैं.", "इन किटों में पाँच बुनियादी उपकरण शामिल हैं।", "अधिकांश भोजन में चावल और मछली शामिल होते हैं।"),
+        "constitution" to listOf("उनका संविधान बहुत मजबूत है.", "संविधान हमारे मूल अधिकारों की रक्षा करता है।", "नये संविधान पर आज हस्ताक्षर किये गये."),
+        "contend" to listOf("उनका तर्क है कि कीमत बहुत ज़्यादा है.", "वह स्वर्ण पदक के लिए प्रतिस्पर्धा करेंगी.", "मेरा तर्क है कि हमें और समय चाहिए।"),
+        "contribute" to listOf("सभी को परियोजना में योगदान देना चाहिए।", "वह स्थानीय आश्रय में धन का योगदान देता है।", "क्या आप कोई विचार योगदान देना चाहते हैं?"),
+        "convenience store" to listOf("मैं दूध के लिए सुविधा स्टोर पर रुका।", "सुविधा स्टोर चौबीस घंटे खुला रहता है।", "क्या आस-पास कोई सुविधा स्टोर है?"),
+        "conversely" to listOf("उसे चाय बहुत पसंद है; इसके विपरीत, वह कॉफ़ी पसंद करती है।", "कुछ को गर्मी पसंद है; इसके विपरीत, अन्य लोग इससे नफरत करते हैं।", "यह तेज़ है, लेकिन इसके विपरीत, यह बहुत महंगा है।"),
+        "cooking" to listOf("मेरी माँ पास्ता पकाने में बहुत अच्छी हैं।", "रात का खाना पकाने में काफी समय लगता है।", "मुझे अपने दोस्तों के लिए खाना बनाना अच्छा लगता है।"),
+        "cool" to listOf("मौसम अंततः ठंडा हो रहा है।", "वह सचमुच बहुत बढ़िया जैकेट है।", "आइए इंजन के ठंडा होने तक प्रतीक्षा करें।"),
+        "correlation" to listOf("आहार और स्वास्थ्य के बीच एक संबंध है।", "मुझे दोनों घटनाओं के बीच कोई संबंध नजर नहीं आता।", "यह अध्ययन एक मजबूत सहसंबंध दर्शाता है।"),
+        "corroborate" to listOf("गवाह उसकी कहानी की पुष्टि कर सकता है।", "नए सबूत दावे की पुष्टि करेंगे.", "क्या आप घटनाओं के उसके संस्करण की पुष्टि कर सकते हैं?"),
+        "cough" to listOf("उसे तेज़, सूखी खांसी है।", "खांसते समय कृपया अपना मुंह ढक लें।", "यह सिरप खांसी को शांत करने में मदद करता है।"),
+        "could" to listOf("क्या आप खिड़की खोल सकते हैं?", "वह घर पर हो सकता है.", "मुझे अपनी चाबियाँ नहीं मिल सकीं।"),
+        "country" to listOf("आप किस देश से हैं?", "वे दूसरे देश में चले गये।", "यह देश अपने पहाड़ों के लिए जाना जाता है।"),
+        "course" to listOf("मैं इतिहास का पाठ्यक्रम ले रहा हूं।", "गोल्फ कोर्स आज बंद है.", "कृपया मुख्य पाठ्यक्रम पर बने रहें।"),
+        "cousin" to listOf("मेरा चचेरा भाई न्यूयॉर्क में रहता है।", "वह मेरी पसंदीदा महिला चचेरी बहन है।", "क्या आपका कोई चचेरा भाई है?"),
+        "cow" to listOf("गाय घास खा रही है.", "एक गाय खेत के लिए दूध प्रदान करती है।", "उस बड़ी भूरी गाय को देखो."),
+        "crisis" to listOf("सरकार आर्थिक संकट से जूझ रही है.", "इस संकट से निपटने के लिए हमें एक योजना की जरूरत है.", "यह उनके लिए व्यक्तिगत संकट था."),
+        "criteria" to listOf("इस नौकरी के लिए क्या मापदंड हैं?", "वह सभी जरूरी मानदंडों पर खरा उतरता है.", "चयन के मानदंड बहुत सख्त हैं."),
+        "crocodile" to listOf("एक मगरमच्छ नदी में छिपा हुआ है.", "मगरमच्छ से सावधान रहें.", "मगरमच्छ के दाँत बहुत तेज़ होते हैं।"),
+        "culture" to listOf("मुझे विभिन्न संस्कृतियों के बारे में सीखना अच्छा लगता है।", "भोजन संस्कृति का एक बड़ा हिस्सा है।", "वे नई संस्कृति के साथ तालमेल बिठा रहे हैं।"),
+        "curry" to listOf("यह चिकन करी बहुत तीखी होती है.", "मैंने सब्जी का ऑर्डर दिया.", "क्या आपको भारतीय करी पसंद है?"),
+        "custom" to listOf("झुकना एक स्थानीय रिवाज है।", "यह प्रथा सदियों से चली आ रही है।", "हमने पारंपरिक विवाह रीति-रिवाज का पालन किया।'"),
+        "dancing" to listOf("वह डांस करने में बहुत अच्छी हैं.", "हमने नाचते हुए रात बिताई।", "नृत्य व्यायाम करने का एक बेहतरीन तरीका है।"),
+        "data" to listOf("हमें डेटा का विश्लेषण करने की जरूरत है.", "डेटा एक स्पष्ट रुझान दिखाता है।", "मुझे कच्चा डेटा कहां मिल सकता है?"),
+        "daughter" to listOf("उनकी बेटी कल से स्कूल जाना शुरू करेगी।", "वह इकलौती बेटी है.", "मेरी बेटी को पेंटिंग करना पसंद है."),
+        "daughter-in-law" to listOf("मेरी बहू डॉक्टर है.", "उसकी अपनी बहू से खूब बनती है.", "मैंने अपनी बहू के लिए एक उपहार खरीदा।"),
+        "day" to listOf("मेरे पास काम पर एक लंबा दिन था।", "आज कौन सा दिन है", "लंदन में बारिश का दिन था।"),
+        "deadline" to listOf("समय सीमा कल दोपहर है.", "हम फाइलिंग की समय सीमा चूक गए।", "क्या हम समय सीमा बढ़ा सकते हैं?"),
+        "debt" to listOf("वह अपना कर्ज चुकाने के लिए संघर्ष कर रहा है।", "आख़िरकार वे कर्ज़ से मुक्त हो गए।", "राष्ट्रीय ऋण तेजी से बढ़ रहा है।"),
+        "decline" to listOf("पिछले महीने बिक्री में गिरावट शुरू हुई।", "उन्होंने इस प्रस्ताव को अस्वीकार करने का निर्णय लिया।", "जनसंख्या में गिरावट जारी है."),
+        "deer" to listOf("एक हिरण सड़क पर दौड़ता हुआ चला गया।", "जंगल में उस हिरण को देखो.", "हिरणों को बगीचे के पौधे खाना बहुत पसंद है।"),
+        "degree" to listOf("उसके पास इतिहास में डिग्री है।", "यह प्रथम श्रेणी की जलन थी।", "वह फिनिशिंग से एक डिग्री दूर है."),
+        "degrees" to listOf("आज बाहर तीस डिग्री तापमान है।", "पानी सौ डिग्री पर उबलता है।", "कोण पैंतालीस डिग्री है."),
+        "delegate" to listOf("मुझे और अधिक कार्य सौंपने की आवश्यकता है.", "उन्हें प्रतिनिधि के रूप में चुना गया था।", "कृपया इसे टीम को सौंपें।"),
+        "delicious" to listOf("यह चॉकलेट केक बहुत स्वादिष्ट है.", "रात के खाने में स्वादिष्ट खुशबू आ रही थी।", "वह एक स्वादिष्ट भोजन था."),
+        "delineate" to listOf("कृपया सीमा रेखाएँ रेखांकित करें।", "मानचित्र सीमा रेखांकन में सहायता करता है।", "वह लक्ष्य निर्धारित करने में असफल रहे।"),
+        "demonstrate" to listOf("क्या आप प्रदर्शित कर सकते हैं कि यह कैसे काम करता है?", "शिक्षक प्रयोग प्रदर्शित करेंगे.", "उन्होंने मंच पर अपना हुनर ​​दिखाया."),
+        "dentist" to listOf("कल मेरी दंत चिकित्सक की नियुक्ति है।", "दंतचिकित्सक ने मेरे दाँत साफ़ किये।", "मेरा दंतचिकित्सक बहुत दयालु है।"),
+        "department store" to listOf("हमने डिपार्टमेंटल स्टोर से एक ड्रेस खरीदी।", "डिपार्टमेंटल स्टोर में बिक्री चल रही है।", "मुझसे डिपार्टमेंटल स्टोर पर मिलें."),
+        "desert" to listOf("रेगिस्तान में बहुत कम बारिश होती है.", "सहारा एक विशाल रेगिस्तान है।", "वे रेगिस्तान में खो गये।"),
+        "desk" to listOf("मेरी मेज कागज़ों से ढकी हुई है।", "दीपक को अपनी मेज पर रखें।", "वह पूरे दिन अपनी मेज पर बैठा रहा।"),
+        "dessert" to listOf("मिठाई के लिए हमारे पास क्या होना चाहिए?", "मुझे मिठाई के लिए आइसक्रीम चाहिए.", "यह सेब टार्ट एक बेहतरीन मिठाई है।"),
+        "development" to listOf("शहर का तेजी से विकास हो रहा है।", "यह एक नया उत्पाद विकास है.", "बाल विकास एक जटिल विषय है।"),
+        "diet" to listOf("मैं सख्त डाइट पर हूं.", "संतुलित आहार महत्वपूर्ण है.", "बेहतर महसूस करने के लिए उसने अपना आहार बदल लिया।"),
+        "difficult" to listOf("गणित की यह समस्या बहुत कठिन है.", "यह एक कठिन निर्णय था.", "भाषा सीखना कठिन है."),
+        "dinner" to listOf("आज रात के खाने में क्या है?", "हमने सात बजे खाना खाया.", "चलो डिनर के लिए बाहर चलते हैं."),
+        "direction" to listOf("हम किस दिशा में जा रहे हैं?", "तीर की दिशा का पालन करें.", "उन्होंने हमें गलत दिशा दी."),
+        "discovery" to listOf("इस खोज ने विज्ञान को हमेशा के लिए बदल दिया।", "यह एक आश्चर्यजनक खोज थी.", "उन्होंने गुफा में एक खोज की।"),
+        "discrepancy" to listOf("बिल में विसंगति है.", "हमें डेटा में विसंगति मिली.", "अपनी कहानी में विसंगति स्पष्ट करें।"),
+        "do" to listOf("आप जीविका के लिए क्या करते हैं?", "मैं अब कपड़े धो सकता हूं।", "आज बस अपना सर्वश्रेष्ठ प्रदर्शन करें."),
+        "doctor" to listOf("डॉक्टर ने मुझे कुछ दवा दी.", "मुझे डॉक्टर से मिलना है.", "वह एक योग्य डॉक्टर हैं."),
+        "doctrine" to listOf("पार्टी का मूल सिद्धांत बदल रहा है.", "वह एक सख्त धार्मिक सिद्धांत का पालन करता है।", "वह राजनीतिक सिद्धांत अब पुराना हो चुका है।"),
+        "dog" to listOf("मेरे कुत्ते को टेनिस गेंदों का पीछा करना बहुत पसंद है।", "आज कुत्ते को कौन टहला रहा है?", "मुझे कुत्ते को खाना खिलाना है."),
+        "dolphin" to listOf("एक डॉल्फिन पानी से बाहर कूद गई।", "डॉल्फ़िन बहुत बुद्धिमान जानवर हैं।", "हमने नाव के पास एक डॉल्फिन देखी।"),
+        "donation" to listOf("मैंने एक छोटा सा नकद दान दिया।", "आपके उदार दान के लिए धन्यवाद.", "संस्था ने वस्त्र दान स्वीकार कर लिया।"),
+        "door" to listOf("कृपया अपने पीछे का दरवाज़ा बंद कर लें।", "कोई सामने वाले दरवाजे पर दस्तक दे रहा है.", "दरवाज़ा अंदर से बंद है."),
+        "down" to listOf("कृपया बैठ जाएं।", "सूरज छुपता है।", "बैग नीचे रखो."),
+        "download" to listOf("मुझे ऐप डाउनलोड करना होगा.", "डाउनलोड में बहुत अधिक समय लग रहा है.", "मैं फ़ाइल कहां से डाउनलोड कर सकता हूं?"),
+        "downpour" to listOf("हम भारी बारिश में भीग गये।", "अचानक हुई बारिश ने पार्टी बर्बाद कर दी.", "भारी बारिश से सड़क पर पानी भर गया।"),
+        "dress" to listOf("उन्होंने नीले रंग की समर ड्रेस पहनी थी.", "यह पोशाक मेरे लिए बहुत लंबी है.", "आपको फॉर्मल ड्रेस पहननी चाहिए."),
+        "drink" to listOf("क्या आप कुछ पीना चाहेंगे?", "मुझे अब कोल्ड ड्रिंक चाहिए.", "उसने अपने पेय का एक घूंट लिया।"),
+        "driver" to listOf("टैक्सी ड्राइवर बहुत मिलनसार था.", "क्या वह एक लाइसेंस प्राप्त ट्रक चालक है?", "ड्राइवर लाल बत्ती पर रुका।"),
+        "duck" to listOf("तालाब में एक बत्तख तैर रही है.", "उस पीले रबर बत्तख को देखो.", "बत्तख घास के पार घूमती रही।"),
+        "eagle" to listOf("एक चील पहाड़ों के ऊपर उड़ गई।", "बाज की दृष्टि बहुत तेज़ होती है।", "मैंने पेड़ पर एक चील देखी।"),
+        "ear" to listOf("उसने मेरे कान में कुछ कहा.", "आज मेरा बायां कान दर्द कर रहा है.", "उन्हें संगीत का बहुत शौक है।"),
+        "earrings" to listOf("ये सोने की बालियाँ एक उपहार थीं।", "उन्होंने छोटे-छोटे मोतियों वाले ईयररिंग्स पहने हुए हैं।", "मैंने अपनी एक बाली खो दी।"),
+        "earth" to listOf("पृथ्वी सूर्य के चारों ओर परिक्रमा करती है।", "हमें पृथ्वी के संसाधनों की रक्षा करनी चाहिए।", "समृद्ध धरती पर पौधे उगते हैं।"),
+        "easy" to listOf("गणित की यह परीक्षा बहुत आसान थी.", "यहां खो जाना आसान है.", "नुस्खा का पालन करना काफी आसान है।"),
+        "eat" to listOf("आप क्या खाना चाहते हो?", "मुझे ताजे फल खाना पसंद है.", "चलो आज रात छह बजे खाना खाते हैं."),
+        "economy" to listOf("वैश्विक अर्थव्यवस्था अब संघर्ष कर रही है।", "उन्होंने स्थानीय अर्थव्यवस्था का अध्ययन किया।", "कम ब्याज दरें अर्थव्यवस्था को मदद करती हैं।"),
+        "egg" to listOf("मैंने नाश्ते में एक उबला अंडा खाया।", "क्या हमारे पास कोई अंडे बचे हैं?", "उसने कटोरे में एक अंडा फोड़ दिया।"),
+        "eight" to listOf("आठ बजे बैठक शुरू होती है.", "उसके बैग में आठ सेब हैं।", "मेरी बहन आठ साल की है."),
+        "elephant" to listOf("हाथी की सूंड लंबी होती है।", "हमने आज एक जंगली हाथी देखा।", "हाथी सबसे बड़े ज़मीनी जानवर हैं।"),
+        "elevator" to listOf("एलिवेटर ख़राब पड़ा है।", "लिफ्ट से पाँचवीं मंजिल पर जाएँ।", "मुझे लिफ्ट की अपेक्षा सीढ़ियाँ अधिक पसंद हैं।"),
+        "eleven" to listOf("टीम में ग्यारह खिलाड़ी हैं.", "बच्चा ग्यारह साल का है.", "मेरे पास उत्तर देने के लिए ग्यारह ईमेल हैं।"),
+        "eloquent" to listOf("उन्होंने आज एक शानदार भाषण दिया.", "उनकी लेखन शैली बहुत ही ओजस्वी है.", "वह एक शानदार सार्वजनिक वक्ता हैं।"),
+        "elucidate" to listOf("क्या आप कृपया उस बिंदु को स्पष्ट कर सकते हैं?", "शिक्षक ने अवधारणा को स्पष्ट करने का प्रयास किया।", "आगे की जानकारी से मामला स्पष्ट हो जाएगा।"),
+        "emphasize" to listOf("कृपया मुख्य बिंदुओं पर ज़ोर दें।", "मैं इस विवरण पर जोर देना चाहता हूं।", "मुझे जोखिम पर जोर देने दीजिए."),
+        "energy" to listOf("आज मुझमें कोई ऊर्जा नहीं है.", "यह पेय मुझे ऊर्जा देता है।", "सौर ऊर्जा सस्ती हो रही है."),
+        "entrance" to listOf("मुख्य प्रवेश द्वार कहाँ है?", "प्रवेश द्वार पर मुझसे मिलो.", "प्रवेश द्वार बर्फ से अवरुद्ध था।"),
+        "environment" to listOf("हमें अपने पर्यावरण की रक्षा करनी चाहिए।", "यह एक तनावपूर्ण माहौल है.", "पौधों को गर्म वातावरण की आवश्यकता होती है।"),
+        "equality" to listOf("वे लैंगिक समानता के लिए लड़ते हैं।", "हम कानूनी समानता में विश्वास करते हैं।", "समानता एक बुनियादी मानव अधिकार है."),
+        "ethics" to listOf("यह नैतिकता का प्रश्न है.", "चिकित्सीय नैतिकता बहुत सख्त है.", "वह पेशेवर नैतिकता का अध्ययन करता है।"),
+        "evaluate" to listOf("हमें परिणामों का मूल्यांकन करने की आवश्यकता है।", "मैं अभी आपके काम का मूल्यांकन नहीं कर सकता.", "आइए विकल्पों का मूल्यांकन करें।"),
+        "evening" to listOf("मैं तुम्हें आज शाम को फोन करूंगा.", "शाम बहुत शांत थी.", "आपकी शाम की क्या योजनाएँ हैं?"),
+        "every day" to listOf("मैं हर दिन कॉफी पीता हूं.", "वह हर दिन अपने कुत्ते को टहलाती है।", "मैं हर दिन अंग्रेजी सीखता हूं।"),
+        "evidence" to listOf("यहां कोई सबूत नहीं है.", "पुलिस को नए सबूत मिले.", "क्या आपके पास कोई सबूत है?"),
+        "exacerbate" to listOf("तनाव दर्द को बढ़ा सकता है।", "समस्या को बढ़ाओ मत.", "ठंड का मौसम इसे और बढ़ा देगा।"),
+        "exam" to listOf("मेरी गणित की परीक्षा है.", "परीक्षा बहुत कठिन थी.", "आपकी अंतिम परीक्षा कब है?"),
+        "excited" to listOf("मैं यात्रा के लिए उत्साहित हूं.", "वह अपनी नौकरी को लेकर उत्साहित हैं.", "हम आपसे मिलने के लिए उत्साहित हैं."),
+        "exercise" to listOf("मुझे अधिक दैनिक व्यायाम की आवश्यकता है।", "यह व्यायाम बहुत कठिन है.", "क्या आप हर सुबह व्यायाम करते हैं?"),
+        "exhibition" to listOf("कला प्रदर्शनी आज से खुल रही है।", "मैंने फोटो प्रदर्शनी का आनंद लिया।", "कौन सी प्रदर्शनी सर्वोत्तम है?"),
+        "existential" to listOf("उसके सामने अस्तित्व का संकट है.", "यह एक अस्तित्वगत ख़तरा है.", "उन्होंने अस्तित्ववादी दर्शन पर चर्चा की।"),
+        "expense" to listOf("यात्रा एक बहुत बड़ा खर्च है.", "यह एक अप्रत्याशित खर्च था.", "हमें खर्चों में कटौती करने की जरूरत है."),
+        "expensive" to listOf("ये कार बहुत महंगी है.", "रात का खाना बहुत महंगा था.", "मैं महंगे कपड़े नहीं खरीद सकता."),
+        "experience" to listOf("मेरे पास पांच साल का अनुभव है.", "यह एक शानदार अनुभव था।", "क्या आपके पास कोई अनुभव है?"),
+        "experiment" to listOf("विज्ञान का प्रयोग असफल रहा।", "हमने एक नया प्रयोग किया.", "यह सिर्फ एक सामाजिक प्रयोग है."),
+        "extrapolate" to listOf("हम डेटा का एक्सट्रपलेशन कर सकते हैं.", "परिणामों को बढ़ा-चढ़ाकर पेश न करें.", "प्रवृत्ति को उजागर करने का प्रयास करें."),
+        "eye" to listOf("मेरी आँख में कुछ है.", "उस पर नजर रखें.", "उसकी नीली आंख है."),
+        "face" to listOf("अपना चेहरा पानी से धो लें.", "उसका मुस्कुराता हुआ चेहरा है.", "मैं सच का सामना नहीं कर सकता."),
+        "facilitate" to listOf("इस टूल से काम में आसानी होगी.", "एक गाइड यात्रा को सुविधाजनक बना सकता है।", "मुझे बैठक की सुविधा प्रदान करने दीजिए."),
+        "family" to listOf("मुझे अपने बड़े परिवार से प्यार है.", "मेरा परिवार स्पेन में रहता है.", "हमने पारिवारिक रात्रिभोज किया।"),
+        "far" to listOf("पार्क बहुत दूर है.", "यह कितनी दूर है?", "बहुत दूर चले जाओ."),
+        "farmer" to listOf("किसान जैविक मक्का उगाता है।", "मेरे चाचा एक डेयरी किसान हैं।", "किसान गायें चराता है।"),
+        "fast" to listOf("ये कार बहुत तेज़ है.", "बहुत तेज न चलें.", "वह तेजी से सीखता है."),
+        "father" to listOf("मेरे पिता एक बैंक में काम करते हैं।", "वह एक महान पिता हैं.", "आज रात अपने पिता को बुलाओ."),
+        "feasibility" to listOf("हम परियोजना की व्यवहार्यता की जांच कर रहे हैं।", "व्यवहार्यता अध्ययन पूरा हो गया है.", "क्या यह योजना संभव भी है?"),
+        "festival" to listOf("संगीत समारोह कल से शुरू हो रहा है.", "हमें शरद उत्सव बहुत पसंद है।", "मैंने उत्सव में भोजन खरीदा।"),
+        "fever" to listOf("बच्चे को तेज बुखार है.", "बुखार उतारने के लिए पानी पियें।", "मुझे गर्मी लग रही है और बुखार है."),
+        "finance" to listOf("वह कॉर्पोरेट फाइनेंस की पढ़ाई करती है।", "पर्सनल फाइनेंस बहुत महत्वपूर्ण है.", "वह वित्त विभाग में काम करता है।"),
+        "finger" to listOf("मैंने अपनी तर्जनी काट ली.", "अपनी उंगली मानचित्र पर रखें.", "उसने अपनी उंगली पर एक अंगूठी पहनी थी।"),
+        "finish" to listOf("कृपया अब अपना होमवर्क पूरा करें।", "मैं आज रात किताब ख़त्म कर दूंगा.", "क्या आपने दौड़ पूरी कर ली?"),
+        "firefighter" to listOf("फायरफाइटर ने बिल्ली को बचाया.", "वह एक बहादुर फायर फाइटर हैं.", "अग्निशामक भारी गियर पहनते हैं।"),
+        "fish" to listOf("मुझे ग्रिल्ड मछली खाना बहुत पसंद है.", "तालाब में मछलियाँ हैं.", "क्या आप इस झील में मछली पकड़ सकते हैं?"),
+        "fisherman" to listOf("मछुआरे ने एक बहुत बड़ा बास पकड़ा।", "मेरे दादाजी मछुआरे थे।", "मछुआरे ने अपना जाल डाला।"),
+        "five" to listOf("मेरे पास पाँच सोने के सिक्के हैं।", "पैदल चलने में पांच मिनट लगते हैं.", "कृपया मुझे पाँच डॉलर दीजिए।"),
+        "flight attendant" to listOf("फ्लाइट अटेंडेंट ने पेय परोसा।", "वह फ्लाइट अटेंडेंट के तौर पर ट्रेनिंग ले रही हैं।", "मदद के लिए फ्लाइट अटेंडेंट से पूछें।"),
+        "floor" to listOf("फर्श लकड़ी का बना है.", "मैंने अपना फोन फर्श पर गिरा दिया।", "हम दूसरी मंजिल पर रहते हैं."),
+        "flower" to listOf("इस फूल की खुशबू बहुत ही मीठी होती है.", "उसने एक पीला फूल चुना।", "रोज सुबह फूलों को पानी दें।"),
+        "fluctuate" to listOf("कीमतों में हर दिन उतार-चढ़ाव होता है।", "वसंत ऋतु के दौरान तापमान में उतार-चढ़ाव होता है।", "मेरा मूड उतार-चढ़ाव वाला रहता है।"),
+        "fog" to listOf("पहाड़ पर कोहरा छाया हुआ था.", "मैं कोहरे के पार नहीं देख सकता.", "घने कोहरे ने यातायात की गति धीमी कर दी।"),
+        "foggy" to listOf("यह बहुत धुंधली सुबह है.", "घाटी आज धुंधली नजर आई।", "कोहरे के मौसम में गाड़ी चलाना कठिन होता है।"),
+        "foot" to listOf("उसने मेरे बाएँ पैर पर कदम रखा।", "पदयात्रा के बाद मेरे पैर में दर्द होता है।", "रूलर एक फुट लंबा है."),
+        "for" to listOf("यह उपहार आपके लिए है।", "मैंने दो घंटे तक इंतजार किया.", "क्या यह बिक्री के लिए है?"),
+        "for instance" to listOf("एक उपकरण का उपयोग करें, उदाहरण के लिए, एक हथौड़ा।", "उदाहरण के लिए, हम तैराकी करने जा सकते हैं।", "उदाहरण के लिए, एक फल लें, एक सेब।"),
+        "forest" to listOf("हम अंधेरे जंगल से होकर गुजरे।", "जंगल में बहुत से जानवर रहते हैं।", "यहां जंगल बहुत शांत है."),
+        "four" to listOf("मेज पर चार कुर्सियाँ हैं।", "मेरे चार भाई-बहन हैं.", "केक को चार टुकड़ों में काटा जाता है."),
+        "fox" to listOf("एक लाल लोमड़ी भागी।", "लोमड़ी बहुत चालाक है.", "हमने बगीचे में एक लोमड़ी देखी।"),
+        "friday" to listOf("हम हर शुक्रवार को सिनेमा देखने जाते हैं।", "शुक्रवार मेरा पसंदीदा दिन है.", "रिपोर्ट इस शुक्रवार को आने वाली है।"),
+        "friend" to listOf("वह मेरी सबसे अच्छी दोस्त है।", "मुझे बात करने के लिए एक दोस्त की जरूरत है.", "हम वर्षों से दोस्त हैं।"),
+        "frog" to listOf("एक छोटा हरा मेंढक उछलकर दूर चला गया।", "मेंढक एक पत्ते पर बैठ गया।", "मैंने तालाब में एक मेंढक देखा।"),
+        "from" to listOf("मैं कनाडा से हूँ।", "ये गिफ्ट सारा की तरफ से है.", "किनारे से दूर चलो."),
+        "fruit" to listOf("क्या आपको ताजे फल पसंद हैं?", "सेब मेरा पसंदीदा फल है.", "प्रतिदिन अधिक फल खायें।"),
+        "fun" to listOf("यह पार्टी बहुत मजेदार है.", "हमने समुद्र तट पर खूब मस्ती की.", "अंग्रेजी सीखना वाकई मजेदार है।"),
+        "furthermore" to listOf("यह सस्ता है; इसके अलावा, यह तेज़ है।", "कमरा छोटा है; इसके अलावा, यह ठंडा है।", "वह चतुर है; इसके अलावा, वह मेहनती है।"),
+        "gallery" to listOf("आर्ट गैलरी आज खुली है.", "हमने एक स्थानीय फोटो गैलरी का दौरा किया।", "इस गैलरी में एक नई प्रदर्शनी है."),
+        "game" to listOf("चलो एक बोर्ड गेम खेलते हैं.", "खेल आधी रात को ख़त्म होता है.", "फुटबॉल खेल किसने जीता?"),
+        "garden" to listOf("मेरी दादी के पास एक सुंदर बगीचा है।", "हमने बगीचे में गुलाब के फूल लगाए।", "बगीचे को अधिक पानी की जरूरत है."),
+        "generous" to listOf("वह अपने समय के प्रति बहुत उदार हैं।", "आपके उदार उपहार के लिए धन्यवाद.", "वह एक उदार व्यक्ति हैं."),
+        "get" to listOf("मुझे थोड़ा दूध लाना है.", "आपको मेरा ईमेल मिला?", "अब देर हो रही है."),
+        "get up" to listOf("मैं आमतौर पर छह बजे उठता हूं।", "आप किस समय उठते हैं?", "मुझे फर्श से उठने में मदद करो."),
+        "give up" to listOf("अपने सपनों को मत छोड़ो.", "मैं अब कभी हार नहीं मानूंगा.", "उन्होंने धूम्रपान छोड़ने का फैसला किया।"),
+        "glasses" to listOf("मुझे अपना पढ़ने का चश्मा नहीं मिल रहा है।", "क्या ये चश्मा अच्छा लग रहा है?", "वह पढ़ने के लिए चश्मा पहनती है।"),
+        "global" to listOf("ग्लोबल वार्मिंग एक गंभीर मुद्दा है.", "हम एक वैश्विक अर्थव्यवस्था में रहते हैं।", "यह एक वैश्विक समस्या है."),
+        "gloves" to listOf("बर्फ में अपने दस्ताने पहनें।", "मेरे दस्ताने बहुत छोटे हैं.", "ये चमड़े के दस्ताने महंगे हैं।"),
+        "go" to listOf("अब मुझे जाना होगा।", "आओ पार्क में चलें।", "आप कहाँ जाना चाहते हैं?"),
+        "go out" to listOf("आप बाहर जाना चाहते हो?", "वे हर शुक्रवार रात को बाहर जाते हैं।", "मेरा बाहर जाने का मन नहीं है."),
+        "goal" to listOf("मेरा लक्ष्य अंग्रेजी सीखना है.", "उन्होंने खेल में एक गोल किया.", "यहां आपका मुख्य लक्ष्य क्या है?"),
+        "goat" to listOf("बकरी घास खा रही है.", "मैंने पहाड़ी पर एक बकरी देखी।", "वह बकरी बहुत जिद्दी है."),
+        "good" to listOf("यह एक बहुत अच्छी किताब है।", "आपका दिन शुभ हो!", "वह एक अच्छा छात्र है."),
+        "good afternoon" to listOf("मंगलमय दोपहर आप कैसे है?", "दोपहर के बाद नमस्कार!", "शुभ दोपहर, श्रीमान स्मिथ।"),
+        "good evening" to listOf("सभी को शुभ संध्या।", "शुभ संध्या, क्या मैं आपकी मदद कर सकता हूँ?", "आप सभी को शुभ संध्या."),
+        "good morning" to listOf("सुप्रभात, अच्छी नींद आई?", "सुप्रभात, जागने का समय हो गया है।", "सुप्रभात, आपका दिन कैसा है?"),
+        "goodbye" to listOf("अब अलविदा कहने का समय आ गया है.", "अलविदा कल मिलेंगे!", "उसने हाथ हिलाकर मुझे अलविदा कहा."),
+        "gradual" to listOf("मौसम में धीरे-धीरे बदलाव हुआ।", "पुनर्प्राप्ति एक क्रमिक प्रक्रिया थी।", "हमने बिक्री में धीरे-धीरे वृद्धि देखी।"),
+        "grandchild" to listOf("वह अपने इकलौते पोते से प्यार करती है।", "वह उनका पसंदीदा पोता है।", "आज पोता आ रहा है."),
+        "granddaughter" to listOf("मेरी पोती आज स्कूल जाना शुरू कर रही है।", "वह एक बिगड़ैल पोती है.", "मैंने अपनी पोती के लिए एक उपहार खरीदा।"),
+        "grandfather" to listOf("मेरे दादाजी महान कहानियाँ सुनाते हैं।", "वह एक सेवानिवृत्त दादा हैं।", "मैं रविवार को अपने दादाजी से मिलने जाता हूँ।"),
+        "grandmother" to listOf("मेरी दादी सबसे अच्छी कुकीज़ बनाती हैं।", "वह एक प्यारी दादी हैं.", "मैं अपनी दादी के साथ रहता हूं."),
+        "grandparents" to listOf("मेरे दादा-दादी ग्रामीण इलाके में रहते हैं।", "वे बहुत गौरवान्वित दादा-दादी हैं।", "हम हर गर्मियों में अपने दादा-दादी से मिलने जाते हैं।"),
+        "grandson" to listOf("वह एक प्रतिभाशाली पोता है.", "मेरे पोते को फुटबॉल खेलना बहुत पसंद है।", "मेरा एक पोता और दो पोतियाँ हैं।"),
+        "grapes" to listOf("ये हरे अंगूर बहुत मीठे होते हैं.", "क्या आपको लाल या हरे अंगूर पसंद हैं?", "मैंने अंगूर का एक गुच्छा खरीदा।"),
+        "grass" to listOf("घास काटने की जरूरत है.", "घास पर मत चलो.", "घास पर ओस है."),
+        "green tea" to listOf("मैं हर सुबह ग्रीन टी पीता हूं।", "ग्रीन टी बहुत स्वास्थ्यवर्धक होती है.", "क्या आप कुछ हरी चाय चाहेंगे?"),
+        "greengrocer" to listOf("आज सब्जी विक्रेता के पास ताजे सेब हैं।", "मैं अपना फल सब्जी विक्रेता से खरीदता हूँ।", "स्थानीय सब्जी विक्रेता बहुत मिलनसार है।"),
+        "guest" to listOf("हमारे पास रात्रिभोज के लिए एक अतिथि है।", "कृपया अतिथि का स्वागत करें।", "वह हमारे घर में मेहमान है."),
+        "guide" to listOf("वह एक पेशेवर टूर गाइड है।", "गाइड ने हमें महल दिखाया।", "पहले उपयोगकर्ता मार्गदर्शिका पढ़ें."),
+        "habit" to listOf("नाखून चबाना एक बुरी आदत है.", "मुझे जल्दी उठने की आदत है.", "किसी आदत को छोड़ना कठिन है।"),
+        "hair" to listOf("उसके लंबे भूरे बाल है।", "मेरे बालों को ट्रिम की जरूरत है.", "उसके घुंघराले बाल है।"),
+        "hair salon" to listOf("हेयर सैलून में मेरी अपॉइंटमेंट है।", "ये हेयर सैलून बहुत महंगा है.", "निकटतम हेयर सैलून कहाँ है?"),
+        "hairdresser" to listOf("मेरा हेयरड्रेसर बहुत प्रतिभाशाली है.", "मुझे नाई को बुलाना है.", "हेयरड्रेसर ने मेरे बाल छोटे कर दिये।"),
+        "hand" to listOf("कृपया इसमें मेरी मदद करें।", "खाने से पहले अपने हाथ धो।", "उसने उसका हाथ कस कर पकड़ लिया."),
+        "handbag" to listOf("उसने अपना हैंडबैग बस में ही छोड़ दिया।", "यह चमड़े का हैंडबैग एक उपहार था।", "अपना फ़ोन अपने हैंडबैग में रखें."),
+        "happy" to listOf("मैं आपके लिए बहुत खुश हूं।", "वे एक खुशहाल जोड़े की तरह दिखते हैं।", "यह खबर मुझे बहुत खुश करती है."),
+        "hat" to listOf("सूरज के लिए टोपी लगाओ.", "वह काली टोपी पहनता है।", "यह टोपी मेरे लिए बहुत छोटी है."),
+        "have" to listOf("क्या आपका कोई सगा भाई बहन है?", "आज मेरे पास बहुत काम है.", "दोपहर को हमारी बैठक है."),
+        "head" to listOf("शोर से मेरा सिर दुख रहा है.", "उसने असहमति में सिर हिलाया.", "अपना सिर तकिये पर रखें।"),
+        "headache" to listOf("मुझे एक भयानक सिरदर्द है।", "यह तेज़ संगीत मुझे सिरदर्द दे रहा है।", "एस्पिरिन सिरदर्द में मदद करती है।"),
+        "headline" to listOf("हेडलाइन बेहद चौंकाने वाली थी.", "मैंने समाचार में शीर्षक पढ़ा।", "यह एक भ्रामक शीर्षक है."),
+        "healthy" to listOf("सब्जियां खाना एक स्वस्थ आदत है।", "वह बेहद स्वस्थ और फिट नजर आती हैं.", "मैं एक स्वस्थ जीवन जीना चाहता हूं."),
+        "heart" to listOf("मेरा दिल तेजी से धड़क रहा है.", "वह बहुत दयालु हृदय का है.", "व्यायाम आपके दिल के लिए अच्छा है।"),
+        "heavy" to listOf("यह बक्सा बहुत भारी है.", "भारी बारिश हो रही थी.", "मेरा बैग बहुत भारी लगता है."),
+        "hello" to listOf("हैलो आज आप कैसे हैं?", "नमस्ते, कृपया अंदर आएँ।", "नमस्ते, क्या वहां कोई है?"),
+        "help" to listOf("क्या आप मुझे हिलने-डुलने में मदद कर सकते हैं?", "मुझे यहाँ कुछ मदद चाहिए।", "कृपया इसे ढूंढने में मेरी मदद करें."),
+        "hence" to listOf("उसने झूठ बोला, इसलिए भरोसा था.", "बारिश हुई, इसलिए देरी हुई.", "वह बीमार है, इसलिए अनुपस्थित है।"),
+        "here" to listOf("अभी यहीं आ जाओ.", "यहाँ ठंड है.", "इसे यहाँ रखो."),
+        "hi" to listOf("हाय तुम्हारा नाम क्या है?", "नमस्ते कैसा चल रहा है?", "बस उन्हें नमस्ते कहो."),
+        "high" to listOf("कीमतें बहुत अधिक हैं.", "वह ऊंची दीवार है.", "पक्षी ऊँचा उड़ गया।"),
+        "high heels" to listOf("उन्होंने लाल रंग की हाई हील्स पहनी थी.", "हाई हील्स से मेरे पैरों में दर्द होता है।", "अपनी ऊँची एड़ी पहनें."),
+        "hill" to listOf("घर एक पहाड़ी पर है.", "हम पहाड़ी से नीचे भागे।", "यह एक खड़ी पहाड़ी है."),
+        "hold" to listOf("कृपया दरवाज़ा खुला रखें.", "क्या तुम मेरा बैग पकड़ सकते हो?", "इसे एक सेकंड के लिए रोकें."),
+        "honest" to listOf("अब मेरे साथ ईमानदार रहो.", "वह एक ईमानदार आदमी हैं.", "मुझे अपनी ईमानदार राय दें."),
+        "honey bee" to listOf("एक मधुमक्खी ने मुझे डंक मार दिया.", "शहद की मक्खी पीले रंग की होती है।", "उस मधु मक्खी को देखो."),
+        "horse" to listOf("वह भूरे घोड़े की सवारी करता है।", "घोड़ा बहुत तेज दौड़ा.", "क्या मैं घोड़े को खाना खिला सकता हूँ?"),
+        "hospital" to listOf("वह अस्पताल में काम करती है.", "अस्पताल पास ही है.", "वह अस्पताल में है।"),
+        "host" to listOf("हमारा मेजबान बहुत मिलनसार था।", "पार्टी होस्ट कौन है?", "मेजबान ने अतिथियों का स्वागत किया."),
+        "hot" to listOf("कॉफ़ी बहुत गरम है.", "आज बाहर गर्मी है.", "यह सूप बहुत गर्म होता है."),
+        "hotel" to listOf("हम एक होटल में रुके.", "कौन सा होटल सबसे अच्छा है?", "होटल में एक पूल है."),
+        "hotel staff" to listOf("होटल के कर्मचारी मददगार थे।", "मदद के लिए होटल स्टाफ से पूछें।", "होटल का स्टाफ पेशेवर है."),
+        "hour" to listOf("मैं एक घंटे में वहां पहुंच जाऊंगा.", "इसमें एक घंटा लगता है.", "एक और घंटे तक प्रतीक्षा करें."),
+        "house" to listOf("यह एक बड़ा घर है.", "हम घर पर ही रह रहे हैं.", "मेरा घर सफ़ेद रंग से रंगा हुआ है."),
+        "humid" to listOf("हवा बहुत नम महसूस होती है.", "फ्लोरिडा में नमी है.", "मुझे आर्द्र मौसम से नफरत है."),
+        "humidity" to listOf("आर्द्रता बहुत अधिक है.", "कम नमी से त्वचा सूख जाती है।", "नमी मुझे चिपचिपा महसूस कराती है।"),
+        "hundred" to listOf("इसकी कीमत एक सौ डॉलर है.", "वहाँ सौ पक्षी हैं।", "मेरे पास सैकड़ों विचार हैं."),
+        "hungry" to listOf("मुझे बहुत भूख लग रही है.", "क्या आप दोपहर के भोजन के लिए भूखे हैं?", "बच्चा अब भूखा है."),
+        "husband" to listOf("उनके पति एक डॉक्टर हैं.", "मेरे पति को खाना बनाना बहुत पसंद है.", "वह एक दयालु पति हैं."),
+        "hypothesis" to listOf("मेरी परिकल्पना वास्तव में गलत थी.", "अभी अपनी परिकल्पना का परीक्षण करें.", "परिकल्पना को और अधिक प्रमाण की आवश्यकता है।"),
+        "hypothesize" to listOf("वैज्ञानिक उत्पत्ति के बारे में परिकल्पना करते हैं।", "आइए हम परिणाम की परिकल्पना करें।", "मेरा अनुमान है कि बारिश होगी."),
+        "ice" to listOf("इसमें थोड़ी बर्फ डालें.", "झील बर्फ से बनी है.", "मुझे और बर्फ के टुकड़े चाहिए."),
+        "ice cream" to listOf("क्या आप चॉकलेट आइसक्रीम चाहते हैं?", "मुझे गर्मियों में आइसक्रीम खाना बहुत पसंद है.", "आइसक्रीम तेजी से पिघल रही है."),
+        "ideology" to listOf("उनकी राजनीतिक विचारधारा बहुत सख्त है.", "यह एक जटिल सामाजिक विचारधारा है।", "उन्होंने पार्टी की मूल विचारधारा पर सवाल उठाया."),
+        "if" to listOf("अगर बारिश हो तो घर पर ही रहें.", "तुम जाओगे तो मैं जाऊंगा.", "अगर तुम्हें मदद चाहिए तो बताओ."),
+        "immigration" to listOf("नए आव्रजन कानून भ्रमित करने वाले हैं।", "आप्रवासन स्थानीय अर्थव्यवस्था को बढ़ने में मदद करता है।", "वह अंतरराष्ट्रीय आव्रजन पैटर्न का अध्ययन कर रही है।"),
+        "implement" to listOf("हमें नई योजना लागू करने की जरूरत है.'", "वे परिवर्तन कब लागू करेंगे?", "कंपनी ने सख्त नीति लागू की."),
+        "implication" to listOf("इस फैसले के गंभीर निहितार्थ हैं.", "इसका निहितार्थ क्या है?", "उन्होंने कानूनी निहितार्थ को नजरअंदाज कर दिया."),
+        "improve" to listOf("मैं अपनी अंग्रेजी सुधारना चाहता हूं.", "यह क्रीम आपकी त्वचा में निखार लाएगी।", "हमें अपने बिक्री लक्ष्य में सुधार करना होगा।"),
+        "in" to listOf("चाबियाँ मेरे बैग में हैं.", "वह एक शहर में रहता है.", "मैं दस बजे वहाँ पहुँच जाऊँगा।"),
+        "in addition" to listOf("इसके अलावा, हम मुफ़्त शिपिंग की पेशकश करते हैं।", "वह फ्रेंच और इसके अलावा स्पैनिश भी बोलती है।", "इसके अलावा, होटल में एक जिम है।"),
+        "in conclusion" to listOf("निष्कर्षतः, हमें और अधिक धन की आवश्यकता है।", "निष्कर्षतः, परियोजना सफल रही।", "अंत में, कृपया फॉर्म पर हस्ताक्षर करें।"),
+        "in contrast" to listOf("वह लंबा है; इसके विपरीत, उसका भाई छोटा है।", "इसके विपरीत, शहर बहुत शोरगुल वाला है।", "लाल वाला चमकीला है; इसके विपरीत, नीला गहरा है।"),
+        "in essence" to listOf("संक्षेप में, यह एक साधारण मशीन है.", "यह मूलतः समय की बर्बादी है।", "संक्षेप में, हम सभी एक जैसे हैं।"),
+        "in light of" to listOf("समाचार के प्रकाश में, हम रुके।", "लागत को ध्यान में रखते हुए, हमने रद्द कर दिया।", "बारिश के कारण योजना बदल गई।"),
+        "in other words" to listOf("दूसरे शब्दों में, आपको निकाल दिया जाता है।", "दूसरे शब्दों में, यह बहुत महंगा है.", "यह मुफ़्त है; दूसरे शब्दों में, कोई लागत नहीं."),
+        "in the long run" to listOf("लंबे समय में, इससे पैसे की बचत होती है।", "यह लंबे समय में बेहतर होगा.", "लंबे समय में, स्वास्थ्य ही धन है।"),
+        "income" to listOf("मेरी मासिक आय काफी कम है.", "उनकी वार्षिक आय बहुत अधिक होती है।", "वह अब एक स्थिर आय अर्जित करता है।"),
+        "inevitably" to listOf("कीमत अनिवार्य रूप से बढ़ेगी.", "अनिवार्य रूप से, हमारे पास समय समाप्त हो गया।", "प्रक्रिया के दौरान गलतियाँ अनिवार्य रूप से होंगी।"),
+        "inherent" to listOf("चढ़ाई में एक अंतर्निहित जोखिम है।", "धैर्य उनके व्यक्तित्व में अंतर्निहित है।", "इस प्रणाली में एक अंतर्निहित दोष है."),
+        "insect" to listOf("एक छोटा सा कीड़ा मेरी बांह पर आ गिरा।", "यह कौन सा कीट है?", "चींटियाँ बहुत मेहनती कीड़े हैं।"),
+        "interesting" to listOf("यह एक दिलचस्प दृष्टिकोण है.", "मैंने कल एक दिलचस्प किताब पढ़ी।", "फिल्म बहुत दिलचस्प नहीं थी."),
+        "internet" to listOf("इंटरनेट आज फिर बंद हो गया है.", "मुझे इसका उत्तर इंटरनेट पर मिला।", "क्या आपके पास इंटरनेट कनेक्शन है?"),
+        "intersection" to listOf("अगले चौराहे पर बाएँ मुड़ें।", "चौराहे पर एक दुर्घटना हुई.", "चौराहे पर रोशनी का इंतज़ार करें."),
+        "interview" to listOf("कल मेरा नौकरी के लिए इंटरव्यू है.", "इंटरव्यू एक घंटे तक चला.", "इंटरव्यू के दौरान उन्हें घबराहट महसूस हुई."),
+        "intricate" to listOf("पोशाक में एक जटिल पैटर्न है।", "ये बहुत पेचीदा पहेली है.", "घड़ी में एक जटिल तंत्र है।"),
+        "investment" to listOf("घर ख़रीदना एक अच्छा निवेश है.", "उन्होंने जोखिम भरा स्टॉक निवेश किया.", "इस परियोजना के लिए बड़े निवेश की आवश्यकता है."),
+        "irrefutable" to listOf("उनके ख़िलाफ़ सबूत अकाट्य हैं.", "यह एक अकाट्य सत्य है.", "उनका तर्क पूर्णतया अकाट्य था।"),
+        "island" to listOf("वे एक छोटे उष्णकटिबंधीय द्वीप पर रहते हैं।", "हमने द्वीप के लिए एक नाव ली।", "यह द्वीप अपने समुद्र तटों के लिए प्रसिद्ध है।"),
+        "issue" to listOf("हमें इस मुद्दे को ठीक करने की जरूरत है.", "क्या कोई तकनीकी समस्या है?", "यह एक बड़ा मुद्दा है."),
+        "jacket" to listOf("अपनी शीतकालीन जैकेट पहनें.", "यह जैकेट बहुत छोटी है.", "मैंने अपनी जैकेट यहीं छोड़ दी।"),
+        "jeans" to listOf("ये जींस बहुत टाइट है.", "क्या आपको ये जींस पसंद है?", "मैंने नई नीली जींस खरीदी।"),
+        "job" to listOf("उन्होंने एक नया काम शुरू किया.", "मुझे अपनी वर्तमान नौकरी पसंद है.", "क्या यह पूर्णकालिक नौकरी है?"),
+        "journey" to listOf("यह एक लंबी यात्रा थी.", "इटली की अपनी यात्रा का आनंद लें।", "यात्रा में पाँच घंटे लगे।"),
+        "judiciary" to listOf("यहां न्यायपालिका स्वतंत्र है.", "वह न्यायपालिका में काम करता है.", "न्यायपालिका अपीलों को संभालती है।"),
+        "juice" to listOf("मुझे कुछ संतरे का जूस चाहिए.", "यह सेब का रस मीठा होता है.", "क्या आपके पास कोई जूस है?"),
+        "jurisdiction" to listOf("यह मेरे अधिकार क्षेत्र से बाहर है.", "इस पर अधिकार क्षेत्र किसका है?", "न्यायालय का कानूनी क्षेत्राधिकार है।"),
+        "just" to listOf("मैं अभी घर पहुँचा हूँ।", "बस एक क्षण रुकें.", "यह सिर्फ एक खेल है."),
+        "justice" to listOf("हम सभी सामाजिक न्याय चाहते हैं।", "न्यायाधीश ने न्याय सुनिश्चित किया।", "यहां कोई न्याय नहीं है."),
+        "justify" to listOf("आप इसे कैसे उचित ठहरा सकते हैं?", "आपको लागत का औचित्य सिद्ध करना होगा.", "मैं इस खर्च को उचित नहीं ठहरा सकता."),
+        "kimono" to listOf("उसने रेशम का किमोनो पहना था।", "किमोनो में पुष्प पैटर्न हैं।", "उन्होंने एक पारंपरिक किमोनो खरीदा।"),
+        "kitchen" to listOf("रसोई बहुत साफ़ है.", "मुझसे रसोई में मिलो.", "रसोई में कौन है?"),
+        "knee" to listOf("मेरे बाएं घुटने में चोट लगी है.", "वह घुटने के बल गिर गया.", "मेरा घुटना सूज गया है."),
+        "know" to listOf("क्या आप उसका नाम जानते हैं?", "मुझे उत्तर नहीं पता.", "हम जानते हैं कि इसे कैसे ठीक करना है."),
+        "knowledge" to listOf("उसके पास बहुत ज्ञान है.", "जीवन में ज्ञान ही शक्ति है।", "कानून के अपने ज्ञान का प्रयोग करें."),
+        "laboratory" to listOf("नमूने प्रयोगशाला में हैं.", "हम प्रयोगशाला में काम करते हैं.", "यह एक रसायन विज्ञान प्रयोगशाला है."),
+        "lake" to listOf("झील बहुत शांत है.", "हम झील में तैरने गये।", "चलो झील पर नाव चलाएं."),
+        "language" to listOf("आप कौन सी भाषा बोलते हैं?", "किसी भाषा को सीखने में समय लगता है।", "अंग्रेजी एक वैश्विक भाषा है."),
+        "last month" to listOf("मैंने पिछले महीने पेरिस का दौरा किया था।", "उसने पिछले महीने अपनी नौकरी छोड़ दी।", "पिछले महीने बहुत बारिश हुई."),
+        "last week" to listOf("हम उनसे पिछले हफ्ते मिले थे.", "मैंने इसे पिछले सप्ताह खरीदा था।", "पिछला हफ़्ता बहुत व्यस्त था."),
+        "lawyer" to listOf("मुझे अपने वकील से बात करनी है.", "वह एक कॉर्पोरेट वकील हैं.", "वकील ने कुछ सलाह दी."),
+        "leaf" to listOf("एक पीला पत्ता नीचे गिर गया.", "इस हरे पत्ते को देखो.", "अब हर पत्ता गिर रहा है."),
+        "learn" to listOf("मैं स्पेनिश सीखना चाहता हूं।", "आप स्कूल में तेजी से सीखते हैं।", "हम अपनी गलतियों से सीखते हैं।"),
+        "leave" to listOf("कृपया दरवाज़ा खुला छोड़ दें.", "मुझे अब निकलना होगा.", "वे घर से कब निकले?"),
+        "left" to listOf("यहां बाएं मुड़ें.", "कुछ भी नहीं बचा है.", "वह कमरे से बाहर चला गया."),
+        "leg" to listOf("मेरे पैर में ऐंठन हो रही है.", "उसका दाहिना पैर टूट गया.", "मेज का एक पैर है."),
+        "legislation" to listOf("नया कानून सख्त है.", "वे कानून का मसौदा तैयार कर रहे हैं.", "यह कानून सभी नागरिकों को प्रभावित करता है।"),
+        "liaise" to listOf("मैं टीम के साथ संपर्क स्थापित करूंगा.", "हमें उनके साथ संपर्क स्थापित करने की जरूरत है.", "कृपया अपने प्रबंधक से संपर्क करें."),
+        "library" to listOf("मैं पुस्तकालय के लिए जा रहा हूँ।", "लाइब्रेरी बहुत शांत है.", "क्या आपको कोई पुस्तकालय पुस्तक मिल सकती है?"),
+        "lifestyle" to listOf("उनकी जीवनशैली बहुत स्वस्थ है।", "यह जीवनशैली बहुत महंगी है.", "मैं धीमी जीवनशैली चाहता हूं."),
+        "light" to listOf("कृपया लाइट चालू करें.", "यह कमरा बहुत रोशनी वाला है.", "रोशनी बहुत तेज़ है."),
+        "like" to listOf("मुझे ताजे फल खाना पसंद है.", "क्या आपको यह गीत पसंद है?", "वह अपनी मां की तरह दिखती हैं."),
+        "likewise" to listOf("आपसे मिलकर अच्छा लगा; वैसे ही।", "वह मुस्कुराया और उसने भी वैसा ही किया।", "मैं भी इस बारे में ऐसा ही महसूस करता हूं."),
+        "lion" to listOf("शेर बहुत तेज़ है.", "हमने आज एक शेर देखा.", "शेर एक बड़ी बिल्ली है."),
+        "listen" to listOf("कृपया मेरी बात सुनें।", "मुझे संगीत सुनना पसंद है.", "ध्वनि सुनो."),
+        "lively" to listOf("पार्टी बहुत जीवंत थी.", "यह एक जीवंत शहर है.", "वह एक जिंदादिल बच्चा है."),
+        "loan" to listOf("मुझे एक छोटे ऋण की आवश्यकता है.", "क्या आप मुझे दस डॉलर उधार दे सकते हैं?", "उसने कर्ज चुका दिया."),
+        "local" to listOf("मैं स्थानीय स्टोर पर खरीदारी करता हूं।", "हम एक स्थानीय पार्क में रहते हैं।", "स्थानीय समाचार उबाऊ है."),
+        "lonely" to listOf("उन्हें यहां बहुत अकेलापन महसूस होता है.", "यह एक सुनसान सड़क है.", "मैं रात को अकेला हो जाता हूँ."),
+        "long" to listOf("लंबी सैर थी।", "उसके बहुत लंबे बाल हैं.", "वह एक लंबी कहानी है."),
+        "look into" to listOf("मुझे इस पर गौर करना है।", "हमें लागत पर गौर करना चाहिए.", "मुझे उस पर गौर करने दीजिए."),
+        "low" to listOf("बैटरी बहुत कम है.", "अपनी आवाज धीमी रखें.", "जल स्तर कम है."),
+        "luggage" to listOf("मेरा सामान बहुत भारी है.", "आपका सामान कहाँ है?", "हमारा सामान खो गया."),
+        "lunch" to listOf("आज दोपहर के भोजन में क्या है?", "चलो दोपहर का खाना साथ में खाते हैं.", "मैंने जल्दी से दोपहर का भोजन कर लिया।"),
+        "lungs" to listOf("अपने फेफड़ों में गहरी सांस लें।", "धूम्रपान आपके फेफड़ों को नुकसान पहुंचाता है।", "मेरे फेफड़े तंग महसूस हो रहे हैं।"),
+        "magnitude" to listOf("उन्हें भूकंप की तीव्रता का एहसास हुआ.", "हमने परिमाण को कम करके आंका।", "परिमाण काफी बड़ा था."),
+        "maintain" to listOf("आपको कार का रखरखाव करना होगा.", "व्यवस्था बनाए रखना कठिन है.", "स्थिर गति बनाए रखें."),
+        "make" to listOf("क्या आप कुछ कॉफ़ी बना सकते हैं?", "मैं केक बनाऊंगा.", "आइये एक योजना बनायें."),
+        "manager" to listOf("अपने स्टोर मैनेजर से बात करें.", "मैनेजर एक मीटिंग में है.", "वह एक बेहतरीन मैनेजर हैं."),
+        "mandarin orange" to listOf("मैंने एक मंदारिन संतरा खाया।", "यह मंदारिन संतरा मीठा होता है।", "क्या आपको मंदारिन संतरे पसंद हैं?"),
+        "map" to listOf("मैं यह मानचित्र नहीं पढ़ सकता.", "शहर का नक्शा देखो.", "हमें एक मानचित्र की आवश्यकता है."),
+        "marginal" to listOf("मामूली अंतर है.", "लाभ मामूली था.", "यह एक सीमांत लागत है."),
+        "market" to listOf("मैं बाजार के लिए जा रहा हूँ।", "मछली बाज़ार व्यस्त है.", "बाजार में कीमतें ऊंची हैं."),
+        "masterpiece" to listOf("यह पेंटिंग एक सच्ची कृति है.", "वह इस फिल्म को अपनी उत्कृष्ट कृति मानते हैं।", "शेफ ने पाक कला का उत्कृष्ट नमूना बनाया।"),
+        "may" to listOf("कृपया मैं अंदर आ सकता हुँ?", "आज दोपहर को बारिश हो सकती है.", "आप कमरा छोड़ सकते हैं."),
+        "meat" to listOf("क्या आप लाल मांस खाते हैं?", "मैं आज कुछ पिसा हुआ मांस खरीदूंगा।", "यह मांस पूरी तरह से पकाया जाता है."),
+        "medicine" to listOf("रात के खाने के बाद अपनी दवा लें।", "यह दवा मुझे सुला देती है।", "खांसी की दवा कहां है?"),
+        "meeting" to listOf("बैठक दस बजे शुरू होगी.", "कल मेरी मीटिंग है.", "आज हमारी मीटिंग रद्द कर दी गई."),
+        "melon" to listOf("यह खरबूजा बहुत मीठा होता है.", "मैंने नाश्ते के लिए खरबूजे के टुकड़े किये।", "क्या आपको तरबूज या खरबूज पसंद है?"),
+        "message" to listOf("मुझे एक त्वरित संदेश भेजें.", "मुझे आपका टेक्स्ट संदेश मिला.", "क्या उसने कोई संदेश छोड़ा?"),
+        "methodology" to listOf("उनकी शोध पद्धति त्रुटिपूर्ण है।", "कक्षा को अपनी कार्यप्रणाली समझाएं।", "हमें एक नई परीक्षण पद्धति की आवश्यकता है।"),
+        "meticulous" to listOf("वह अपने काम को लेकर सतर्क रहती हैं।", "वह एक कुशल सफ़ाईकर्मी है।", "कलाकार बहुत ही कुशल था."),
+        "midnight" to listOf("मैं आधी रात तक जागता रहा।", "आधी रात को पार्टी ख़त्म हुई.", "अब लगभग आधी रात हो चुकी है."),
+        "might" to listOf("यह बहुत महंगा हो सकता है.", "हम इटली जा सकते हैं।", "वह अभी सो रही होगी."),
+        "milk" to listOf("कृपया कुछ बादाम का दूध खरीदें।", "दूध खट्टा हो गया है.", "क्या आप अपनी कॉफ़ी में दूध चाहते हैं?"),
+        "million" to listOf("उसने एक मिलियन डॉलर जीते।", "लाखों तारे हैं.", "इसमें लाखों वर्ष लग जाते हैं।"),
+        "minute" to listOf("एक मिनट और रुकें.", "मैं एक मिनट में वहां पहुंचूंगा.", "मुझे सोचने के लिए एक मिनट का समय दें।"),
+        "mirror" to listOf("कृपया दर्पण में देखें।", "दर्पण टूट गया है.", "उसने दर्पण की ओर देखा।"),
+        "miso soup" to listOf("मुझे गर्म मिसो सूप बहुत पसंद है।", "मिसो सूप एक बेहतरीन स्टार्टर है।", "मिसो सूप यहां ऑर्डर करें।"),
+        "mitigate" to listOf("हमें जोखिम को कम करने की जरूरत है.", "इस योजना से नुकसान कम होगा.", "हम लागत कैसे कम कर सकते हैं?"),
+        "monday" to listOf("मुझे सोमवार की सुबह से नफरत है।", "सोमवार सुबह मिलते हैं.", "सोमवार सबसे व्यस्त दिन है."),
+        "money" to listOf("मेरे पास ज्यादा पैसे नहीं हैं.", "वह कितना पैसा है?", "अपना पैसा बाद के लिए बचाकर रखें."),
+        "monkey" to listOf("बंदर ने केला खाया.", "उस अजीब बंदर को देखो.", "बंदर बहुत बुद्धिमान जानवर होते हैं।"),
+        "month" to listOf("मैं आपसे अगले महीने मिलूंगा.", "फरवरी एक छोटा महीना है.", "मैंने यह काम पिछले महीने शुरू किया है."),
+        "mood" to listOf("उसका मूड ख़राब है.", "संगीत हमेशा मेरे मूड को बेहतर बनाता है।", "वह बहुत अच्छे मूड में हैं."),
+        "moon" to listOf("आज रात चाँद बहुत चमकीला है.", "अर्धचंद्र को देखो.", "चंद्रमा पृथ्वी की परिक्रमा करता है।"),
+        "morality" to listOf("उन्होंने कानून की नैतिकता पर बहस की।", "उसकी नैतिकता बहुत सख्त है.", "यह कहानी मानवीय नैतिकता की परीक्षा लेती है।"),
+        "moreover" to listOf("यह ठंडा है; इसके अलावा, बारिश हो रही है.", "इसके अलावा, कीमत बहुत अधिक है.", "वह चतुर है; इसके अलावा, वह दयालु है।"),
+        "morning" to listOf("मैं हर सुबह व्यायाम करता हूं।", "यहां मौजूद सभी लोगों को सुप्रभात।", "सुबह की हवा ताज़ा होती है."),
+        "mother" to listOf("मेरी मां शिक्षक है।", "आज शाम को अपनी माँ को बुलाओ.", "उनकी मां स्पेन में रहती हैं."),
+        "mountain" to listOf("हम एक ऊँचे पहाड़ पर चढ़ गये।", "पहाड़ बर्फ से ढका हुआ है.", "कौन सा पर्वत सबसे ऊंचा है?"),
+        "mouse" to listOf("मेरा कंप्यूटर माउस टूट गया है.", "रसोई में एक चूहा है.", "चूहे ने पनीर खा लिया."),
+        "mouth" to listOf("चबाते समय अपना मुँह बंद कर लें।", "उसका मुंह छोटा है.", "अपने दाँत और मुँह को ब्रश करें।"),
+        "movie" to listOf("चलो आज रात एक फिल्म देखते हैं.", "वो फिल्म बहुत डरावनी थी.", "मुझे यह पुरानी फिल्म बहुत पसंद है."),
+        "movie theater" to listOf("मुझसे मूवी थिएटर में मिलें.", "सिनेमाघर में भीड़ है.", "मैं मूवी थिएटर में काम करता हूं."),
+        "muscle" to listOf("उसके पास एक मजबूत मांसपेशी है.", "मेरे पैर की मांसपेशियों में दर्द है.", "व्यायाम मांसपेशियों के निर्माण में मदद करता है।"),
+        "museum" to listOf("हमने कला संग्रहालय का दौरा किया।", "संग्रहालय आज बंद है.", "मुझे संग्रहालय देखना बहुत पसंद है."),
+        "music" to listOf("मैं रोजाना संगीत सुनता हूं।", "संगीत बहुत तेज़ है.", "उसे शास्त्रीय संगीत पसंद है।"),
+        "musician" to listOf("मेरा भाई एक प्रतिभाशाली संगीतकार है.", "संगीतकार ने वायलिन बजाया।", "वह संगीतकार बनना चाहती है."),
+        "must" to listOf("आपको सीटबेल्ट अवश्य पहनना चाहिए।", "मुझे यह प्रोजेक्ट पूरा करना ही होगा.", "हमें बहुत शांत रहना चाहिए."),
+        "narrow" to listOf("यह गली बहुत संकरी है.", "रास्ता बहुत संकरा हो गया.", "यह एक संकरा पुल है."),
+        "nature" to listOf("मुझे प्रकृति में समय बिताना पसंद है।", "वसंत ऋतु में प्रकृति सुन्दर होती है।", "हमें प्रकृति की रक्षा करनी चाहिए।"),
+        "near" to listOf("मेरा घर यहीं पास में है.", "निकास के पास रहें.", "क्या पास में कोई बैंक है?"),
+        "neck" to listOf("उन्होंने गले पर स्कार्फ पहना हुआ था.", "मेरी गर्दन बहुत कड़ी महसूस होती है.", "उसकी लंबी गर्दन है."),
+        "necklace" to listOf("वह सोने का हार पहनती है।", "ये नेकलेस बहुत महंगा है.", "मैंने उसके लिए एक मोती का हार खरीदा।"),
+        "necktie" to listOf("उन्होंने लाल नेकटाई पहनी हुई है.", "मैं नेकटाई नहीं बांध सकता.", "नेकटाई औपचारिक पहनावा है।"),
+        "negligible" to listOf("अंतर नगण्य है.", "लागत में वृद्धि नगण्य थी.", "यह एक नगण्य राशि है."),
+        "negotiate" to listOf("हमें कीमत पर बातचीत करने की जरूरत है।", "क्या आप किसी सौदे पर बातचीत कर सकते हैं?", "वे बातचीत की कोशिश कर रहे हैं."),
+        "negotiation" to listOf("बातचीत में तीन घंटे लगे.", "हम एक कठिन बातचीत में हैं.", "कल वार्ता विफल रही."),
+        "neighbour" to listOf("मेरा पड़ोसी बहुत मिलनसार है.", "पड़ोसी का कुत्ता जोर-जोर से भौंकता है।", "वह एक मददगार पड़ोसी है."),
+        "never" to listOf("मैं वहाँ कभी नहीं गया।", "वह कभी नहीं सुनता.", "कभी हार न मानना।"),
+        "new" to listOf("मैंने एक नई कार खरीदी है।", "यह एक नया फ़ोन है.", "हमारे पास एक नया शिक्षक है."),
+        "news" to listOf("क्या आपने खबर सुनी?", "खबर चौंकाने वाली थी.", "मैं शाम की खबरें देखता हूं."),
+        "newspaper" to listOf("वह रोजाना अखबार पढ़ता है।", "मुझे अखबार में नौकरी मिल गयी.", "अखबार मेज पर रख दो।"),
+        "next month" to listOf("मैं अगले महीने यात्रा करूंगा.", "परियोजना अगले महीने समाप्त हो रही है।", "हम अगले महीने घर बदल लेंगे।"),
+        "next week" to listOf("आपसे अगले हफ्ते मिलते हैं।", "अगले सप्ताह मेरी परीक्षा है.", "अगले सप्ताह बारिश होगी."),
+        "nice to meet you" to listOf("नमस्कार, आपसे मिलकर अच्छा लगा।", "आपसे मिलकर अच्छा लगा।", "आपसे मिलकर भी अच्छा लगा।"),
+        "night" to listOf("रात बहुत अंधेरी है.", "मुझे रात को नींद नहीं आती.", "कल रात मिलते हैं."),
+        "night town" to listOf("रात का शहर बहुत उज्ज्वल है.", "मुझे रात्रिकालीन शहर की ऊर्जा बहुत पसंद है।", "हमने रात के शहर का पता लगाया।"),
+        "nine" to listOf("मेरे पास नौ सेब हैं.", "वो नौ साल का है।", "क्लास नौ बजे शुरू होती है."),
+        "no" to listOf("नहीं, मैं नहीं जा सकता.", "बिल्कुल समय नहीं है।", "नहीं, ये ग़लत है."),
+        "nonetheless" to listOf("पानी बरस रहा था; फिर भी, हम गए।", "वह थका हुआ है, फिर भी काम करता है।", "यह महंगा है, फिर भी मैंने इसे खरीदा।"),
+        "noon" to listOf("चलो दोपहर को मिलते हैं.", "दोपहर का भोजन दोपहर में परोसा जाता है।", "दोपहर के समय सूरज तेज़ होता है।"),
+        "nose" to listOf("मेरी नाक बह रही है.", "उसकी छोटी नाक है.", "उसने अपनी नाक पर प्रहार किया."),
+        "not" to listOf("मुझे अच्छा महसूस नही हो रहा।", "उस बटन को मत छुओ.", "अभी बहुत देर नहीं हुई है।"),
+        "notion" to listOf("यह एक अजीब धारणा है.", "मुझे इसका कोई अंदाज़ा नहीं है.", "यह धारणा अव्यावहारिक लगती है."),
+        "notwithstanding" to listOf("बारिश के बावजूद हमने खेला.", "विपरीत परिस्थितियों के बावजूद उन्होंने जीत हासिल की।", "लागत के बावजूद, यह इसके लायक है।"),
+        "novel" to listOf("मैं एक उपन्यास पढ़ रहा हूं.", "उन्होंने एक ऐतिहासिक उपन्यास लिखा।", "यह एक लम्बा उपन्यास है."),
+        "now" to listOf("मुझे अब जाना हे।", "अभी आप कहाँ हैं?", "हम अभी शुरू कर सकते हैं."),
+        "nurse" to listOf("नर्स ने मरीज की मदद की.", "वह एक पंजीकृत नर्स है.", "मदद के लिए नर्स को बुलाएँ।"),
+        "obtain" to listOf("मुझे वीज़ा कहाँ से मिल सकता है?", "आपको परमिट प्राप्त करना होगा.", "उन्होंने और अधिक जानकारी प्राप्त करने का प्रयास किया."),
+        "of" to listOf("यह एक कप चाय है.", "वह मेरा एक दोस्त है.", "कार का रंग लाल है."),
+        "office" to listOf("मेरा कार्यालय शहर में है.", "वह एक शांत कार्यालय में काम करती है।", "कृपया मेरे कार्यालय आएं."),
+        "office worker" to listOf("वह एक ठेठ कार्यालय कर्मचारी है.", "कार्यालय कर्मी को थकान महसूस हुई.", "वह यहां एक ऑफिस वर्कर है।"),
+        "often" to listOf("आप कितनी बार व्यायाम करते हैं?", "मैं अक्सर वहां जाता हूं.", "हम अक्सर बाहर खाना खाते हैं."),
+        "oil" to listOf("थोड़ा सा जैतून का तेल डालें।", "कार से तेल लीक हो रहा है.", "इस पैन को अधिक तेल की आवश्यकता होती है."),
+        "old" to listOf("मेरा कुत्ता बहुत बूढ़ा है.", "यह एक पुराना घर है.", "वह पुराना मित्र है."),
+        "older brother" to listOf("मेरा बड़ा भाई एक डॉक्टर है.", "वह मेरा बड़ा भाई है.", "मैं अपने बड़े भाई से लड़ता हूं."),
+        "older sister" to listOf("मेरी बड़ी बहन यहीं रहती है.", "वह मेरी बड़ी बहन है.", "मैं अपनी बड़ी बहन से प्यार करता हूँ."),
+        "on" to listOf("किताब मेज़ पर है.", "अब अपना कोट पहन लो.", "मैं अपने रास्ते पर हूँ।"),
+        "on balance" to listOf("कुल मिलाकर, यह एक सफलता थी.", "संतुलन पर, योजना काम कर गई।", "संतुलन पर, हम खुश हैं."),
+        "on the contrary" to listOf("इसके विपरीत, यह गर्म है.", "इसके विपरीत, मैं असहमत हूं।", "इसके विपरीत, वह दयालु है."),
+        "on the verge of" to listOf("वह रोने की कगार पर है.", "हम जीत की कगार पर हैं.", "यह टूटने की कगार पर है."),
+        "once" to listOf("मैं वहां एक बार जा चुका हूं.", "सप्ताह में एक बार पर्याप्त है.", "इसे केवल एक बार करें."),
+        "one" to listOf("मेरे पास केवल एक डॉलर है.", "एक व्यक्ति इंतज़ार कर रहा है.", "यह वही है जो मैं चाहता हूं."),
+        "online" to listOf("मैंने इसे ऑनलाइन खरीदा.", "कक्षा ऑनलाइन आयोजित की जाती है।", "क्या आप अभी ऑनलाइन हैं?"),
+        "only" to listOf("मेरे पास केवल पाँच डॉलर हैं।", "वह इकलौती संतान है.", "यह सिर्फ़ एक मिनट लेता है।"),
+        "only child" to listOf("मैं अकेला बच्चा हूं।", "वह इकलौती संतान के रूप में बड़ी हुई।", "वो इकलौता है।"),
+        "open" to listOf("कृपया खिड़की खोल दें।", "दुकान अब खुली है.", "अपनी पुस्तक को पृष्ठ दस पर खोलें।"),
+        "opinion" to listOf("आपकी ईमानदार राय क्या है?", "मेरी राय में ये बेहतर है.", "हर किसी की अलग-अलग राय होती है."),
+        "optimize" to listOf("हमें साइट को अनुकूलित करने की आवश्यकता है।", "कृपया अपना वर्कफ़्लो अनुकूलित करें.", "यह टूल गति को अनुकूलित करने में मदद करता है।"),
+        "or" to listOf("क्या आपको चाय या कॉफ़ी चाहिए?", "आप पैदल जा सकते हैं या बस ले सकते हैं।", "लाल या नीला, एक चुनें।"),
+        "out of the blue" to listOf("उसने अचानक मुझे बुलाया.", "यह बिल्कुल अचानक हुआ।", "वह अचानक आ गई।"),
+        "outlet" to listOf("निकटतम बिजली आउटलेट कहाँ है?", "यह स्टोर एक बेहतरीन आउटलेट है.", "मुझे एक नया विद्युत आउटलेट चाहिए."),
+        "over" to listOf("बिल्ली उस पर कूद पड़ी.", "यह अब ख़त्म हो गया है.", "मेरे घर आओ."),
+        "oversee" to listOf("वह नये प्रोजेक्ट की देखरेख करेंगी.", "वह दस लोगों की एक टीम की देखरेख करता है।", "निर्माण स्थल की देखरेख कौन कर रहा है?"),
+        "owl" to listOf("जंगल में एक उल्लू ने गुर्राया।", "उस उल्लू की आंखें बहुत बड़ी-बड़ी हैं.", "उल्लू रात में भोजन की तलाश में शिकार करते हैं।"),
+        "pain" to listOf("मेरी पीठ के निचले हिस्से में दर्द है.", "दर्द जल्दी ही दूर हो गया.", "यहां उन्हें तेज दर्द महसूस हुआ."),
+        "painter" to listOf("चित्रकार ने लिविंग रूम का काम पूरा कर दिया।", "वह एक प्रतिभाशाली तेल चित्रकार हैं।", "हमने एक पेशेवर हाउस पेंटर को काम पर रखा।"),
+        "painting" to listOf("यह पेंटिंग बहुत कीमती है.", "वह बाड़ को सफेद रंग से रंग रही है।", "मुझे यहां की वह तेल चित्रकला बहुत पसंद है।"),
+        "palm" to listOf("उसने सिक्का अपनी हथेली में रखा।", "हम एक ताड़ के पेड़ के नीचे बैठे।", "मेरे हाथ की हथेली में खुजली होती है।"),
+        "paper" to listOf("क्या मुझे कागज का एक टुकड़ा मिल सकता है?", "यह कागज बहुत पतला है.", "मैंने इसे अखबार में पढ़ा।"),
+        "paradigm" to listOf("यह एक नया व्यवसाय प्रतिमान है.", "युद्ध के बाद प्रतिमान बदल गया।", "हमें एक नये सामाजिक प्रतिमान की आवश्यकता है।"),
+        "paradox" to listOf("यह एक अजीब विरोधाभास जैसा लगता है.", "यह एक क्लासिक तार्किक विरोधाभास है।", "जीवन विरोधाभासों से भरा है."),
+        "paramount" to listOf("सुरक्षा सर्वोपरि है.", "हमारी सफलता के लिए गुणवत्ता सर्वोपरि है।", "यह मुद्दा अभी सर्वोपरि है."),
+        "parents" to listOf("मेरे माता-पिता न्यूयॉर्क में रहते हैं।", "उसके माता-पिता बहुत सहयोगी हैं।", "क्या आपके माता-पिता इस बारे में जानते हैं?"),
+        "park" to listOf("चलो आज पार्क चलते हैं.", "आप यहां अपनी कार पार्क नहीं कर सकते.", "बच्चे पार्क में खेल रहे हैं."),
+        "partner" to listOf("वह मेरी बिजनेस पार्टनर है.", "वह एक बेहतरीन डांसिंग पार्टनर हैं।'", "मैं अपने दीर्घकालिक साथी के साथ रहता हूं।"),
+        "passport" to listOf("अपना पासपोर्ट न खोएं.", "मुझे अपना पासपोर्ट नवीनीकृत कराना है.", "गेट पर अपना पासपोर्ट दिखाएँ।"),
+        "password" to listOf("मैं अपना कंप्यूटर पासवर्ड भूल गया.", "कृपया अपना गुप्त पासवर्ड दर्ज करें.", "आपका पासवर्ड आठ अक्षर का होना चाहिए."),
+        "pasta" to listOf("मुझे लाल सॉस के साथ पास्ता बहुत पसंद है.", "हम रात के खाने के लिए पास्ता पका रहे हैं।", "यह पास्ता थोड़ा ज्यादा पका हुआ है."),
+        "patience" to listOf("कृपया मेरे साथ थोड़ा धैर्य रखें.", "बच्चों को पढ़ाने के लिए बहुत धैर्य की आवश्यकता होती है।", "मेरा धैर्य बहुत कम हो रहा है."),
+        "pay" to listOf("आपको भुगतान कब मिलता है?", "मैं कॉफी के लिए भुगतान करूंगा.", "वे आपको कितना भुगतान करते हैं?"),
+        "peach" to listOf("यह आड़ू बहुत रसीला होता है.", "मुझे आड़ू की गंध बहुत पसंद है।", "क्या आप ताजा आड़ू चाहते हैं?"),
+        "peak" to listOf("हम पर्वत शिखर पर पहुँचे।", "दोपहर के समय यातायात चरम पर होता है।", "वह अपने करियर के शिखर पर हैं."),
+        "pen" to listOf("क्या मैं आपका नीला पेन उधार ले सकता हूँ?", "इस पेन की स्याही ख़त्म हो गई है.", "फॉर्म पर पेन से हस्ताक्षर करें."),
+        "penguin" to listOf("पेंगुइन बर्फ पर डोलता है।", "पेंगुइन हवा में नहीं उड़ सकते.", "उस प्यारे छोटे पेंगुइन को देखो।"),
+        "pepper" to listOf("इसमें थोड़ी सी काली मिर्च मिला लें.", "यह मिर्च बहुत तीखी है.", "क्या आपको शिमला मिर्च पसंद है?"),
+        "perception" to listOf("उसके बारे में मेरी धारणा तेजी से बदल गई।", "कंपनी के बारे में लोगों की धारणा ख़राब है.", "उसे विस्तार की गहरी समझ है।"),
+        "person" to listOf("वह बहुत दयालु व्यक्ति हैं.", "यहाँ का प्रभारी कौन व्यक्ति है?", "मैं सिर्फ एक व्यक्ति हूं."),
+        "personality" to listOf("उनका बहुत ही चुलबुला व्यक्तित्व है.", "उनका व्यक्तित्व मेरे व्यक्तित्व से टकराता है.", "उनका व्यक्तित्व एक जैसा है."),
+        "perspective" to listOf("इसे मेरे दृष्टिकोण से देखने का प्रयास करें।", "यात्रा आपको एक नया दृष्टिकोण देती है।", "जीवन के प्रति उनका दृष्टिकोण अद्वितीय है।"),
+        "phenomenon" to listOf("यह एक अजीब प्राकृतिक घटना है.", "सोशल मीडिया एक वैश्विक घटना है।", "उत्तरी रोशनी एक दुर्लभ घटना है।"),
+        "phone" to listOf("मेरे फोन की बैटरी खत्म हो गई है.", "कृपया अपना फ़ोन दूर रखें.", "मैंने अपना फ़ोन घर पर ही छोड़ दिया।"),
+        "photo" to listOf("यह तस्वीर पिछले साल ली गई थी.", "क्या आप हमारी एक तस्वीर ले सकते हैं?", "इस पुरानी तस्वीर को देखिए."),
+        "photographer" to listOf("फ़ोटोग्राफ़र ने बहुत बढ़िया शॉट लिया.", "वह एक प्रोफेशनल वेडिंग फोटोग्राफर हैं।", "मैंने इस कार्यक्रम के लिए एक फोटोग्राफर को नियुक्त किया।"),
+        "pig" to listOf("सुअर एक सेब खा रहा है.", "फार्मों में आमतौर पर बहुत सारे सूअर होते हैं।", "एक सुअर बहुत होशियार हो सकता है."),
+        "pilot" to listOf("पायलट ने विमान को सुरक्षित उतार लिया.", "वह पायलट बनना चाहता है.", "पायलट से मौसम के बारे में पूछें."),
+        "pineapple" to listOf("क्या आपको पिज़्ज़ा पर अनानास पसंद है?", "मैंने एक ताजा अनानास खरीदा।", "अनानास गर्म जलवायु में उगते हैं।"),
+        "pivotal" to listOf("यह इतिहास का एक महत्वपूर्ण क्षण था।", "परियोजना में उनकी भूमिका महत्वपूर्ण थी।", "यह उनके लिए एक निर्णायक निर्णय था."),
+        "plane" to listOf("विमान छह बजे रवाना होता है.", "अब हम विमान में चढ़ रहे हैं.", "उन्होंने हवाई जहाज से लंदन के लिए उड़ान भरी।"),
+        "planet" to listOf("मंगल एक लाल ग्रह है.", "पृथ्वी हमारा गृह ग्रह है।", "कौन सा ग्रह सूर्य से सबसे दूर है?"),
+        "plateau" to listOf("पदयात्री एक ऊँचे पठार पर पहुँचे।", "भूमि एक पठार में समतल हो जाती है।", "मेरी प्रगति स्थिर हो गई है।"),
+        "platform" to listOf("मंच के किनारे से पीछे खड़े हो जाएं।", "यह ऐप एक बेहतरीन प्लेटफॉर्म है.", "वह लकड़ी के मंच से बोले।"),
+        "play" to listOf("क्या तुम्हे फुटबॉल खेलना है?", "हमने थिएटर में एक नाटक देखा।", "बच्चों को बाहर खेलने दें."),
+        "please" to listOf("कृपया मुझे नमक दे दीजिए।", "कृपया बैठ जाइये और शांत रहिये।", "आप कृपया मुझे मदद कर सकता है?"),
+        "plot" to listOf("फिल्म का कथानक जटिल है।", "वे एक बगीचे की योजना बना रहे हैं.", "मुझे कथानक समझ नहीं आया."),
+        "pocket" to listOf("अपनी चाबियाँ अपनी जेब में रखो.", "उसकी जेब में छेद है.", "मुझे अपनी जेब में एक सिक्का मिला।"),
+        "poetry" to listOf("उन्हें रोमांटिक कविताएँ पढ़ना बहुत पसंद है।", "यह कक्षा आधुनिक कविता का अध्ययन करती है।", "उनकी शायरी बेहद भावुक कर देने वाली है."),
+        "point out" to listOf("कृपया गलती बताएं.", "उसने बाहर निकलने का इशारा किया.", "मैं एक बात बताना चाहता हूं."),
+        "police officer" to listOf("पुलिस अधिकारी ने कार रोकी.", "मदद के लिए किसी पुलिस अधिकारी से पूछें.", "वह एक समर्पित पुलिस अधिकारी हैं."),
+        "police station" to listOf("नजदीकी पुलिस स्टेशन जाएं.", "पुलिस स्टेशन मेन स्ट्रीट पर है.", "वह स्थानीय पुलिस स्टेशन में काम करती है।"),
+        "policy" to listOf("कंपनी की नीति यहां धूम्रपान करने पर रोक लगाती है।", "वापसी नीति क्या है?", "हमें एक नई सुरक्षा नीति की जरूरत है."),
+        "politician" to listOf("वह राजनेता बहुत सारे वादे करता है।", "वह एक जानी-मानी राजनीतिज्ञ हैं.", "मुझे उस राजनेता पर भरोसा नहीं है."),
+        "pollution" to listOf("शहरों में वायु प्रदूषण का बुरा हाल है.", "प्लास्टिक जल प्रदूषण का कारण बनता है।", "हमें समुद्र प्रदूषण को कम करना होगा।"),
+        "population" to listOf("शहर की आबादी बढ़ रही है.", "दुनिया की आबादी बहुत बड़ी है.", "जापान की जनसंख्या कितनी है?"),
+        "pork" to listOf("मैं सूअर का मांस नहीं खाता.", "इस पोर्क रोस्ट का स्वाद बहुत अच्छा है।", "क्या आपको ग्रिल्ड पोर्क पसंद है?"),
+        "post office" to listOf("डाकघर पांच बजे बंद हो जाता है।", "मैं डाकघर जा रहा हूं.", "निकटतम डाकघर कहाँ है?"),
+        "postulate" to listOf("वैज्ञानिकों ने एक नई थ्योरी पेश की है.", "हम मानते हैं कि गर्मी बढ़ती है।", "उन्होंने एक अलग परिणाम प्रस्तुत किया।"),
+        "poverty" to listOf("बहुत से लोग अत्यधिक गरीबी में रहते हैं।", "सरकार बाल गरीबी से लड़ती है।", "गरीबी लाखों लोगों को प्रभावित करती है।"),
+        "practice" to listOf("मुझे पियानो का अभ्यास करना है.", "अभ्यास परिपूर्ण बनाता है।", "उसकी मेडिकल प्रैक्टिस है."),
+        "pragmatic" to listOf("हमें एक व्यावहारिक समाधान की जरूरत है.", "वह व्यावहारिक दृष्टिकोण अपनाता है।", "बजट को लेकर व्यावहारिक रहें."),
+        "precedent" to listOf("यह मामला एक कानूनी मिसाल कायम करता है।", "इसकी कोई मिसाल नहीं है.", "हमें मौजूदा मिसाल का पालन करना चाहिए।"),
+        "precipitate" to listOf("ठंडी हवा से बारिश होगी।", "कुछ रसायन प्रतिक्रिया उत्पन्न करते हैं।", "ये घटनाएँ संकट पैदा करती हैं।"),
+        "prevalence" to listOf("फ्लू का प्रचलन बढ़ रहा है।", "रोग की व्यापकता का अध्ययन करें.", "मोटापे का प्रचलन बहुत अधिक है।"),
+        "price" to listOf("गैस की कीमत अधिक है.", "खुदरा कीमत क्या है?", "ये कीमत बहुत महंगी है."),
+        "prioritize" to listOf("आपको अपने स्वास्थ्य को प्राथमिकता देनी चाहिए।", "मुझे अपने कार्यों को प्राथमिकता देने की आवश्यकता है।", "आइए सबसे ज़रूरी काम को प्राथमिकता दें।"),
+        "professor" to listOf("मेरे इतिहास के प्रोफेसर बहुत सख्त हैं।", "वह एक यूनिवर्सिटी प्रोफेसर हैं.", "प्रोफेसर ने एक लम्बा व्याख्यान दिया।"),
+        "profit" to listOf("कंपनी को भारी मुनाफा हुआ", "हमें अपना मुनाफ़ा बढ़ाने की ज़रूरत है", "छोटे व्यवसाय लाभ कमाने के लिए संघर्ष करते हैं"),
+        "profound" to listOf("उनकी बातों का गहरा असर हुआ", "यह एक गहन खोज थी", "उसे हानि का गहरा एहसास हुआ"),
+        "programmer" to listOf("वह जावा प्रोग्रामर के रूप में काम करता है", "प्रोग्रामर ने बग ठीक कर दिया", "वह एक प्रतिभाशाली युवा प्रोग्रामर हैं"),
+        "project" to listOf("यह प्रोजेक्ट शुक्रवार को होना है", "हमने एक नया स्कूल प्रोजेक्ट शुरू किया", "इस परियोजना में तीन महीने लगे"),
+        "promotion" to listOf("आखिरकार उन्हें प्रमोशन मिल गया", "उन्हें प्रमोशन की उम्मीद है", "कंपनी ने उन्हें प्रमोशन का ऑफर दिया"),
+        "propensity" to listOf("उसकी झूठ बोलने की प्रवृत्ति होती है", "उसमें जोखिम लेने की प्रवृत्ति है", "कुत्तों में भौंकने की प्रवृत्ति होती है"),
+        "prosecution" to listOf("अभियोजन पक्ष ने एक नया गवाह बुलाया", "अभियोजन पक्ष इसे साबित करने में विफल रहा", "वह आपराधिक मुकदमे का सामना कर रहा है"),
+        "protect" to listOf("अपनी त्वचा की सुरक्षा के लिए सनस्क्रीन लगाएं", "यह केस फोन की सुरक्षा करेगा", "माता-पिता अपने बच्चों की सुरक्षा करना चाहते हैं"),
+        "put off" to listOf("अपना होमवर्क मत टालो", "हमें यात्रा स्थगित करनी पड़ी", "वह डॉक्टर को टालती रहती है"),
+        "quiet" to listOf("कृपया पुस्तकालय में शांत रहें", "यहाँ बहुत शांति है", "आख़िरकार घर शांत हो गया"),
+        "rabbit" to listOf("खरगोश ने एक गाजर खा ली", "मेरा पालतू खरगोश बहुत मुलायम है", "एक खरगोश आँगन में उछल-कूद करने लगा"),
+        "railway" to listOf("रेलवे शहर से होकर गुजरती है", "मैं राष्ट्रीय रेलवे के लिए काम करता हूं", "रेलवे स्टेशन पर भीड़ है"),
+        "rain" to listOf("मुझे आशा है कि आज बारिश नहीं होगी", "एक घंटे पहले बारिश बंद हो गई", "हमें बारिश की खुशबू बहुत पसंद है"),
+        "rainbow" to listOf("उस खूबसूरत इंद्रधनुष को देखो", "तूफान के बाद एक इंद्रधनुष दिखाई दिया", "क्या आप इंद्रधनुष देख सकते हैं?"),
+        "raincoat" to listOf("अपना पीला रेनकोट पहनो", "मैं अपना रेनकोट घर पर भूल गया", "यह रेनकोट मुझे सूखा रखता है"),
+        "rainy" to listOf("बरसात की दोपहर है", "बरसात के दिनों में हम अंदर ही रहते थे", "मुझे बरसात का मौसम पसंद है"),
+        "ramen" to listOf("मुझे कुछ मसालेदार रेमन चाहिए", "यह रेमन दुकान बहुत लोकप्रिय है", "उसने रात के खाने के लिए रेमन पकाया"),
+        "rationale" to listOf("इसका क्या औचित्य है?", "उन्होंने अपना तर्क स्पष्ट रूप से समझाया", "इस निर्णय के पीछे तर्क सरल था"),
+        "read" to listOf("मुझे उपन्यास पढ़ना पसंद है", "क्या आपने खबर पढ़ी?", "वह बहुत तेजी से पढ़ सकती है"),
+        "reading" to listOf("मैं एक बेहतरीन किताब पढ़ रहा हूं", "पढ़ने से आपको अंग्रेजी सीखने में मदद मिलती है", "वह अपना सप्ताहांत पढ़ने में बिताती है"),
+        "really" to listOf("क्या आपका सचमुच यह मतलब है?", "आज सचमुच गर्मी है.", "मुझे ये वाकई पसंद है."),
+        "recycle" to listOf("कृपया उन प्लास्टिक की बोतलों को रीसायकल करें।", "हमें घर पर अधिक रीसाइक्लिंग करनी चाहिए।", "क्या आप जानते हैं कि रीसायकल कहाँ करना है?"),
+        "referendum" to listOf("नागरिकों ने जनमत संग्रह में मतदान किया।", "जनमत संग्रह ने कानून बदल दिया।", "वे राष्ट्रीय जनमत संग्रह करा रहे हैं."),
+        "refrigerator" to listOf("दूध को फ्रिज में रख दें.", "क्या रेफ्रिजरेटर में कोई खाना है?", "रेफ़्रिजरेटर तेज़ आवाज़ कर रहा है."),
+        "refute" to listOf("उन्होंने दावे का खंडन करने की कोशिश की.", "वकील सबूतों का खंडन करेगा.", "नया डेटा उस सिद्धांत का खंडन कर सकता है।"),
+        "relationship" to listOf("उनका बहुत मजबूत रिश्ता है.", "मेरे बॉस के साथ मेरे रिश्ते अच्छे हैं.", "किसी भी रिश्ते में विश्वास महत्वपूर्ण है।"),
+        "relative" to listOf("मेरा पसंदीदा रिश्तेदार इटली में रहता है।", "क्या आप उसके रिश्तेदार हैं?", "वह मेरी दूर की रिश्तेदार है."),
+        "relax" to listOf("मैं आज बस आराम करना चाहता हूं.", "यह संगीत मुझे आराम पहुंचाने में मदद करता है।", "आपको अपने कंधों को आराम देने की जरूरत है।"),
+        "reliability" to listOf("मुझे इस कार की विश्वसनीयता पर संदेह है.", "वह अपनी विश्वसनीयता के लिए जाने जाते हैं।", "हमें इसकी विश्वसनीयता जांचनी होगी."),
+        "reporter" to listOf("रिपोर्टर ने एक कठिन सवाल पूछा.", "वह एक समाचार रिपोर्टर के रूप में काम करती है।", "रिपोर्टर कहानी कवर कर रहा है."),
+        "require" to listOf("इस कार्य के लिए यात्रा की आवश्यकता हो सकती है।", "अधिकांश पौधों को भरपूर धूप की आवश्यकता होती है।", "क्या आपको किसी और सहायता की आवश्यकता है?"),
+        "research" to listOf("मैं स्कूल के लिए शोध कर रहा हूं.", "इस पर और अधिक शोध की जरूरत है.", "वह काफी रिसर्च करती हैं."),
+        "resource" to listOf("पुस्तकालय एक महान संसाधन है.", "हमारे पास जल संसाधन सीमित हैं।", "आपके पास उपलब्ध प्रत्येक संसाधन का उपयोग करें।"),
+        "respect" to listOf("कृपया दूसरों के प्रति कुछ सम्मान दिखाएं।", "मेरे मन में उनके लिए बहुत सम्मान है.", "वे स्थानीय परंपराओं का सम्मान करते हैं।"),
+        "rest" to listOf("तुम्हें थोड़ा आराम करने की जरूरत है.", "मैं थोड़ा आराम करूंगा.", "आटे को एक घंटे के लिये रख दीजिये."),
+        "restaurant" to listOf("आइए एक जापानी रेस्तरां में चलते हैं।", "इस रेस्तरां की समीक्षाएँ बहुत अच्छी हैं।", "रेस्तरां सोमवार को बंद रहता है।"),
+        "restroom" to listOf("निकटतम शौचालय कहाँ है?", "शौचालय हॉल के नीचे है.", "मुझे एक शौचालय ढूंढना है."),
+        "result" to listOf("परिणाम पूर्णतः आश्चर्यचकित करने वाला था।", "ये कड़ी मेहनत का नतीजा है.", "खेल का परिणाम क्या रहा?"),
+        "return home" to listOf("मैं काम के बाद घर लौटूंगा.", "आप घर कब लौटे?", "यह घर लौटने का समय है."),
+        "rice" to listOf("क्या आप भूरा या सफेद चावल पसंद करते हैं?", "मैं हर दिन चावल पकाती हूं।", "हमने मछली के साथ चावल खाया।"),
+        "rice ball" to listOf("मैंने दोपहर के भोजन के लिए एक चावल का गोला खरीदा।", "क्या आपको यह चावल का गोला पसंद है?", "इस चावल के गोले का स्वाद बहुत नमकीन होता है."),
+        "rice field" to listOf("वे चावल के खेत में काम करते हैं।", "चावल का खेत बहुत हरा-भरा है।", "हम चावल के खेत के पास से गुजरे।"),
+        "right" to listOf("कोने से दायें घुमें।", "आप उस बारे में सही हैं।", "अपने दाहिने हाथ का प्रयोग करें."),
+        "rigorous" to listOf("यह एक कठोर प्रशिक्षण कार्यक्रम है.", "वह कठोर आहार का पालन करते हैं।", "परीक्षण अविश्वसनीय रूप से कठोर था."),
+        "ring" to listOf("वह सोने की शादी की अंगूठी पहनती है।", "कल मुझे एक अंगूठी दे देना.", "घंटी जोर-जोर से बजने लगी।"),
+        "river" to listOf("नदी शहर से होकर बहती है।", "हम ठंडी नदी में तैरे।", "यहां नदी बहुत गहरी है."),
+        "road" to listOf("यह सड़क शहर की ओर जाती है.", "सड़क में एक गड्ढा है.", "मुख्य सड़क पर रहें."),
+        "rock" to listOf("वह एक बड़ी चट्टान पर बैठ गया।", "पर्वतारोही चट्टान की दीवार पर चढ़ गए।", "मुझे एक अजीब सी चट्टान मिली."),
+        "roof" to listOf("छत पर एक बिल्ली है.", "बारिश के कारण छत से पानी टपक रहा है।", "हमने कल छत ठीक कर दी।"),
+        "room" to listOf("क्या कोई कमरा उपलब्ध है?", "यह कमरा बहुत छोटा है.", "अभी अपना कमरा साफ करो."),
+        "routine" to listOf("मेरी सुबह की दिनचर्या बहुत सरल है।", "उनकी दिनचर्या सख्त है.", "मुझे एक नए वर्कआउट रूटीन की जरूरत है।"),
+        "run" to listOf("क्या तुम मुझसे तेज़ दौड़ सकते हो?", "मैं हर सुबह पांच मील दौड़ता हूं।", "चलो जल्दी से दौड़ें।"),
+        "sad" to listOf("इस फिल्म का अंत दुखद है.", "तुम इतने उदास क्यों दिख रहे हो?", "यह दुखद है कि वे चले गये."),
+        "salary" to listOf("मेरा मासिक वेतन काफी कम है.", "वह उच्च वार्षिक वेतन अर्जित करती है।", "उन्होंने बेहतर वेतन पर बातचीत की।"),
+        "salient" to listOf("यहां मुख्य बिंदु क्या हैं?", "सबसे प्रमुख विशेषताओं पर ध्यान दें.", "उन्होंने सबसे महत्वपूर्ण तथ्यों को नजरअंदाज कर दिया।"),
+        "salt" to listOf("मुझे कृपया नमक दीजिये।", "इस सूप में नमक बहुत ज्यादा है.", "एक चुटकी नमक डालें."),
+        "saturday" to listOf("हम इस शनिवार को बाहर जा रहे हैं।", "शनिवार मेरा पसंदीदा दिन है.", "मैं हर शनिवार को काम करता हूं।"),
+        "say" to listOf("आपने उससे क्या कहा?", "एक बार और कहो.", "वे कहते हैं कि बारिश होगी."),
+        "scared" to listOf("मुझे मकड़ियों से डर लगता है.", "तेज आवाज से बच्चा डर गया।", "उसे अँधेरे में डर लग रहा था."),
+        "scarf" to listOf("बाहर गर्म स्कार्फ पहनें।", "उनका रेशमी दुपट्टा बहुत रंगीन है।", "उसने गले में दुपट्टा बांध रखा था."),
+        "schedule" to listOf("आज मेरा शेड्यूल पूरा है.", "बस शेड्यूल ऑनलाइन जांचें।", "हम फिर से तय समय से पीछे हैं।"),
+        "school" to listOf("मैं हर दिन पैदल चलकर स्कूल जाता हूं।", "रविवार को स्कूल बंद रहता है.", "वह एक हाई स्कूल टीचर हैं."),
+        "scientist" to listOf("वैज्ञानिक ने एक नई प्रजाति की खोज की।", "वह एक शानदार शोध वैज्ञानिक हैं।", "वैज्ञानिक ने सिद्धांत समझाया."),
+        "screen" to listOf("मेरे फ़ोन की स्क्रीन टूट गयी है.", "उसने कंप्यूटर स्क्रीन की ओर देखा।", "स्क्रीन को मत छुओ."),
+        "sculpture" to listOf("वह मूर्ति कांसे की बनी है.", "संग्रहालय में एक विशाल मूर्ति है।", "वह अमूर्त मूर्तियां बनाती हैं।"),
+        "sea" to listOf("आज समुद्र बहुत शांत है.", "हमने समुद्र के किनारे दिन बिताया।", "समुद्र का खारा पानी डंक मारता है।"),
+        "seat" to listOf("कृपया वहाँ बैठ जाइये।", "क्या यह सीट दे दी गई है?", "वह पीछे की सीट पर बैठ गया."),
+        "see" to listOf("मै अब आपको देख सकता हूँ।", "मुझे आपका होमवर्क देखने दो।", "क्या आप उस पक्षी को देखते हैं?"),
+        "sell" to listOf("वे यहां ताजी रोटी बेचते हैं।", "मैं अपनी कार बेचना चाहता हूं.", "क्या यह दुकान दूध बेचती है?"),
+        "set up" to listOf("तंबू लगाने में मेरी मदद करो.", "उसने नया प्रिंटर स्थापित किया।", "आइए एक मीटिंग तय करें."),
+        "seven" to listOf("मैं सात बजे उठा.", "सप्ताह में सात दिन होते हैं।", "वह सात साल का है।"),
+        "shall" to listOf("क्या हम एक साथ नृत्य करेंगे?", "मैं शीघ्र ही वापस आऊंगा.", "हम कहाँ मिले?"),
+        "sheep" to listOf("भेड़ें घास खा रही हैं.", "मैंने भेड़ों का झुंड देखा।", "वह भेड़ खोई हुई लगती है।"),
+        "ship" to listOf("जहाज़ बंदरगाह से निकल गया।", "वह एक मालवाहक जहाज पर काम करता है।", "जहाज बहुत बड़ा है."),
+        "shirt" to listOf("यह सफ़ेद शर्ट बहुत बड़ी है.", "मुझे एक नई ड्रेस शर्ट चाहिए।", "एक साफ शर्ट पहनें."),
+        "shoe store" to listOf("जूते की दुकान बंद है.", "चलो जूते की दुकान पर चलते हैं।", "कौन सी जूते की दुकान सबसे अच्छी है?"),
+        "shoes" to listOf("मेरे जूते बहुत तंग हैं.", "अपने जूते अंदर ही उतार दें.", "उसने नये दौड़ने वाले जूते खरीदे।"),
+        "shop" to listOf("यह कॉफ़ी शॉप आरामदायक है.", "मुझे खाने के लिए खरीदारी करनी है.", "उपहार की दुकान कार्ड बेचती है।"),
+        "shop clerk" to listOf("दुकान का क्लर्क बहुत मददगार था।", "मदद के लिए दुकान के क्लर्क से पूछें।", "दुकान के क्लर्क ने सामान उठाया।"),
+        "short" to listOf("फिल्म बहुत छोटी थी.", "वह इसके लिए बहुत छोटा है.", "जिन्दगी छोटी है मज़े करो।"),
+        "shorts" to listOf("गर्मियों में शॉर्ट्स पहनें.", "ये शॉर्ट्स बहुत लंबे हैं.", "उसने शॉर्ट्स की एक जोड़ी खरीदी।"),
+        "should" to listOf("आपको अधिक सब्जियां खानी चाहिए.", "हमें अभी निकल जाना चाहिए.", "क्या मुझे उन्हें वापस बुलाना चाहिए?"),
+        "shoulder" to listOf("उसने बैग कंधे पर लटका रखा था.", "आज मेरे कंधे में दर्द है.", "उसने उसे कंधे पर थपथपाया।"),
+        "shower" to listOf("मुझे नहाना है.", "शॉवर बहुत गर्म है.", "उसने जल्दी से स्नान किया।"),
+        "shrine" to listOf("उन्होंने प्राचीन मंदिर का दौरा किया।", "यह तीर्थस्थल अत्यंत शांतिपूर्ण है।", "लोग मजार पर फूल छोड़ते हैं।"),
+        "siblings" to listOf("क्या आपका कोई सगा भाई बहन है?", "मेरे भाई-बहन ओहियो में रहते हैं।", "वह तीन भाई-बहनों में सबसे छोटी हैं।"),
+        "sick" to listOf("मैं आज बीमार महसूस कर रहा हूं.", "वह फ्लू से बीमार है.", "बीमार को काम पर बुलाओ."),
+        "significance" to listOf("क्या इस तारीख का कोई महत्व है?", "मुझे इसका कोई महत्व नजर नहीं आता.", "इस घटना का बड़ा ऐतिहासिक महत्व था."),
+        "significant" to listOf("यह एक महत्वपूर्ण रकम है.", "यहां एक महत्वपूर्ण अंतर है.", "उन्होंने एक महत्वपूर्ण सुधार किया."),
+        "similarly" to listOf("वह मुस्कुराई, और वह भी वैसे ही मुस्कुराया।", "इसी तरह, हमें लागत पर भी विचार करना चाहिए।", "यह फोन की तरह ही काम करता है।"),
+        "singer" to listOf("वह एक पेशेवर गायिका हैं.", "आपका पसंदीदा गायक कौन है?", "गायक ने खूब धमाल मचाया।"),
+        "singing" to listOf("शॉवर में गाना बंद करो!", "उसे गायक मंडली में गाना पसंद है।", "मैंने पास में किसी को गाते हुए सुना।"),
+        "sister" to listOf("मेरी बहन एक डॉक्टर है.", "क्या आपकी कोई बड़ी बहन है?", "मैं अपनी बहन के साथ रहता हूं."),
+        "sit" to listOf("कृपया इस कुर्सी पर बैठें।", "क्या हम वहां बैठ सकते हैं?", "बस थोड़ी देर बैठो और आराम करो।"),
+        "six" to listOf("मैं छह बजे उठा.", "छह अंडे बचे हैं.", "वह छह साल का है."),
+        "size" to listOf("आप किस आकार के जूते पहनते हैं?", "यह शर्ट साइज़ में बहुत छोटी है.", "मुझे बड़े आकार की आवश्यकता है."),
+        "skepticism" to listOf("उन्होंने कुछ संदेह के साथ प्रतिक्रिया व्यक्त की।", "उसकी योजना को संदेह का सामना करना पड़ा।", "मैं दावे को संदेह की दृष्टि से देखता हूं।"),
+        "skill" to listOf("खाना पकाना एक उपयोगी कौशल है.", "उनके पास जबरदस्त तकनीकी कौशल है.", "शतरंज खेलने के लिए आपको कौशल की आवश्यकता है।"),
+        "skin" to listOf("रूखी त्वचा के लिए लोशन का प्रयोग करें।", "उसकी त्वचा बहुत पीली है.", "अपनी त्वचा को साबुन से धोएं."),
+        "skirt" to listOf("उन्होंने लंबी स्कर्ट पहनी हुई है.", "वह स्कर्ट तुम पर बहुत अच्छी लग रही है।", "मैंने एक नई डेनिम स्कर्ट खरीदी।"),
+        "sky" to listOf("नीले आकाश को देखो.", "आसमान धूसर हो रहा है.", "पक्षी आकाश में उड़ते हैं।"),
+        "sleep" to listOf("मैं थोड़ा सोना चाहता हूँ।", "क्या कल रात तुम अच्छे से सोए?", "अभी सो जाओ."),
+        "slow" to listOf("कृपया थोड़ा धीमी गति से गाड़ी चलाएं।", "आज इंटरनेट बहुत धीमा है.", "वह धीमी गति से पढ़ने वाला व्यक्ति है।"),
+        "small" to listOf("यह कमरा बहुत छोटा है.", "मुझे एक छोटी कॉफ़ी चाहिए.", "यह एक छोटी सी गलती है."),
+        "snake" to listOf("उस हरे साँप को देखो।", "एक साँप सरक रहा है.", "मुझे सांपों से डर लगता है."),
+        "snow" to listOf("बाहर ताज़ा बर्फ़ है.", "मुझे बर्फ में खेलना पसंद है.", "बर्फ तेज़ी से गिर रही है."),
+        "snowy" to listOf("वह एक ठंडी, बर्फीली रात थी।", "हम बर्फीले क्षेत्र में रहते हैं।", "पर्वत शिखर बर्फीला है."),
+        "so" to listOf("बारिश हो रही थी इसलिए मैं रुक गया।", "मैं आज बहुत थक गया हूँ.", "आज मै बहुत बहुत खुश हु।"),
+        "social media" to listOf("मैं सोशल मीडिया का ज्यादा इस्तेमाल नहीं करता.", "उन्होंने इसे सोशल मीडिया पर पोस्ट किया.", "सोशल मीडिया बहुत ध्यान भटकाने वाला हो सकता है।"),
+        "society" to listOf("हम एक आधुनिक समाज में रहते हैं।", "वह समाज की मदद करना चाहता है.", "यह समाज में एक सामान्य नियम है।"),
+        "socks" to listOf("मेरे साफ़ मोज़े कहाँ हैं?", "ये ऊनी मोज़े बहुत गर्म होते हैं।", "मुझे नए मोज़े खरीदने हैं."),
+        "sofa" to listOf("कृपया सोफ़े पर बैठें।", "सोफा बहुत आरामदायक है.", "वह सोफे पर सो गया."),
+        "soil" to listOf("यह मिट्टी पौधों के लिए बहुत अच्छी होती है।", "यहां की मिट्टी बहुत सूखी है.", "बीज को मिट्टी में डालें."),
+        "some" to listOf("मैं कुछ पानी की जरूरत है।", "क्या आप कुछ नाश्ता ला सकते हैं?", "कुछ लोग इंतज़ार कर रहे हैं."),
+        "sometimes" to listOf("कभी-कभी मुझे दुख होता है.", "यहाँ कभी-कभी बर्फबारी होती है।", "कभी-कभी उसे देर हो जाती है."),
+        "son" to listOf("मेरा बेटा कल से स्कूल जाना शुरू करेगा।", "वह इकलौता बेटा है.", "उनका बेटा लंदन में रहता है."),
+        "son-in-law" to listOf("मेरा दामाद डॉक्टर है.", "उन्हें अपना दामाद पसंद है.", "दामाद ने हमें आगे बढ़ने में मदद की."),
+        "sorry" to listOf("देरी के लए माफी चाहता हूँ।", "क्षमा करें, मैंने आपको नहीं देखा।", "उसे कुत्ते पर दया आ गई।"),
+        "soup" to listOf("यह टमाटर का सूप बहुत स्वादिष्ट है.", "मुझे सूप का एक कटोरा चाहिए.", "सूप बहुत गर्म है."),
+        "souvenir" to listOf("मैंने पेरिस से एक स्मारिका खरीदी।", "यह चाबी का गुच्छा एक बेहतरीन स्मारिका है।", "क्या आपको कोई स्मृति चिन्ह मिला?"),
+        "sovereignty" to listOf("देश ने अपनी संप्रभुता के लिए लड़ाई लड़ी.", "वे भूमि पर संप्रभुता का दावा करते हैं।", "संप्रभुता स्वतंत्रता की कुंजी है।"),
+        "sparrow" to listOf("एक छोटी सी गौरैया यहाँ उतरी।", "गौरैया जोर-जोर से गा रही है।", "मैंने पेड़ पर एक गौरैया देखी।"),
+        "speak" to listOf("क्या आप अंग्रेजी बोल सकते हैं?", "कृपया और धीमा बोलें।", "मुझे उससे बात करनी है."),
+        "sport" to listOf("आपका पसंदीदा खेल क्या है?", "बास्केटबॉल एक लोकप्रिय खेल है.", "वह हर सप्ताहांत खेल खेलता है।"),
+        "squirrel" to listOf("एक गिलहरी पेड़ पर चढ़ रही है.", "गिलहरी को एक अखरोट मिला.", "उस अजीब गिलहरी को देखो."),
+        "stairs" to listOf("कृपया सीढ़ियाँ चढ़ें।", "वह सीढ़ियों से नीचे भागा.", "सीढ़ियाँ लकड़ी से बनी हैं।"),
+        "stand" to listOf("कृपया पंक्ति में खड़े रहें.", "मैं ज्यादा देर तक खड़ा नहीं रह सकता.", "अब आप कहां खड़े हैं?"),
+        "star" to listOf("उस चमकीले तारे को देखो.", "वह एक फिल्म स्टार हैं.", "आज रात सितारे खूबसूरत हैं।"),
+        "station" to listOf("मुझसे रेलवे स्टेशन पर मिलो.", "कौन सा स्टेशन आपके सबसे नजदीक है?", "बस स्टेशन पर बहुत भीड़ है."),
+        "stipulate" to listOf("नियम एक सख्त समय सीमा निर्धारित करते हैं।", "क्या अनुबंध में कोई कीमत निर्धारित है?", "कृपया भुगतान की शर्तें निर्धारित करें।"),
+        "stomach" to listOf("उस भोजन के बाद मेरे पेट में दर्द होता है।", "आज मेरे पेट में घबराहट है.", "उसे पेट का फ्लू है."),
+        "stone" to listOf("यह दीवार पत्थर से बनी है.", "उसे नदी का एक चिकना पत्थर मिला।", "तालाब में पत्थर न फेंके।"),
+        "storm" to listOf("आज रात बहुत बड़ा तूफ़ान आने वाला है.", "तूफान के दौरान हम अंदर ही रहे।", "तूफ़ान ने एक पेड़ को गिरा दिया."),
+        "story" to listOf("मुझे बचपन के बारे में एक कहानी बताओ.", "वह बहुत दुखद कहानी है.", "उसकी कहानी सच नहीं लगती."),
+        "strawberry" to listOf("मुझे स्ट्रॉबेरी मिल्कशेक चाहिए.", "यह स्ट्रॉबेरी बहुत मीठी होती है.", "क्या आपको स्ट्रॉबेरी जैम पसंद है?"),
+        "streamline" to listOf("हमें अपनी प्रक्रिया को सुव्यवस्थित करने की आवश्यकता है।", "यह अद्यतन वर्कफ़्लो को सुव्यवस्थित करेगा.", "आइए चेक-आउट प्रणाली को सुव्यवस्थित करें।"),
+        "street" to listOf("मैं एक शांत सड़क पर रहता हूँ.", "सड़क पार करने से पहले दोनों तरफ देख लें।", "सड़क कारों से अवरुद्ध है."),
+        "stress" to listOf("काम के कारण मुझे बहुत तनाव हो रहा है।", "मैं इतना तनाव नहीं झेल सकता.", "अपने दैनिक तनाव को कम करने का प्रयास करें।"),
+        "strong" to listOf("वह इसे उठाने के लिए काफी मजबूत है।", "यह कॉफ़ी बहुत तेज़ है.", "उनका एक मजबूत व्यक्तित्व है."),
+        "stubborn" to listOf("मेरी बिल्ली बहुत जिद्दी है.", "इसके बारे में इतना जिद्दी होना बंद करो.", "वह माफी मांगने के लिए बहुत जिद्दी है।"),
+        "student" to listOf("वह एक मेहनती मेडिकल छात्रा हैं।", "प्रत्येक विद्यार्थी को एक पेन लाना होगा।", "मैं दस साल पहले एक छात्र था."),
+        "study" to listOf("मुझे परीक्षा के लिए अध्ययन करना है.", "आप आमतौर पर कहाँ पढ़ते हैं?", "वह कॉलेज में फ्रेंच पढ़ रही है।"),
+        "subject" to listOf("गणित मेरा पसंदीदा स्कूल विषय है।", "चलिए अब विषय बदलते हैं.", "यह बहुत जटिल विषय है."),
+        "subsequently" to listOf("उन्होंने इस्तीफा दे दिया और बाद में शहर छोड़ दिया।", "त्रुटि उत्पन्न हुई और बाद में क्रैश हो गया।", "वह असफल रही और बाद में फिर से प्रयास किया।"),
+        "substantial" to listOf("भारी मात्रा में कर्ज है.", "हमने आज पर्याप्त प्रगति की है।", "घर को काफी नुकसान हुआ."),
+        "substantiate" to listOf("क्या आप अपना दावा प्रमाणित कर सकते हैं?", "इसकी पुष्टि के लिए उनके पास कोई सबूत नहीं था।", "कृपया डेटा के साथ अपने सिद्धांत की पुष्टि करें।"),
+        "sugar" to listOf("क्या आप अपनी चाय में चीनी लेते हैं?", "इस केक में बहुत ज्यादा चीनी है.", "कृपया मुझे चीनी का कटोरा दे दीजिए।"),
+        "sum up" to listOf("संक्षेप में, हमें और समय चाहिए।", "क्या आप मुख्य बिंदुओं को संक्षेप में बता सकते हैं?", "मुझे बैठक का सारांश बताने दीजिए।"),
+        "sun" to listOf("आज सूरज बहुत चमकीला है.", "सीधे सूर्य की ओर न देखें.", "सूर्य पश्चिम में अस्त होता है।"),
+        "sunday" to listOf("मैं आमतौर पर रविवार को आराम करता हूं।", "रविवार मेरा पसंदीदा दिन है.", "हम हर रविवार को दादी से मिलने जाते हैं।"),
+        "sunny" to listOf("यह एक खूबसूरत धूप वाला दिन है।", "मुझे जुलाई में धूप वाला मौसम पसंद है।", "अगर धूप हो तो टोपी पहनें।"),
+        "sunny then rain" to listOf("धूप होगी फिर बारिश होगी.", "कल धूप फिर बारिश की उम्मीद है।", "पूर्वानुमान कहता है धूप खिलेगी फिर बारिश होगी।"),
+        "sunshine" to listOf("मुझे गर्म धूप महसूस करना अच्छा लगता है।", "कमरा धूप से भर गया है.", "हमने दिन धूप में बिताया।"),
+        "supermarket" to listOf("मुझे सुपरमार्केट जाना है.", "सुपरमार्केट आधी रात तक खुला रहता है।", "सुपरमार्केट के प्रवेश द्वार पर मुझसे मिलें।"),
+        "support" to listOf("मैं वास्तव में आपके भावनात्मक समर्थन की सराहना करता हूं।", "क्या यह फ़ोन वायरलेस चार्जिंग को सपोर्ट करता है?", "वे स्थानीय फुटबॉल टीम का समर्थन करते हैं।"),
+        "sushi" to listOf("आइए कुछ सैल्मन सुशी ऑर्डर करें।", "मुझे ताज़ी सुशी खाना बहुत पसंद है।", "क्या आपको अदरक वाली सुशी पसंद है?"),
+        "sustainability" to listOf("कंपनी पर्यावरणीय स्थिरता पर ध्यान केंद्रित करती है।", "स्थिरता हमारे भविष्य के लिए महत्वपूर्ण है।", "वे हमें स्थिरता के बारे में सिखा रहे हैं।"),
+        "sustainable" to listOf("हमें अधिक टिकाऊ ऊर्जा स्रोतों की आवश्यकता है।", "क्या यह पैकेजिंग सचमुच टिकाऊ है?", "वे टिकाऊ खेती के तरीकों का उपयोग करते हैं।"),
+        "sweater" to listOf("स्वेटर पहन लो, ठंड है.", "यह ऊनी स्वेटर बहुत मुलायम है।", "मैंने एक नया नीला स्वेटर खरीदा।"),
+        "swim" to listOf("क्या आप इस झील में तैर सकते हैं?", "मुझे हर सुबह तैरना पसंद है.", "चलो जल्दी से तैरने चलें।"),
+        "swimsuit" to listOf("अपना स्विमसूट पैक करना न भूलें।", "यह स्विमसूट थोड़ा छोटा है.", "उसने एक नया लाल स्विमसूट खरीदा।"),
+        "synthesize" to listOf("हमें डेटा को संश्लेषित करने की आवश्यकता है।", "वैज्ञानिक इस प्रोटीन का संश्लेषण कर सकते हैं।", "इन विचारों को संश्लेषित करना कठिन है।"),
+        "t-shirt" to listOf("मैंने सफ़ेद टी-शर्ट पहन रखी है.", "यह टी-शर्ट कॉटन से बनी है।", "मेरी पसंदीदा टी-शर्ट कहाँ है?"),
+        "table" to listOf("कृपया चाबियाँ मेज पर रख दें।", "यह डाइनिंग टेबल ओक से बनी है।", "टेबल हमारे लिए बहुत छोटी है."),
+        "take" to listOf("अपना छाता अपने साथ ले जाओ.", "मैं रोजाना बस लेता हूं।", "कृपया गहरी सांस लें."),
+        "taxi" to listOf("मैं तुम्हारे लिए टैक्सी बुलाऊंगा.", "टैक्सी बाहर इंतज़ार कर रही है.", "टैक्सी का किराया कितना है?"),
+        "tea" to listOf("क्या आप कुछ हरी चाय चाहेंगे?", "मैं रोज सुबह चाय पीता हूं.", "यह चाय बहुत गर्म है."),
+        "teach" to listOf("क्या आप मुझे खाना बनाना सिखा सकते हैं?", "वह अगले वर्ष अंग्रेजी पढ़ायेंगी।", "मैं अपने बच्चों को पढ़ाना चाहता हूं."),
+        "teacher" to listOf("मेरे गणित शिक्षक बहुत सख्त हैं।", "वह प्राथमिक विद्यालय के एक महान शिक्षक हैं।", "मदद के लिए अपने शिक्षक से पूछें."),
+        "television" to listOf("अब टेलीविजन बंद कर दीजिए.", "मेरा टेलीविजन बहुत छोटा है.", "क्या आपके पास टेलीविजन है?"),
+        "temperature" to listOf("तापमान तेजी से गिर रहा है.", "कमरे का तापमान जांचें.", "उसका तापमान बहुत ज्यादा है."),
+        "temple" to listOf("हमने एक प्राचीन मंदिर का दौरा किया।", "मंदिर बहुत शांत है.", "वे एक नया मंदिर बना रहे हैं."),
+        "ten" to listOf("मेरे पास दस डॉलर बचे हैं.", "पैदल चलने में दस मिनट लगते हैं.", "वह दस वर्ष आयु का है।"),
+        "tenuous" to listOf("उनका संबंध काफी कमजोर है.", "यह एक कमजोर कड़ी है.", "सबूत बहुत कमज़ोर है."),
+        "thank you" to listOf("आपकी मदद के लिए आपको धन्यवाद।", "तुम्हारे उपहार के लिए धन्यवाद।", "नहीं, बहुत बहुत धन्यवाद."),
+        "that" to listOf("मुझे वह लाल पोशाक चाहिए.", "यह एक बढ़िया विचार है।", "किसने कहा तुमसे ये?"),
+        "the" to listOf("सूरज बहुत चमकीला है.", "मुझे रिमोट कंट्रोल दे दो।", "दुकान नौ बजे बंद हो जाती है।"),
+        "the crux of the matter" to listOf("यही मामले की जड़ है.", "हमें मामले की जड़ मिल गई.", "आइए मामले की जड़ पर गौर करें।"),
+        "theme" to listOf("पार्टी में बीच थीम है.", "मुख्य विषय क्या है?", "यह फिल्म एक डार्क थीम पर आधारित है।"),
+        "then" to listOf("पहले खाना, फिर सोना.", "फिर क्या हुआ?", "फिर हम घर चाहते हैं।"),
+        "theory" to listOf("मेरा सिद्धांत यह है कि उसने झूठ बोला।", "यह एक जंगली सिद्धांत है.", "सिद्धांत अब प्रशंसनीय लगता है।"),
+        "there" to listOf("उधर देखो।", "वहाँ एक बड़ा कुत्ता है.", "मेरे वहां जाना होगा।"),
+        "these" to listOf("ये जूते बहुत छोटे हैं.", "क्या ये अच्छे लगते हैं?", "मैंने इन्हें कल खरीदा।"),
+        "think" to listOf("मुझे लगता है हमें चले जाना चाहिए.", "क्या आपको लगता है बारिश होगी?", "मुझे सोचने के लिए समय चाहिए."),
+        "thirsty" to listOf("आज मुझे बहुत प्यास लगी है.", "क्या आपको प्यास लग रही है?", "प्यास लगे तो पानी पियें."),
+        "thirteen" to listOf("यहां तेरह लोग हैं.", "वह तेरह साल की है.", "मेरे पास भेजने के लिए तेरह ईमेल हैं।"),
+        "those" to listOf("वे सेब पके हुए दिखते हैं।", "वे लोग कौन हैं?", "उन किताबों को दूर रख दो."),
+        "thousand" to listOf("एक हजार लोग आये.", "इसकी कीमत एक हजार यूरो है.", "वह एक हजार मीटर दौड़ा।"),
+        "three" to listOf("मेरे पास तीन कुत्ते हैं।", "मुझे तीन मिनट और दीजिए.", "उनके तीन बच्चे हैं."),
+        "throat" to listOf("मेरा गला बहुत ख़राब लग रहा है.", "उनके गले में गांठ है.", "गले के लिए चाय पियें."),
+        "thunder" to listOf("मैं गड़गड़ाहट सुन सकता हूँ.", "गड़गड़ाहट बहुत तेज़ थी.", "गड़गड़ाहट बिजली का पीछा करती है।"),
+        "thursday" to listOf("अगले गुरुवार को मिलते हैं.", "गुरुवार मेरा सबसे व्यस्त दिन है.", "यह पिछले गुरुवार को हुआ."),
+        "thus" to listOf("इस प्रकार, योजना विफल हो गई।", "उसने झूठ बोला और इस तरह विश्वास खो दिया।", "इस प्रकार यह निर्णय लिया गया है।"),
+        "ticket" to listOf("क्या आपके पास अपना टिकट है?", "मैंने एक ट्रेन टिकट खरीदा.", "कृपया मुझे अपना टिकट दिखाएँ।"),
+        "tiger" to listOf("बाघ अब शिकार कर रहा है.", "उस नारंगी बाघ को देखो.", "बाघ जंगल में रहते हैं."),
+        "time" to listOf("अब समय क्या है?", "आज मेरे पास समय नहीं है.", "यह जाने का समय है।"),
+        "tired" to listOf("मैं खाना बनाने के लिए बहुत थक गई हूं.", "आज आप सचमुच थके हुए लग रहे हैं.", "वह जिम के बाद थका हुआ था।"),
+        "to" to listOf("मुझे घर जाना हे।", "किताब उसे दे दो.", "हम पार्क की ओर चल दिये।"),
+        "today" to listOf("तुम आज क्या कर रहे हो?", "आज मेरी एक मीटिंग है.", "आज का दिन बहुत व्यस्त है."),
+        "toe" to listOf("मैंने अपने बड़े पैर का अंगूठा दबा लिया।", "उसके पैर के अंगूठे में दर्द है.", "दौड़ते समय उसके पैर के अंगूठे में चोट लग गई।"),
+        "toilet" to listOf("निकटतम शौचालय कहाँ है?", "शौचालय हॉल के नीचे है.", "कृपया अतिथि शौचालय साफ़ करें।"),
+        "tomorrow" to listOf("मैं आपसे कल मिलूंगा।", "क्या मीटिंग कल सुबह है?", "चलो कल पार्क में चलते हैं।"),
+        "tongue" to listOf("चाय से उसकी जीभ जल गई.", "कुत्ते ने मेरी जीभ चाट ली.", "एक सेकंड के लिए अपनी जीभ रोकें।"),
+        "too" to listOf("बाहर बहुत गर्मी है.", "यह शर्ट बहुत बड़ी है.", "मैं भी आना चाहता हूँ."),
+        "tooth" to listOf("मेरा एक दांत ढीला है.", "मेरे सामने वाले दाँत में सचमुच दर्द हो रहा है।", "वह दंत चिकित्सक के पास गया."),
+        "tourist" to listOf("वह यहां सिर्फ एक पर्यटक है.", "शहर पर्यटकों से भरा हुआ है.", "वह एक आम पर्यटक की तरह दिखता है।"),
+        "tower" to listOf("घंटाघर बहुत पुराना है।", "वह टावर बहुत ऊंचा है.", "हम वॉच टावर पर चढ़ गये."),
+        "town" to listOf("यह एक छोटा सा शांत शहर है.", "मैं पास के कस्बे में रहता हूँ.", "चलो रात के खाने के लिए शहर चलें।"),
+        "tradition" to listOf("यह एक पारिवारिक परंपरा है.", "हम छुट्टियों की परंपरा कायम रखते हैं।", "वह परंपरा बहुत पुरानी है."),
+        "train" to listOf("मैं रोज ट्रेन पकड़ता हूं.", "ट्रेन दस मिनट लेट थी.", "लंदन कौन सी ट्रेन जाती है?"),
+        "travel" to listOf("मुझे अकेले यात्रा करना पसंद है.", "वे अक्सर काम के सिलसिले में यात्रा करते हैं।", "क्या आप हवाई जहाज़ से यात्रा करते हैं?"),
+        "treaty" to listOf("दोनों देशों ने एक संधि पर हस्ताक्षर किये.", "यह एक शांति संधि थी.", "उन्होंने पुरानी संधि तोड़ दी."),
+        "tree" to listOf("बिल्ली पेड़ पर है.", "वह पेड़ बहुत तेजी से बढ़ता है.", "हम एक बड़े पेड़ के नीचे बैठे।"),
+        "trend" to listOf("वह फैशन ट्रेंड खत्म हो गया है.", "यह एक बढ़ती प्रवृत्ति है.", "मैं हर ट्रेंड को फॉलो नहीं करता."),
+        "trousers" to listOf("ये पतलून बहुत लंबे हैं.", "उन्होंने आज काली पतलून पहनी थी.", "मेरी ग्रे पतलून कहाँ हैं?"),
+        "trust" to listOf("मुझे अपने जीवन पर उस पर भरोसा है।", "आप उसकी बात पर भरोसा नहीं कर सकते.", "यहां अपनी अंतरात्मा की भावना पर भरोसा करें।"),
+        "tsunami" to listOf("सुनामी तट से टकराई।", "सुनामी एक विशाल लहर है।", "उन्होंने हमें सुनामी के बारे में चेतावनी दी।"),
+        "tuesday" to listOf("मंगलवार को मेरी परीक्षा है.", "हम हर दूसरे मंगलवार को मिलते हैं।", "मंगलवार सबसे बुरा दिन है."),
+        "turn down" to listOf("कृपया संगीत बंद कर दें.", "उन्होंने नौकरी का प्रस्ताव ठुकरा दिया.", "आंच को थोड़ा कम कर दें."),
+        "turtle" to listOf("वह कछुआ बहुत धीरे-धीरे चलता है।", "मैंने समुद्र तट पर एक कछुआ देखा।", "कछुओं के कवच कठोर होते हैं।"),
+        "twelve" to listOf("बारह बज चुके हैं.", "उसने बारह लाल गुलाब खरीदे।", "कार्टन में बारह अंडे हैं।"),
+        "twenty" to listOf("इसकी कीमत बीस डॉलर है.", "वह बीस साल का है.", "मेरे पास पढ़ने के लिए बीस पेज हैं।"),
+        "twice" to listOf("मैंने उसे दो बार फोन किया.", "अपने दांतों को दिन में दो बार ब्रश करें।", "ऐसा दो बार हुआ."),
+        "two" to listOf("मेरी दो बहनें हैं।", "क्या मुझे दो कॉफ़ी मिल सकती हैं?", "वहां पहुंचने में दो घंटे लगते हैं."),
+        "typhoon" to listOf("तूफ़ान कल तट से टकराया।", "तूफ़ान के दौरान हम अंदर ही रहे।", "कल एक तेज़ तूफ़ान आने वाला है."),
+        "ubiquitous" to listOf("स्मार्टफोन इन दिनों सर्वव्यापी हैं।", "इस शहर में कॉफ़ी की दुकानें सर्वव्यापी हैं।", "समुद्र में प्लास्टिक कचरा सर्वव्यापी है।"),
+        "umbrella" to listOf("अपने साथ एक छाता ले जाएं.", "मेरा छाता टूट गया है.", "उसने अपना काला छाता खोला।"),
+        "uncle" to listOf("मेरे चाचा न्यूयॉर्क में रहते हैं।", "वह मेरे पिता का भाई है.", "मैं पिछले सप्ताहांत अपने चाचा से मिलने गया।"),
+        "under" to listOf("बिल्ली बिस्तर के नीचे है.", "इसे टेबल के नीचे रख दें.", "मैं दबाव में हूं."),
+        "understand" to listOf("मुझे यह शब्द समझ नहीं आता.", "क्या आप नियम समझते हैं?", "मुझे समझ आता है आप कैसा महसूस करते हैं।"),
+        "unequivocal" to listOf("उनका उत्तर स्पष्ट रूप से हाँ था।", "साक्ष्य ने स्पष्ट प्रमाण प्रदान किया।", "उसने स्पष्ट आदेश दिया।"),
+        "university" to listOf("वह यूनिवर्सिटी में पढ़ रही है.", "आप किस विश्वविद्यालय में जाते हैं?", "उन्होंने एक शीर्ष विश्वविद्यालय से स्नातक किया।"),
+        "up" to listOf("ऊपर आसमान में देखो।", "उठो, बहुत देर हो गयी है.", "बक्सा ऊपर उठाओ."),
+        "use" to listOf("क्या मुझे आपक फोन इस्तेमाल करने की आज्ञा है?", "मैं हर दिन इस ऐप का उपयोग करता हूं।", "आप इस टूल का उपयोग कैसे करते हैं?"),
+        "usually" to listOf("मैं आमतौर पर चाय पीता हूं.", "वह आमतौर पर छह बजे आता है।", "हम आम तौर पर पैदल घर जाते हैं।"),
+        "vacuum cleaner" to listOf("वैक्यूम क्लीनर बहुत तेज़ है.", "मुझे एक नया वैक्यूम क्लीनर चाहिए.", "वैक्यूम क्लीनर को दूर रख दें."),
+        "validity" to listOf("टिकट की वैधता ख़त्म हो गई.", "मैं इस दावे की वैधता पर सवाल उठाता हूं।", "पासपोर्ट की वैधता की जांच करें."),
+        "variable" to listOf("मौसम निरंतर परिवर्तनशील है.", "कीमत यहां एक प्रमुख चर है।", "इस प्रयोग का एक मुख्य चर है."),
+        "vegetable garden" to listOf("हमारे पास एक छोटा सा सब्जी का बगीचा है।", "वह सब्जी के बगीचे में काम करता है।", "सब्जी के बगीचे में बीज बोयें।"),
+        "vegetables" to listOf("हरी सब्जियाँ अधिक खायें।", "मैंने कुछ ताज़ी सब्जियाँ खरीदीं।", "क्या आपको पकी हुई सब्जियाँ पसंद हैं?"),
+        "verdict" to listOf("जूरी एक फैसले पर पहुंची.", "हम फैसले का इंतजार कर रहे हैं.", "फैसला आश्चर्यचकित करने वाला था."),
+        "very" to listOf("यह कमरा बहुत ठंडा है.", "वह बहुत लंबा है.", "बहुत थक गई हूं।"),
+        "viable" to listOf("यह कोई व्यवहार्य योजना नहीं है.", "हमें एक व्यवहार्य समाधान की आवश्यकता है.", "क्या यह परियोजना अभी भी व्यवहार्य है?"),
+        "virtue" to listOf("धैर्य एक महान गुण है.", "वह ईमानदारी को एक गुण के रूप में महत्व देती है।", "दयालुता उसका सबसे बड़ा गुण है."),
+        "volcano" to listOf("ज्वालामुखी पिछले साल फटा था.", "क्या वह ज्वालामुखी अभी भी सक्रिय है?", "हमने ज्वालामुखी तक पैदल यात्रा की।"),
+        "volunteer" to listOf("मैं आज स्वयंसेवा करना चाहता हूं।", "वह एक अस्पताल की स्वयंसेवक हैं।", "क्या आप स्वयंसेवक बनना चाहते हैं?"),
+        "waist" to listOf("यह बेल्ट बहुत टाइट है.", "यह ड्रेस उनकी कमर पर फिट बैठती है।", "उन्होंने चौड़ी बेल्ट पहनी थी."),
+        "wait" to listOf("कृपया बस का इंतजार करें.", "मेरे लिए अब और इंतजार करना मुश्किल है।", "बस कुछ मिनट प्रतीक्षा करें."),
+        "waiter" to listOf("वेटर खाना लेकर आया.", "हमारा वेटर बहुत मिलनसार था।", "वेटर को यहाँ बुलाओ।"),
+        "wake up" to listOf("मैं छह बजे उठता हूं.", "कृपया बच्चों को जगाएं.", "आप कितने बजे उठता है?"),
+        "walk" to listOf("चलो थोड़ी सैर करें.", "मैं रोजाना काम पर पैदल जाता हूं।", "क्या आप कुत्ते को घुमा सकते हैं?"),
+        "wall" to listOf("दीवार को सफेद रंग से रंगा गया है.", "तस्वीर को दीवार पर लटकाएं.", "यहाँ एक दीवार है."),
+        "wallet" to listOf("मेरा बटुआ पूरी तरह से खाली है.", "उसका चमड़े का बटुआ खो गया।", "पैसे अपने बटुए में रखो."),
+        "want" to listOf("मैं एक गिलास पानी चाहता हूं।", "क्या आपको कुछ केक चाहिए?", "वे घर जाना चाहते हैं."),
+        "wardrobe" to listOf("मेरी अलमारी कपड़ों से भरी है.", "उसने एक नई अलमारी खरीदी।", "इसे अलमारी में रख दो."),
+        "warm" to listOf("सूप बहुत गरम है.", "बच्चे को गर्म रखें.", "यह गर्म दिन है."),
+        "wash" to listOf("अपने हाथ साबुन से धोएं.", "मुझे अपनी कार धोनी है.", "क्या तुमने बर्तन धोये?"),
+        "washbasin" to listOf("वॉशबेसिन से पानी रिस रहा है.", "साबुन को वॉशबेसिन में डालें।", "वॉशबेसिन को आज ही साफ़ करें."),
+        "washing machine" to listOf("वॉशिंग मशीन की आवाज़ तेज़ है.", "तौलिये को मशीन में डालें।", "मेरी वॉशिंग मशीन टूट गई है."),
+        "waste" to listOf("अपना समय बर्बाद मत करो।", "यह पैसे की बर्बादी है.", "पानी बर्बाद करना बंद करो."),
+        "water" to listOf("क्या मुझे थोड़ा पानी मिल सकता है?", "पानी बहुत ठंडा है.", "आज खूब पानी पियें."),
+        "watermelon" to listOf("मुझे ठंडा तरबूज खाना बहुत पसंद है.", "तरबूज़ को क्यूब्स में काटें।", "तरबूज मेरा पसंदीदा फल है."),
+        "weak" to listOf("मेरे पैर बहुत कमज़ोर महसूस हो रहे हैं.", "यह गोंद बहुत कमजोर है.", "वह चलने में बहुत कमजोर है."),
+        "wear" to listOf("मुझे आज रात क्या पहनना चाहिए?", "मैं पढ़ने के लिए चश्मा पहनता हूं।", "वो पुराने जूते मत पहनो."),
+        "weather" to listOf("आज मौसम सुहावना है.", "मुझे इस बरसाती मौसम से नफरत है.", "कल मौसम कैसा रहेगा?"),
+        "website" to listOf("उनकी वेबसाइट बहुत धीमी है.", "कीमतों के लिए वेबसाइट देखें.", "मुझे यह एक वेबसाइट पर मिला."),
+        "wednesday" to listOf("बुधवार सुबह मिलते हैं.", "बुधवार मेरा सबसे व्यस्त दिन है।", "हम हर बुधवार को मिलते हैं."),
+        "week" to listOf("मैं अगले सप्ताह दूर रहूँगा।", "यह एक लंबा सप्ताह रहा है.", "मैं सप्ताह में चालीस घंटे काम करता हूं।"),
+        "weekend" to listOf("आपके सप्ताहांत की क्या योजनाएं हैं?", "मैंने सप्ताहांत में आराम किया।", "सप्ताहांत तेजी से बीतता है।"),
+        "well" to listOf("वह पियानो अच्छा बजाता है।", "मुझे अच्छा महसूस नहीं हो रहा है.", "सब कुछ अच्छा हो जायेगा."),
+        "whale" to listOf("हमने एक विशाल व्हेल देखी।", "वह व्हेल तैर कर दूर जा रही है.", "ब्लू व्हेल वास्तव में विशाल हैं।"),
+        "what" to listOf("आपका क्या नाम है?", "आप क्या कर रहे हो?", "मैं नहीं जानता कि मैं क्या कहूं।"),
+        "when" to listOf("तुम कब जागते हो?", "जब आप आये तब मुझे फोन करे।", "जब यह हुआ तब मैं छोटा था।"),
+        "where" to listOf("आप कहाँ रहते हैं?", "मुझे पता है यह कहां है.", "इसे वहीं रखें जहां यह है."),
+        "whereas" to listOf("उसे चाय पसंद है, जबकि उसे कॉफ़ी पसंद है।", "मैं लम्बा हूँ, जबकि मेरे पिता छोटे हैं।", "ये सस्ता है, वो महंगा है."),
+        "whereby" to listOf("यह एक ऐसी प्रणाली है जिसके द्वारा हम कार्य साझा करते हैं।", "उन्होंने एक ऐसी प्रक्रिया बनाई जिससे डेटा सहेजा जाता है।", "हमें एक ऐसे कानून की जरूरत है जिससे लोग वोट कर सकें।"),
+        "while" to listOf("जब मैं खाना बना रही हूँ तब पढ़ो।", "बारिश होने पर वह सो गया।", "जब तक मैं समझाता हूँ, सुनो।"),
+        "whilst" to listOf("भोजन करते समय बात न करें।", "जब वह बोल रही थी तो मैंने सुना।", "प्रतीक्षा करते समय पुस्तक पढ़ें।"),
+        "who" to listOf("वह आदमी कौन है?", "मुझे पता है ये किसने किया.", "कौन केक चाहता है?"),
+        "why" to listOf("तुम क्यों हंस रहे हो?", "मुझे बताओ तुम क्यों चले गए?", "ऐसा क्यों हुआ?"),
+        "wide" to listOf("नदी बहुत चौड़ी है.", "अपनी आँखें पूरी तरह खोलो.", "यह सड़क बहुत चौड़ी है."),
+        "wife" to listOf("मेरी पत्नी एक डॉक्टर है.", "वह अपनी पत्नी से बेहद प्यार करता है।", "उनकी पत्नी बहुत अच्छी कुक हैं."),
+        "will" to listOf("में कल तुम्हें फोन करुंगा।", "यह जल्द ही यहां होगा.", "वे छह बजे पहुंचेंगे."),
+        "wind" to listOf("हवा तेज़ चल रही है.", "एक ठंडी हवा ने हम पर प्रहार किया।", "हवा ने पेड़ को गिरा दिया।"),
+        "window" to listOf("कृपया शयनकक्ष की खिड़की बंद कर दें।", "खिड़की के बाहर देखो।", "खिड़की टूट गयी है."),
+        "windy" to listOf("खेलने के लिए बहुत तेज़ हवा है।", "आज बहुत तूफानी दिन है.", "अपनी टोपी रखो, हवा चल रही है।"),
+        "with" to listOf("मैं अपने दोस्त के साथ हूँ।", "इन कैंची से इसे काटो.", "मेरे साथ आओ।"),
+        "with a pinch of salt" to listOf("उनकी कहानियों को चुटकी भर नमक के साथ लें।", "मैं खबरों को चुटकी भर नमक के साथ लेता हूं।", "चुटकी भर नमक लगाकर उसकी बात सुनें।"),
+        "wolf" to listOf("भेड़िया चाँद को देखकर चिल्लाया।", "एक भेड़िया गाँव में घुस आया।", "भेड़िये बड़े झुंडों में शिकार करते हैं।"),
+        "work" to listOf("मुझे बहुत ज्यादा काम है।", "आप कहां काम करते हैं?", "काम पर जाने का समय हो गया है."),
+        "work out" to listOf("मैं जिम में वर्कआउट करता हूं.", "हमें इस पर काम करने की जरूरत है।", "क्या यह योजना काम करती है?"),
+        "worried" to listOf("मुझे परीक्षा की चिंता है.", "वह आज बहुत चिंतित लग रही थी.", "मेरे बारे में चिंता मत करो."),
+        "would" to listOf("क्या आप चाय लेंगे?", "यदि संभव हुआ तो मैं जाऊंगा।", "यह बहुत मददगार होगा।"),
+        "write" to listOf("कृपया अपना नाम यहां लिखें.", "मुझे एक ईमेल लिखना है.", "क्या आप कविता लिखते हैं?"),
+        "year" to listOf("आप सभी को नव वर्ष की शुभकामनाएं!", "मैं वहां एक साल तक रहा.", "यह साल बहुत अच्छा रहा."),
+        "yes" to listOf("हाँ मैं सहमत हूँ।", "हाँ, कृपया मेरी मदद करें।", "हाँ, बारिश हो रही है."),
+        "yesterday" to listOf("मैंने उसे कल दोपहर को देखा।", "कल छुट्टी थी.", "कल पूरे दिन बारिश होती रही."),
+        "younger brother" to listOf("मेरा छोटा भाई परेशान है.", "उनका एक छोटा भाई है.", "मैं अपने छोटे भाई के साथ फुटबॉल खेलता हूं।"),
+        "younger sister" to listOf("उसकी छोटी बहन पांच साल की है।", "मेरी छोटी बहन लंदन में रहती है.", "मैं अपनी छोटी बहन की पढ़ाई में मदद करता हूं।"),
+    ) }
+
+    private val POS: Map<String, String> = run {
+        val m = mutableMapOf<String, String>()
+        for (lesson in Oxford.lessons) {
+            for (w in lesson.words) {
+                val k = w.en.trim().lowercase()
+                if (k.isNotEmpty() && w.ipa.isNotEmpty() && !m.containsKey(k)) m[k] = w.ipa.trim().lowercase()
+            }
+        }
+        m
+    }
+
+    fun forWord(word: Word): List<String> = forWordText(word.en)
+
+    /** English example sentences translated into the language being learned. */
+    fun targetForWord(word: Word): List<String> =
+        forWord(word).map { Gloss.lookupTarget(it) ?: it }
+
+    fun forWordText(en: String): List<String> {
+        val key = normalize(en)
+        CURATED[key]?.let { return it }
+        return generated(key)
+    }
+
+    fun normalize(raw: String): String {
+        var w = raw.trim().lowercase()
+        w = w.replace(Regex("\\([^)]*\\)"), " ").replace(Regex("\\s+"), " ").trim()
+        w = w.split(" / ")[0].trim()
+        if (w.startsWith("to ")) w = w.removePrefix("to ").trim()
+        return w
+    }
+
+    private fun generated(key: String): List<String> {
+        if (key.isEmpty()) return generic(key)
+        val pos = POS[key] ?: guessPos(key)
+        return when (pos) {
+            "noun" -> noun(key)
+            "verb", "linking verb" -> verb(key)
+            "adjective" -> adjective(key)
+            "adverb" -> adverb(key)
+            "preposition" -> preposition(key)
+            "conjunction" -> conjunction(key)
+            "determiner", "definite article", "indefinite article" -> determiner(key)
+            "pronoun" -> pronoun(key)
+            "number" -> number(key)
+            "ordinal number" -> ordinal(key)
+            "exclamation" -> exclamation(key)
+            "modal verb" -> modal(key)
+            "infinitive marker" -> listOf("I want to go home.", "She likes to sing.", "We plan to travel.")
+            else -> generic(key)
+        }
+    }
+
+    private fun guessPos(key: String): String = when {
+        key.endsWith("ly") -> "adverb"
+        key.endsWith("ing") || key.endsWith("tion") || key.endsWith("ness") ||
+            key.endsWith("ment") || key.endsWith("ance") -> "noun"
+        key.endsWith("ize") || key.endsWith("ise") || key.endsWith("ate") || key.endsWith("ify") -> "verb"
+        key.endsWith("ful") || key.endsWith("ous") || key.endsWith("ive") ||
+            key.endsWith("al") || key.endsWith("able") -> "adjective"
+        else -> "noun"
+    }
+
+    private fun noun(key: String): List<String> = listOf(
+        "We talked about $key in class today.",
+        "I read about $key in the newspaper.",
+        "Can you tell me more about $key?"
+    )
+
+    private fun verb(key: String): List<String> = when (key) {
+        "be" -> listOf("I want to be a doctor.", "Be careful with that glass.", "She will be here soon.")
+        "have" -> listOf("I have two brothers.", "She has a new car.", "We have a meeting today.")
+        "do" -> listOf("What do you do at work?", "I do my homework at night.", "Do you like coffee?")
+        "go" -> listOf("I go to school by bus.", "She wants to go home.", "We go to the park on Sundays.")
+        "come" -> listOf("Please come to my party.", "She comes home at six.", "They will come tomorrow.")
+        "make" -> listOf("I make coffee every morning.", "She made a cake for us.", "Can you make a plan?")
+        "take" -> listOf("I take the bus to work.", "She took my book by mistake.", "Take an umbrella with you.")
+        "get" -> listOf("I get up at seven.", "Did you get my message?", "She got a new phone.")
+        "see" -> listOf("I see you every day.", "She saw the movie last night.", "Can you see the sign?")
+        "know" -> listOf("I know the answer.", "Do you know her name?", "She knows how to swim.")
+        "say" -> listOf("What did you say?", "She says hello to everyone.", "He said it was fine.")
+        "think" -> listOf("I think it is a good idea.", "What do you think about this?", "She thinks you are right.")
+        else -> listOf(
+            "We need to $key the new plan.",
+            "I want to $key something useful today.",
+            "She will $key the first item on the list."
+        )
+    }
+
+    private fun adjective(key: String): List<String> = listOf(
+        "That was a really $key moment.",
+        "This plan sounds $key to me.",
+        "She looked $key in the photo."
+    )
+
+    private fun adverb(key: String): List<String> = when (key) {
+        "not" -> listOf("I am not feeling well.", "Do not touch that button.", "It is not too late.")
+        else -> listOf(
+            "He spoke $key during the meeting.",
+            "Please do it $key.",
+            "She finished the work $key."
+        )
+    }
+
+    private fun preposition(key: String): List<String> = when (key) {
+        "in" -> listOf("The keys are in my bag.", "He lives in a city.", "I will be there in ten.")
+        "on" -> listOf("The book is on the table.", "Put your coat on now.", "I am on my way.")
+        "at" -> listOf("Meet me at the station.", "He is at work now.", "I am at the door.")
+        "to" -> listOf("I want to go home.", "Give the book to her.", "We walked to the park.")
+        "from" -> listOf("I am from Canada.", "This gift is from Sarah.", "Walk away from the edge.")
+        "for" -> listOf("This gift is for you.", "I waited for two hours.", "Is this for sale?")
+        "with" -> listOf("I am with my friend.", "Cut it with these scissors.", "Come with me please.")
+        "by" -> listOf("I go to work by bus.", "The book was written by him.", "Stand by the door.")
+        "about" -> listOf("Tell me about your day.", "It is about five o'clock.", "I am thinking about it.")
+        "of" -> listOf("This is a cup of tea.", "He is a friend of mine.", "The color of the car is red.")
+        "into" -> listOf("The cat jumped into the box.", "Let's go into the room.", "He ran into the street.")
+        "through" -> listOf("We walked through the forest.", "The train goes through the tunnel.", "I looked through the window.")
+        "during" -> listOf("I fell asleep during the movie.", "It rained during the night.", "Be quiet during the class.")
+        "before" -> listOf("Wash your hands before dinner.", "I have seen this before.", "Please arrive before noon.")
+        "after" -> listOf("We went home after the party.", "She called me after work.", "I will rest after the exam.")
+        "between" -> listOf("The shop is between the bank and the park.", "Choose between the two.", "We sat between them.")
+        "under" -> listOf("The cat is under the table.", "The keys fell under the chair.", "We rested under a tree.")
+        "over" -> listOf("The plane flew over the city.", "She jumped over the wall.", "Let's talk it over.")
+        "above" -> listOf("The sun was above the clouds.", "Write your name above the line.", "The temperature is above normal.")
+        "below" -> listOf("The temperature is below zero.", "Look at the notes below.", "The flat is below my office.")
+        "across" -> listOf("The bridge goes across the river.", "She walked across the road.", "We live across the street.")
+        "along" -> listOf("We walked along the beach.", "There are shops along the road.", "Move along, please.")
+        "among" -> listOf("She sat among her friends.", "There is a spy among us.", "The house is hidden among the trees.")
+        "behind" -> listOf("The car is behind the house.", "He hid behind the door.", "She is behind in her work.")
+        "beside" -> listOf("Come sit beside me.", "The lamp is beside the bed.", "She stood beside her brother.")
+        "beyond" -> listOf("The village is beyond the hills.", "This is beyond my control.", "The school is beyond the bridge.")
+        "near" -> listOf("My house is near here.", "Stay near the exit.", "Is there a bank near?")
+        "since" -> listOf("I have lived here since 2020.", "It has been raining since morning.", "We have been friends since school.")
+        "until" -> listOf("Wait here until I return.", "The shop is open until nine.", "I worked until midnight.")
+        "towards" -> listOf("She walked towards the door.", "He ran towards the station.", "The boat moved towards the shore.")
+        "without" -> listOf("I can't live without my phone.", "She left without saying goodbye.", "Don't go out without a coat.")
+        "within" -> listOf("The package will arrive within a week.", "Stay within the marked area.", "You must finish within an hour.")
+        else -> listOf(
+            "We talked $key the new house.",
+            "I walked $key the station.",
+            "She lives $key the market."
+        )
+    }
+
+    private fun conjunction(key: String): List<String> = when (key) {
+        "and" -> listOf("I like tea and coffee.", "She sang and danced.", "Bread and butter are here.")
+        "but" -> listOf("I like it but it's pricey.", "He is small but strong.", "I tried but I failed.")
+        "or" -> listOf("Do you want tea or coffee?", "Red or blue, pick one.", "You can walk or take a bus.")
+        "so" -> listOf("It was raining so I stayed.", "I am so tired today.", "I am so happy today.")
+        "because" -> listOf("I slept because I was tired.", "She cried because she lost it.", "He smiled because he was happy.")
+        "if" -> listOf("If it rains, stay home.", "I will go if you go.", "Tell me if you need help.")
+        "when" -> listOf("When do you wake up?", "Call me when you arrive.", "I was young when it happened.")
+        "while" -> listOf("Read while I am cooking.", "He slept while it rained.", "Listen while I explain.")
+        "although" -> listOf("Although it was cold, we went out.", "Although he is rich, he is humble.", "Although tired, she kept working.")
+        "though" -> listOf("Though it was late, we kept talking.", "It is expensive, though worth it.", "Though small, the room is cozy.")
+        "unless" -> listOf("We will be late unless we hurry.", "I won't go unless you come.", "Unless it rains, we will play outside.")
+        "whereas" -> listOf("He likes tea, whereas she prefers coffee.", "I'm tall, whereas my dad is short.", "This is cheap, whereas that is expensive.")
+        "whilst" -> listOf("Don't talk whilst you are eating.", "I listened whilst she spoke.", "Read the book whilst you wait.")
+        "until" -> listOf("Wait here until I return.", "The shop is open until nine.", "I worked until midnight.")
+        "since" -> listOf("I have lived here since 2020.", "It has been raining since morning.", "We have been friends since school.")
+        "before" -> listOf("Wash your hands before dinner.", "I have seen this before.", "Please arrive before noon.")
+        "after" -> listOf("We went home after the party.", "She called me after work.", "I will rest after the exam.")
+        else -> listOf(
+            "I stayed home $key it was raining.",
+            "She smiled $key she was happy.",
+            "We left early $key we were tired."
+        )
+    }
+
+    private fun determiner(key: String): List<String> = when (key) {
+        "a" -> listOf("I have a small dog.", "She is a talented artist.", "Give me a hand here.")
+        "an" -> listOf("I ate an apple today.", "It was an honest mistake.", "Do you have an idea?")
+        "the" -> listOf("The sun is very bright.", "Pass me the remote control.", "The store closes at nine.")
+        "this" -> listOf("This book is interesting.", "I like this song.", "This is my friend.")
+        "that" -> listOf("That was a good idea.", "I saw that movie.", "That is my house.")
+        "these" -> listOf("These shoes are too small.", "Do these look good?", "I bought these yesterday.")
+        "those" -> listOf("Those apples look ripe.", "Who are those people?", "Put those books away.")
+        "some" -> listOf("I need some water.", "Can you bring some snacks?", "Some people are waiting.")
+        "any" -> listOf("Do you have any milk?", "Is there any hope?", "I don't see any.")
+        "each" -> listOf("Each student got a book.", "I checked each answer.", "Each day is different.")
+        "every" -> listOf("I exercise every morning.", "Every student passed the test.", "She calls me every week.")
+        "either" -> listOf("You can take either bus.", "Either answer is correct.", "I don't like either option.")
+        "neither" -> listOf("Neither answer is right.", "I like neither of them.", "Neither option works for me.")
+        "no" -> listOf("No, I cannot go.", "There is no time.", "No, that is wrong.")
+        "other" -> listOf("I met the other students.", "The other day I saw him.", "Do you have other plans?")
+        "another" -> listOf("Can I have another cup of tea?", "Let's try another way.", "I need another chair.")
+        "both" -> listOf("Both answers are correct.", "I like both of them.", "Both doors are open.")
+        "few" -> listOf("I have a few questions.", "Few people came today.", "A few friends visited me.")
+        "many" -> listOf("Many people like this song.", "How many books do you have?", "There are many stars tonight.")
+        "much" -> listOf("I don't have much time.", "How much does it cost?", "There isn't much milk left.")
+        "several" -> listOf("I met several new people.", "She asked several questions.", "We waited for several hours.")
+        "all" -> listOf("All the students passed.", "I ate all the cookies.", "We all went home.")
+        "such" -> listOf("Such a lovely day!", "I have never seen such beauty.", "Why did you say such a thing?")
+        "same" -> listOf("We go to the same school.", "I feel the same way.", "We arrived at the same time.")
+        "own" -> listOf("I have my own room.", "She started her own business.", "Do you own a car?")
+        "whole" -> listOf("I ate the whole cake.", "We spent the whole day outside.", "The whole class laughed.")
+        "enough" -> listOf("Do we have enough time?", "That is enough food for us.", "I have had enough.")
+        "more" -> listOf("I need more time.", "Tell me more about it.", "Would you like some more tea?")
+        "most" -> listOf("Most people agree with me.", "I spend most of my time reading.", "She was the most helpful.")
+        "less" -> listOf("I drink less coffee now.", "It costs less than before.", "Try to eat less sugar.")
+        "least" -> listOf("That is the least of my worries.", "He spent the least time on it.", "It is the least I can do.")
+        "which" -> listOf("Which one do you want?", "I don't know which is better.", "Which bus goes to the city?")
+        "what" -> listOf("What is your name?", "What do you want to eat?", "What time is it?")
+        "whose" -> listOf("Whose bag is this?", "I know whose book it is.", "Whose idea was that?")
+        else -> listOf(
+            "I met $key person at the party.",
+            "Show me $key example, please.",
+            "I bought $key one at the shop."
+        )
+    }
+
+    private fun pronoun(key: String): List<String> = when (key) {
+        "i" -> listOf("I like to read books.", "I am learning English.", "I will call you later.")
+        "you" -> listOf("You are very kind.", "You should try this.", "I will help you.")
+        "he" -> listOf("He is a good teacher.", "He likes to play football.", "He will be here soon.")
+        "she" -> listOf("She is my sister.", "She sings very well.", "She will come tomorrow.")
+        "it" -> listOf("It is raining outside.", "I like it very much.", "It was a long day.")
+        "we" -> listOf("We are going home.", "We should work together.", "We had a great time.")
+        "they" -> listOf("They are my friends.", "They will arrive soon.", "They said it was fine.")
+        "me" -> listOf("Please call me later.", "She gave the book to me.", "Come with me.")
+        "him" -> listOf("I met him yesterday.", "Give the keys to him.", "She called him twice.")
+        "her" -> listOf("I saw her at the market.", "This gift is for her.", "She told her the news.")
+        "us" -> listOf("Please join us.", "They invited us to dinner.", "Come with us.")
+        "them" -> listOf("I called them yesterday.", "Give the books to them.", "We waited for them.")
+        "my" -> listOf("This is my phone.", "My mother is a teacher.", "I lost my keys.")
+        "your" -> listOf("Is this your bag?", "Your idea is great.", "Wash your hands.")
+        "his" -> listOf("His name is Ravi.", "I borrowed his pen.", "This is his house.")
+        "our" -> listOf("This is our school.", "Our team won the match.", "We love our city.")
+        "their" -> listOf("Their house is big.", "I met their parents.", "Their idea was good.")
+        "its" -> listOf("The dog wagged its tail.", "The tree lost its leaves.", "The phone is in its case.")
+        "mine" -> listOf("This book is mine.", "The blue bag is mine.", "Mine is the red one.")
+        "yours" -> listOf("Is this seat yours?", "The choice is yours.", "Yours is better than mine.")
+        "who" -> listOf("Who is that man?", "Do you know who called?", "Who wants some cake?")
+        "what" -> listOf("What is your name?", "What do you want to eat?", "What time is it?")
+        "which" -> listOf("Which one do you want?", "I don't know which is better.", "Which bus goes to the city?")
+        "whose" -> listOf("Whose bag is this?", "I know whose book it is.", "Whose idea was that?")
+        "whom" -> listOf("Whom did you meet?", "To whom should I speak?", "She is someone whom I trust.")
+        else -> listOf(
+            "$key is in the box.",
+            "I like $key very much.",
+            "$key seems fine to me."
+        )
+    }
+
+    private fun number(key: String): List<String> = when (key) {
+        "hundred" -> listOf("It costs one hundred dollars.", "There are a hundred birds.", "I have a hundred ideas.")
+        "thousand" -> listOf("A thousand people came.", "It costs a thousand euros.", "He ran a thousand meters.")
+        "million" -> listOf("She won a million dollars.", "There are a million stars.", "It takes a million years.")
+        else -> listOf(
+            "The number $key is written on the board.",
+            "Count from one to $key.",
+            "My lucky number is $key."
+        )
+    }
+
+    private fun ordinal(key: String): List<String> = listOf(
+        "He came $key in the race.",
+        "This is the $key time today.",
+        "She took the $key place."
+    )
+
+    private fun exclamation(key: String): List<String> = when (key) {
+        "hello" -> listOf("Hello, how are you?", "Say hello to your mother.", "Hello, is anyone there?")
+        "hi" -> listOf("Hi, how are you doing?", "Say hi to your sister.", "Hi, nice to see you!")
+        "yes" -> listOf("Yes, I agree.", "Yes, please help me.", "Yes, it is raining.")
+        "no" -> listOf("No, I cannot go.", "There is no time.", "No, that is wrong.")
+        "bye" -> listOf("Bye, see you later.", "She waved bye to us.", "I said bye and left.")
+        "wow" -> listOf("Wow, that is amazing!", "Wow, you look great.", "Wow, what a surprise!")
+        "oh" -> listOf("Oh, I see now.", "Oh, I forgot my keys.", "Oh, that is too bad.")
+        "hey" -> listOf("Hey, how is it going?", "Hey, wait for me!", "Hey, I have an idea.")
+        "well" -> listOf("Well, that is interesting.", "Well, let's get started.", "Well, I am not sure.")
+        "ouch" -> listOf("Ouch, that really hurts.", "Ouch, I hit my finger.", "Ouch, be careful!")
+        "thanks" -> listOf("Thanks for your help.", "Thanks a lot!", "Thanks, I really appreciate it.")
+        else -> listOf(
+            "$key, that was unexpected.",
+            "$key, I didn't see that coming.",
+            "$key, what a surprise."
+        )
+    }
+
+    private fun modal(key: String): List<String> = when (key) {
+        "can" -> listOf("Can you help me move this?", "I can speak a little Spanish.", "We can meet after work.")
+        "could" -> listOf("Could you open the window?", "He could be at home.", "I could not find my keys.")
+        "may" -> listOf("May I come in please?", "It may rain this afternoon.", "You may leave the room.")
+        "might" -> listOf("It might be too expensive.", "We might go to Italy.", "She might be sleeping now.")
+        "must" -> listOf("You must wear a seatbelt.", "I must finish this project.", "We must be very quiet.")
+        "shall" -> listOf("Shall we dance together?", "I shall return shortly.", "Where shall we meet?")
+        "should" -> listOf("You should eat more vegetables.", "We should leave right now.", "Should I call them back?")
+        "will" -> listOf("I will call you tomorrow.", "It will be here soon.", "They will arrive at six.")
+        "would" -> listOf("Would you like some tea?", "I would go if I could.", "That would be very helpful.")
+        else -> listOf(
+            "You $key try again tomorrow.",
+            "I think we $key go now.",
+            "$key I ask a question?"
+        )
+    }
+
+    private fun generic(key: String): List<String> = listOf(
+        "We talked about $key in class today.",
+        "Can you tell me more about $key?",
+        "I read about $key in the newspaper."
+    )
+
+    fun hindiFor(word: Word): List<String> {
+        val key = normalize(word.en)
+        CURATED_HI[key]?.let { return it }
+        return generatedHi(key, word.hi.trim())
+    }
+
+    fun hindiForText(en: String): List<String> {
+        val key = normalize(en)
+        return CURATED_HI[key] ?: emptyList()
+    }
+
+    fun nativeForWord(word: Word, native: String): List<String> {
+        if (native == "en" || native == "hi") return emptyList()
+        val key = normalize(word.en)
+        if (key.isEmpty()) return emptyList()
+        val curated = CURATED[key]
+        if (curated != null) return curated.map { Gloss.lookup(it) ?: "" }
+        val meaning = word.glossFor(native)
+        return generated(key).map { sentence ->
+            Gloss.lookup(sentence) ?: run {
+                val template = plugKey(sentence, key)
+                if (template == sentence) "" else (Gloss.lookup(template) ?: "").replace("XKEYX", meaning)
+            }
+        }
+    }
+
+    private fun plugKey(sentence: String, key: String): String =
+        sentence.replace(Regex("(?<![\\p{L}\\p{N}])" + Regex.escape(key) + "(?![\\p{L}\\p{N}])"), "XKEYX")
+
+    private fun generatedHi(key: String, gloss: String): List<String> {
+        if (gloss.isEmpty()) return emptyList()
+        val x = gloss
+        val pos = POS[key] ?: guessPos(key)
+        return when (pos) {
+            "noun" -> listOf(
+                "आज कक्षा में हमने $x के बारे में बात की।",
+                "मैंने अख़बार में $x के बारे में पढ़ा।",
+                "क्या आप मुझे $x के बारे में और बता सकते हैं?"
+            )
+            "verb", "linking verb" -> listOf(
+                "हमें नई योजना को $x करना होगा।",
+                "मैं आज कुछ उपयोगी $x करना चाहता हूँ।",
+                "वह सूची के पहले काम को $x करेगी।"
+            )
+            "adjective" -> listOf(
+                "वह सचमुच एक $x पल था।",
+                "यह योजना मुझे $x लगती है।",
+                "वह फोटो में $x दिख रही थी।"
+            )
+            "adverb" -> listOf(
+                "उसने बैठक के दौरान $x बात की।",
+                "कृपया इसे $x करें।",
+                "उसने काम $x खत्म किया।"
+            )
+            "preposition" -> listOf(
+                "हमने $x नए घर के बारे में बात की।",
+                "मैं $x स्टेशन तक चला।",
+                "वह $x बाज़ार के पास रहती है।"
+            )
+            "conjunction" -> listOf(
+                "बारिश हो रही थी $x मैं घर पर रहा।",
+                "वह खुश थी $x मुस्कुराई।",
+                "हम थक गए थे $x जल्दी निकल गए।"
+            )
+            "determiner", "definite article", "indefinite article" -> listOf(
+                "मैंने पार्टी में $x व्यक्ति से मुलाकात की।",
+                "मुझे $x उदाहरण दिखाइए।",
+                "मैंने दुकान से $x खरीदा।"
+            )
+            "pronoun" -> listOf(
+                "$x डिब्बे में है।",
+                "मुझे $x बहुत पसंद है।",
+                "$x मुझे ठीक लगता है।"
+            )
+            "number" -> listOf(
+                "नंबर $x बोर्ड पर लिखा है।",
+                "एक से $x तक गिनें।",
+                "मेरा भाग्यशाली नंबर $x है।"
+            )
+            "ordinal number" -> listOf(
+                "वह दौड़ में $x आया।",
+                "आज यह $x बार है।",
+                "उसने $x स्थान पाया।"
+            )
+            "exclamation" -> listOf(
+                "$x, यह अप्रत्याशित था।",
+                "$x, मुझे यह देखने की उम्मीद नहीं थी।",
+                "$x, क्या आश्चर्य है।"
+            )
+            "modal verb" -> listOf(
+                "आप कल फिर से $x कर सकते हैं।",
+                "मुझे लगता है हमें अभी $x चाहिए।",
+                "क्या मैं एक सवाल $x सकता हूँ?"
+            )
+            "infinitive marker" -> listOf(
+                "मैं घर जाना चाहता हूँ।",
+                "उसे गाना पसंद है।",
+                "हम यात्रा करने की योजना बना रहे हैं।"
+            )
+            else -> listOf(
+                "आज कक्षा में हमने $x के बारे में बात की।",
+                "क्या आप मुझे $x के बारे में और बता सकते हैं?",
+                "मैंने अख़बार में $x के बारे में पढ़ा।"
+            )
+        }
+    }
+
+    data class JaEx(val ja: String, val romaji: String, val hi: String, val en: String = "")
+
+    private val CURATED_JA: Map<String, List<JaEx>> by lazy { mapOf(
+        "ねこ" to listOf(
+
+            JaEx("これは ねこ です。", "kore wa neko desu.", "यह एक बिल्ली है।", "This is a cat."),
+            JaEx("わたしは ねこ が すき です。", "watashi wa neko ga suki desu.", "मुझे बिल्लियाँ पसंद हैं।", "I like cats."),
+            JaEx("ねこ は どこ に います か。", "neko wa doko ni imasu ka.", "बिल्ली कहाँ है?", "Where is the cat?"),
+        ),
+        "いぬ" to listOf(
+
+            JaEx("わたし の いえ に いぬ が います。", "watashi no ie ni inu ga imasu.", "मेरे घर में एक कुत्ता है।", "There is a dog in my house."),
+            JaEx("あの いぬ は かわいい です。", "ano inu wa kawaii desu.", "वह कुत्ता प्यारा है।", "That dog is cute."),
+            JaEx("いぬ と さんぽ に いきます。", "inu to sanpo ni ikimasu.", "मैं कुत्ते के साथ टहलने जाता हूँ।", "I'm going to go for a walk with the dog."),
+        ),
+        "とり" to listOf(
+
+            JaEx("そら に とり が います。", "sora ni tori ga imasu.", "आकाश में एक पक्षी है।", "There is a bird in the sky."),
+            JaEx("とり が うたって います。", "tori ga utatte imasu.", "पक्षी गा रहा है।", "The bird is singing."),
+            JaEx("あの とり は しろい です。", "ano tori wa shiroi desu.", "वह पक्षी सफ़ेद है।", "That bird is white."),
+        ),
+        "さかな" to listOf(
+
+            JaEx("うみ に さかな が たくさん います。", "umi ni sakana ga takusan imasu.", "समुद्र में बहुत सारी मछलियाँ हैं।", "There are many fish in the sea."),
+            JaEx("さかな を たべます。", "sakana wo tabemasu.", "मैं मछली खाता हूँ।", "I eat fish."),
+            JaEx("この さかな は おいしい です。", "kono sakana wa oishii desu.", "यह मछली स्वादिष्ट है।", "This fish is delicious."),
+        ),
+        "うま" to listOf(
+
+            JaEx("うま に のりました。", "uma ni norimashita.", "मैंने घोड़े की सवारी की।", "I rode it on horseback."),
+            JaEx("うま は はやく はしります。", "uma wa hayaku hashirimasu.", "घोड़ा तेज़ दौड़ता है।", "Horses run quickly."),
+            JaEx("あそこ に うま が います。", "asoko ni uma ga imasu.", "वहाँ एक घोड़ा है।", "There's a horse over there."),
+        ),
+        "うし" to listOf(
+
+            JaEx("うし から ぎゅうにゅう が とれます。", "ushi kara gyuunyuu ga toremasu.", "गाय से दूध मिलता है।", "You can get the meat from the cow."),
+            JaEx("のうか で うし を かって います。", "nouka de ushi wo katte imasu.", "किसान गाय पालते हैं।", "I'm watching a cow on the water."),
+            JaEx("うし は おおきい です。", "ushi wa ookii desu.", "गाय बड़ी होती है।", "The cow is big."),
+        ),
+        "ひつじ" to listOf(
+
+            JaEx("ひつじ の け は ふわふわ です。", "hitsuji no ke wa fuwafuwa desu.", "भेड़ का ऊन नरम होता है।", "The sheep's cage is fluffy."),
+            JaEx("ひつじ が いっぴき います。", "hitsuji ga ippiki imasu.", "वहाँ एक भेड़ है।", "The sheep are here."),
+            JaEx("ひつじ は しろい です。", "hitsuji wa shiroi desu.", "भेड़ सफ़ेद होती है।", "The sheep is white."),
+        ),
+        "ぶた" to listOf(
+
+            JaEx("ぶた は はやく あるきます。", "buta wa hayaku arukimasu.", "सुअर तेज़ चलता है।", "The pig walks quickly."),
+            JaEx("この ぶた は ちいさい です。", "kono buta wa chiisai desu.", "यह सुअर छोटा है।", "This pig is small."),
+            JaEx("ぶた の にく を たべます。", "buta no niku wo tabemasu.", "मैं सुअर का मांस खाता हूँ।", "I eat pig meat."),
+        ),
+        "ぞう" to listOf(
+
+            JaEx("ぞう は はな が ながい です。", "zou wa hana ga nagai desu.", "हाथी की सूँड़ लंबी होती है।", "Elephants have long flowers."),
+            JaEx("どうぶつえん に ぞう が います。", "doubutsuen ni zou ga imasu.", "चिड़ियाघर में हाथी है।", "There is an elephant in the zoo."),
+            JaEx("ぞう は とても おおきい です。", "zou wa totemo ookii desu.", "हाथी बहुत बड़ा होता है।", "Elephants are very big."),
+        ),
+        "さる" to listOf(
+
+            JaEx("さる は き に のぼります。", "saru wa ki ni noborimasu.", "बंदर पेड़ पर चढ़ता है।", "The monkey climbs onto the tree."),
+            JaEx("さる は ばなな が すき です。", "saru wa banana ga suki desu.", "बंदर को केला पसंद है।", "Monkeys like bananas."),
+            JaEx("この さる は かしこい です。", "kono saru wa kashikoi desu.", "यह बंदर चालाक है।", "This monkey is smart."),
+        ),
+        "くま" to listOf(
+
+            JaEx("くま は どうぶつえん に います。", "kuma wa doubutsuen ni imasu.", "भालू चिड़ियाघर में है।", "The bear is in the zoo."),
+            JaEx("くま は はちみつ が すき です。", "kuma wa hachimitsu ga suki desu.", "भालू को शहद पसंद है।", "Bear likes honey."),
+            JaEx("あの くま は おおきい です。", "ano kuma wa ookii desu.", "वह भालू बड़ा है।", "That bear is big."),
+        ),
+        "へび" to listOf(
+
+            JaEx("へび は ながい です。", "hebi wa nagai desu.", "साँप लंबा होता है।", "The snake is long."),
+            JaEx("へび は こわい です。", "hebi wa kowai desu.", "साँप डरावना होता है।", "Snakes are scary."),
+            JaEx("この へび は どく が あります。", "kono hebi wa doku ga arimasu.", "इस साँप में ज़हर होता है।", "This snake has a poison."),
+        ),
+        "かえる" to listOf(
+
+            JaEx("かえる は みず の そば に います。", "kaeru wa mizu no soba ni imasu.", "मेंढक पानी के पास रहता है।", "The frog lives next to the water."),
+            JaEx("かえる は ぴょんぴょん とびます。", "kaeru wa pyonpyon tobimasu.", "मेंढक उछल-कूद करता है।", "The frog jumps."),
+            JaEx("あめ の ひ は かえる が すき です。", "ame no hi wa kaeru ga suki desu.", "बारिश के दिन मेंढकों को अच्छा लगता है।", "Ame no Hi likes frogs."),
+        ),
+        "むし" to listOf(
+
+            JaEx("むし が はな に います。", "mushi ga hana ni imasu.", "फूल पर एक कीड़ा है।", "The insect is in the flower."),
+            JaEx("この むし は ちいさい です。", "kono mushi wa chiisai desu.", "यह कीड़ा छोटा है।", "This insect is small."),
+            JaEx("むし の こえ が きこえます。", "mushi no koe ga kikoemasu.", "कीड़ों की आवाज़ सुनाई देती है।", "I can hear the insects."),
+        ),
+        "はな" to listOf(
+
+            JaEx("はな が さきました。", "hana ga sakimashita.", "फूल खिल गया।", "Hana has arrived."),
+            JaEx("この はな は きれい です。", "kono hana wa kirei desu.", "यह फूल सुंदर है।", "This flower is beautiful."),
+            JaEx("はな に みず を あげます。", "hana ni mizu wo agemasu.", "मैं फूल को पानी देता हूँ।", "I give water to the flowers."),
+        ),
+        "き" to listOf(
+
+            JaEx("この き は たかい です。", "kono ki wa takai desu.", "यह पेड़ ऊँचा है।", "This is a big deal."),
+            JaEx("き の した で やすみます。", "ki no shita de yasumimasu.", "मैं पेड़ के नीचे आराम करता हूँ।", "I'll take a rest in the comfort of my home."),
+            JaEx("き が たくさん あります。", "ki ga takusan arimasu.", "वहाँ बहुत सारे पेड़ हैं।", "There are many possibilities."),
+        ),
+        "くさ" to listOf(
+
+            JaEx("くさ が のびました。", "kusa ga nobimashita.", "घास बढ़ गई।", "The grass has grown."),
+            JaEx("くさ の うえ に すわります。", "kusa no ue ni suwarimasu.", "मैं घास पर बैठता हूँ।", "I sit on the grass."),
+            JaEx("にわ に くさ が あります。", "niwa ni kusa ga arimasu.", "बगीचे में घास है।", "There is a lot of grass in the chicken."),
+        ),
+        "やま" to listOf(
+
+            JaEx("やま に のぼりました。", "yama ni noborimashita.", "मैं पहाड़ पर चढ़ा।", "I climbed the mountain."),
+            JaEx("この やま は たかい です。", "kono yama wa takai desu.", "यह पहाड़ ऊँचा है।", "This mountain is tall."),
+            JaEx("やま の うえ から まち が みえます。", "yama no ue kara machi ga miemasu.", "पहाड़ की चोटी से शहर दिखता है।", "You can see the city from the top of the mountain."),
+        ),
+        "かわ" to listOf(
+
+            JaEx("かわ で およぎます。", "kawa de oyogimasu.", "मैं नदी में तैरता हूँ।", "It floats in water."),
+            JaEx("かわ は ながい です。", "kawa wa nagai desu.", "नदी लंबी है।", "Cute is long."),
+            JaEx("かわ の みず は つめたい です。", "kawa no mizu wa tsumetai desu.", "नदी का पानी ठंडा होता है।", "The water in the river is cold."),
+        ),
+        "うみ" to listOf(
+
+            JaEx("うみ は ひろい です。", "umi wa hiroi desu.", "समुद्र विशाल है।", "The sea is wide."),
+            JaEx("うみ で およぎました。", "umi de oyogimashita.", "मैंने समुद्र में तैरा।", "It floated in the sea."),
+            JaEx("うみ の みず は からい です。", "umi no mizu wa karai desu.", "समुद्र का पानी नमकीन होता है।", "The water in the ocean is dry."),
+        ),
+        "そら" to listOf(
+
+            JaEx("そら が あおい です。", "sora ga aoi desu.", "आकाश नीला है।", "Sora is Aoi."),
+            JaEx("そら に くも が あります。", "sora ni kumo ga arimasu.", "आकाश में बादल हैं।", "There is a spider in the sky."),
+            JaEx("そら を みて ください。", "sora wo mite kudasai.", "कृपया आकाश को देखिए।", "Please look out there."),
+        ),
+        "あめ" to listOf(
+
+            JaEx("あめ が ふって います。", "ame ga futte imasu.", "बारिश हो रही है।", "The candy is falling."),
+            JaEx("きょう は あめ です。", "kyou wa ame desu.", "आज बारिश है।", "Today is candy."),
+            JaEx("あめ が ふる まえ に かえります。", "ame ga furu mae ni kaerimasu.", "बारिश से पहले घर लौटता हूँ।", "The candy will return to its original state."),
+        ),
+        "ゆき" to listOf(
+
+            JaEx("ゆき が ふりました。", "yuki ga furimashita.", "बर्फ़ गिरी।", "Yuki shook his head."),
+            JaEx("ゆき は しろい です。", "yuki wa shiroi desu.", "बर्फ़ सफ़ेद होती है।", "Yuki is white."),
+            JaEx("ゆき の ひ は さむい です。", "yuki no hi wa samui desu.", "बर्फ़ के दिन ठंडे होते हैं।", "It's cold in the snow."),
+        ),
+        "かぜ" to listOf(
+
+            JaEx("かぜ が つよい です。", "kaze ga tsuyoi desu.", "हवा तेज़ है।", "The wind is strong."),
+            JaEx("きょう は かぜ が ふいて います。", "kyou wa kaze ga fuite imasu.", "आज हवा चल रही है।", "It's cold today."),
+            JaEx("かぜ を ひきました。", "kaze wo hikimashita.", "मुझे ज़ुकाम हो गया।", "I caught a cold."),
+        ),
+        "たいよう" to listOf(
+
+            JaEx("たいよう が ひかって います。", "taiyou ga hikatte imasu.", "सूरज चमक रहा है।", "The sun is shining."),
+            JaEx("たいよう は ひがし から のぼります。", "taiyou wa higashi kara noborimasu.", "सूरज पूरब से उगता है।", "The sun rises from the east."),
+            JaEx("たいよう の ひかり は あたたかい です。", "taiyou no hikari wa atatakai desu.", "सूरज की रोशनी गर्म होती है।", "The light of the day is warm."),
+        ),
+        "つき" to listOf(
+
+            JaEx("つき が きれい です。", "tsuki ga kirei desu.", "चाँद सुंदर है।", "The finish is beautiful."),
+            JaEx("よる に つき が みえます。", "yoru ni tsuki ga miemasu.", "रात में चाँद दिखता है।", "You can see the difference depending on the situation."),
+            JaEx("つき は まるい です。", "tsuki wa marui desu.", "चाँद गोल है।", "The base is round."),
+        ),
+        "ほし" to listOf(
+
+            JaEx("ほし が かがやいて います。", "hoshi ga kagayaite imasu.", "तारे चमक रहे हैं।", "The stars are shining."),
+            JaEx("そら に ほし が たくさん あります。", "sora ni hoshi ga takusan arimasu.", "आकाश में बहुत सारे तारे हैं।", "There are many stars in the sky."),
+            JaEx("ほし を みて ねがい を かけます。", "hoshi wo mite negai wo kakemasu.", "तारा देखकर इच्छा करता हूँ।", "Look at the stars and make a wish."),
+        ),
+        "みず" to listOf(
+
+            JaEx("みず を のみます。", "mizu wo nomimasu.", "मैं पानी पीता हूँ।", "Drink water."),
+            JaEx("みず は のど が かわいた とき に のみます。", "mizu wa nodo ga kawaita toki ni nomimasu.", "पानी प्यास लगने पर पीता हूँ।", "Drink water when you are thirsty."),
+            JaEx("コップ に みず が あります。", "koppu ni mizu ga arimasu.", "गिलास में पानी है।", "There is water in the cup."),
+        ),
+        "たべもの" to listOf(
+
+            JaEx("この たべもの は おいしい です。", "kono tabemono wa oishii desu.", "यह खाना स्वादिष्ट है।", "This food is delicious."),
+            JaEx("にほん の たべもの が すき です。", "nihon no tabemono ga suki desu.", "मुझे जापानी खाना पसंद है।", "I like Japanese food."),
+            JaEx("たべもの を つくります。", "tabemono wo tsukurimasu.", "मैं खाना बनाता हूँ।", "I will make food."),
+        ),
+        "ごはん" to listOf(
+
+            JaEx("ごはん を たべます。", "gohan wo tabemasu.", "मैं खाना खाता हूँ।", "I'm going to eat dinner."),
+            JaEx("ごはん は もう たべました。", "gohan wa mou tabemashita.", "मैंने खाना खा लिया।", "I have already eaten dinner."),
+            JaEx("いっしょ に ごはん を たべましょう。", "issho ni gohan wo tabemashou.", "चलो साथ में खाना खाएँ।", "Let's eat dinner together."),
+        ),
+        "パン" to listOf(
+
+            JaEx("あさ に パン を たべます。", "asa ni pan wo tabemasu.", "सुबह मैं रोटी/ब्रेड खाता हूँ।", "I eat bread in the morning."),
+            JaEx("この パン は やわらかい です。", "kono pan wa yawarakai desu.", "यह ब्रेड नरम है।", "This bread is soft."),
+            JaEx("パン と ぎゅうにゅう を かいました。", "pan to gyuunyuu wo kaimashita.", "मैंने ब्रेड और दूध ख़रीदा।", "I made bread and stuffed meat."),
+        ),
+        "たまご" to listOf(
+
+            JaEx("たまご を ふたつ かいました。", "tamago wo futatsu kaimashita.", "मैंने दो अंडे ख़रीदे।", "I caught two eggs."),
+            JaEx("たまご を にます。", "tamago wo nimasu.", "मैं अंडा उबालता हूँ।", "I'll take the egg."),
+            JaEx("この たまご は あたらしい です。", "kono tamago wa atarashii desu.", "यह अंडा ताज़ा है।", "This egg is new."),
+        ),
+        "にく" to listOf(
+
+            JaEx("にく を たべます か。", "niku wo tabemasu ka.", "क्या आप मांस खाते हैं?", "Do you want to eat garlic?"),
+            JaEx("この にく は やわらかい です。", "kono niku wa yawarakai desu.", "यह मांस नरम है।", "This nail is soft."),
+            JaEx("にく を やいて たべます。", "niku wo yaite tabemasu.", "मैं मांस भूनकर खाता हूँ।", "Cook and eat garlic."),
+        ),
+        "やさい" to listOf(
+
+            JaEx("やさい を たくさん たべます。", "yasai wo takusan tabemasu.", "मैं बहुत सारी सब्ज़ियाँ खाता हूँ।", "I eat a lot of vegetables."),
+            JaEx("やさい は からだ に いい です。", "yasai wa karada ni ii desu.", "सब्ज़ियाँ शरीर के लिए अच्छी हैं।", "Vegetables are good for your body."),
+            JaEx("この やさい は あたらしい です。", "kono yasai wa atarashii desu.", "यह सब्ज़ी ताज़ी है।", "This vegetable is new."),
+        ),
+        "くだもの" to listOf(
+
+            JaEx("くだもの が すき です。", "kudamono ga suki desu.", "मुझे फल पसंद हैं।", "I like fruits."),
+            JaEx("まいにち くだもの を たべます。", "mainichi kudamono wo tabemasu.", "मैं रोज़ फल खाता हूँ।", "I eat fruit every day."),
+            JaEx("この くだもの は あまい です。", "kono kudamono wa amai desu.", "यह फल मीठा है।", "This fruit is sweet."),
+        ),
+        "りんご" to listOf(
+
+            JaEx("りんご を ひとつ ください。", "ringo wo hitotsu kudasai.", "एक सेब दीजिए।", "Please give me an apple."),
+            JaEx("りんご は あか い です。", "ringo wa akai desu.", "सेब लाल होता है।", "The apple is red."),
+            JaEx("りんご は まいにち たべます。", "ringo wa mainichi tabemasu.", "मैं रोज़ सेब खाता हूँ।", "I eat apples every day."),
+        ),
+        "バナナ" to listOf(
+
+            JaEx("バナナ は きいろい です。", "banana wa kiiroi desu.", "केला पीला होता है।", "Bananas are yellow."),
+            JaEx("バナナ を かいました。", "banana wo kaimashita.", "मैंने केला ख़रीदा।", "I ate a banana."),
+            JaEx("バナナ は えいよう が あります。", "banana wa eiyou ga arimasu.", "केले में पोषण होता है।", "Bananas have a special meaning."),
+        ),
+        "みかん" to listOf(
+
+            JaEx("みかん は すっぱい です。", "mikan wa suppai desu.", "संतरा खट्टा होता है।", "Oranges are sour."),
+            JaEx("ふゆ に みかん を たべます。", "fuyu ni mikan wo tabemasu.", "सर्दियों में संतरा खाता हूँ।", "I eat mandarin oranges in Fuyu."),
+            JaEx("みかん を むきます。", "mikan wo mukimasu.", "मैं संतरा छीलता हूँ।", "Peel the oranges."),
+        ),
+        "もも" to listOf(
+
+            JaEx("もも は あまい です。", "momo wa amai desu.", "आड़ू मीठा होता है।", "The thighs are sweet."),
+            JaEx("もも の き が あります。", "momo no ki ga arimasu.", "आड़ू का पेड़ है।", "I have a problem with my thighs."),
+            JaEx("もも を たべたい です。", "momo wo tabetai desu.", "मैं आड़ू खाना चाहता हूँ।", "I want to eat thighs."),
+        ),
+        "いちご" to listOf(
+
+            JaEx("いちご が すき です。", "ichigo ga suki desu.", "मुझे स्ट्रॉबेरी पसंद है।", "I like strawberries."),
+            JaEx("いちご は あかい です。", "ichigo wa akai desu.", "स्ट्रॉबेरी लाल होती है।", "Ichigo is red."),
+            JaEx("いちご の ケーキ を たべました。", "ichigo no keeki wo tabemashita.", "मैंने स्ट्रॉबेरी केक खाया।", "I ate strawberry cake."),
+        ),
+        "おちゃ" to listOf(
+
+            JaEx("おちゃ を のみます か。", "ocha wo nomimasu ka.", "क्या आप चाय पिएँगे?", "Would you like to drink tea?"),
+            JaEx("おちゃ は あつい です。", "ocha wa atsui desu.", "चाय गरम है।", "It's hot."),
+            JaEx("まいにち おちゃ を のみます。", "mainichi ocha wo nomimasu.", "मैं रोज़ चाय पीता हूँ।", "I drink tea every day."),
+        ),
+        "こうちゃ" to listOf(
+
+            JaEx("こうちゃ に さとう を いれます。", "koucha ni satou wo iremasu.", "मैं चाय में चीनी डालता हूँ।", "I put sugar in the kocha."),
+            JaEx("こうちゃ は あじ が いい です。", "koucha wa aji ga ii desu.", "काली चाय का स्वाद अच्छा होता है।", "The horse mackerel is good."),
+            JaEx("こうちゃ を いっぱい ください。", "koucha wo ippai kudasai.", "एक कप चाय दीजिए।", "Please give me a lot of kocha."),
+        ),
+        "コーヒー" to listOf(
+
+            JaEx("コーヒー を のみます。", "koohii wo nomimasu.", "मैं कॉफ़ी पीता हूँ।", "I drink coffee."),
+            JaEx("コーヒー は にがい です。", "koohii wa nigai desu.", "कॉफ़ी कड़वी होती है。", "Coffee is bitter."),
+            JaEx("あさ に コーヒー を のみます。", "asa ni koohii wo nomimasu.", "सुबह मैं कॉफ़ी पीता हूँ।", "I drink coffee in the morning."),
+        ),
+        "ジュース" to listOf(
+
+            JaEx("ジュース を のみたい です。", "jyuusu wo nomitai desu.", "मैं जूस पीना चाहता हूँ।", "I'd like to try some juice."),
+            JaEx("この ジュース は あまい です。", "kono jyuusu wa amai desu.", "यह जूस मीठा है।", "This juice is sweet."),
+            JaEx("みかん の ジュース を ください。", "mikan no jyuusu wo kudasai.", "संतरे का जूस दीजिए।", "I'd like some tangerine juice, please."),
+        ),
+        "ミルク" to listOf(
+
+            JaEx("ミルク は しろい です。", "miruku wa shiroi desu.", "दूध सफ़ेद होता है।", "Milk is white."),
+            JaEx("ミルク を コーヒー に いれます。", "miruku wo koohii ni iremasu.", "मैं कॉफ़ी में दूध डालता हूँ।", "Add milk to coffee."),
+            JaEx("こども は ミルク を のんで います。", "kodomo wa miruku wo nonde imasu.", "बच्चा दूध पी रहा है।", "The child is drinking milk."),
+        ),
+        "さとう" to listOf(
+
+            JaEx("さとう を いれます か。", "satou wo iremasu ka.", "क्या आप चीनी डालेंगे?", "Would you like some sugar?"),
+            JaEx("さとう は あまい です。", "satou wa amai desu.", "चीनी मीठी होती है।", "Sato is sweet."),
+            JaEx("コーヒー に さとう を いれました。", "koohii ni satou wo iremashita.", "मैंने कॉफ़ी में चीनी डाली।", "I added sugar to my coffee."),
+        ),
+        "しお" to listOf(
+
+            JaEx("しお と こしょう を ください。", "shio to koshou wo kudasai.", "नमक और काली मिर्च दीजिए।", "Salt and pepper, please."),
+            JaEx("この スープ は しお が きいて います。", "kono suupu wa shio ga kiite imasu.", "इस सूप में नमक अच्छा लगा है।", "This soup is salty."),
+            JaEx("しお は しょっぱい です。", "shio wa shoppai desu.", "नमक नमकीन होता है।", "Shio is salty."),
+        ),
+        "ケーキ" to listOf(
+
+            JaEx("ケーキ を たべました。", "keeki wo tabemashita.", "मैंने केक खाया।", "I ate cake."),
+            JaEx("この ケーキ は おいしい です。", "kono keeki wa oishii desu.", "यह केक स्वादिष्ट है।", "This cake is delicious."),
+            JaEx("たんじょうび に ケーキ を つくります。", "tanjoubi ni keeki wo tsukurimasu.", "जन्मदिन पर केक बनाता हूँ।", "I will make a cake for my birthday."),
+        ),
+        "アイスクリーム" to listOf(
+
+            JaEx("アイスクリーム が すき です。", "aisukuriimu ga suki desu.", "मुझे आइसक्रीम पसंद है।", "I like ice cream."),
+            JaEx("なつ は アイスクリーム が おいしい です。", "natsu wa aisukuriimu ga oishii desu.", "गर्मियों में आइसक्रीम स्वादिष्ट होती है।", "Natsu's ice cream is delicious."),
+            JaEx("アイスクリーム を ふたつ ください。", "aisukuriimu wo futatsu kudasai.", "दो आइसक्रीम दीजिए।", "Two ice creams, please."),
+        ),
+        "ひと" to listOf(
+
+            JaEx("あそこ に ひと が います。", "asoko ni hito ga imasu.", "वहाँ एक व्यक्ति है।", "There's someone over there."),
+            JaEx("この ひと は だれ です か。", "kono hito wa dare desu ka.", "यह व्यक्ति कौन है?", "Who is this person?"),
+            JaEx("たくさん の ひと が きました。", "takusan no hito ga kimashita.", "बहुत सारे लोग आए।", "Many people came."),
+        ),
+        "おとこ" to listOf(
+
+            JaEx("あの おとこ の ひと は せんせい です。", "ano otoko no hito wa sensei desu.", "वह आदमी शिक्षक है।", "That man is a teacher."),
+            JaEx("おとこ の こ が ふたり います。", "otoko no ko ga futari imasu.", "दो लड़के हैं।", "There are two boys."),
+            JaEx("この おとこ の ひと は わかい です。", "kono otoko no hito wa wakai desu.", "यह आदमी जवान है।", "This man is young."),
+        ),
+        "おんな" to listOf(
+
+            JaEx("あの おんな の ひと は いしゃ です。", "ano onna no hito wa isha desu.", "वह औरत डॉक्टर है।", "That woman is Isha."),
+            JaEx("おんな の こ が すき です。", "onna no ko ga suki desu.", "मुझे लड़कियाँ पसंद हैं।", "I like girls."),
+            JaEx("この おんな の ひと は きれい です。", "kono onna no hito wa kirei desu.", "यह औरत सुंदर है।", "This woman is beautiful."),
+        ),
+        "こども" to listOf(
+
+            JaEx("こども が こうえん で あそんで います。", "kodomo ga kouen de asonde imasu.", "बच्चे पार्क में खेल रहे हैं।", "The children are playing in the park."),
+            JaEx("わたし の こども は ふたり います。", "watashi no kodomo wa futari imasu.", "मेरे दो बच्चे हैं।", "I have two children."),
+            JaEx("こども は ねる じかん です。", "kodomo wa neru jikan desu.", "बच्चों के सोने का समय है।", "Children have a sleeping period."),
+        ),
+        "ともだち" to listOf(
+
+            JaEx("ともだち と えいが を みました。", "tomodachi to eiga wo mimashita.", "मैंने दोस्त के साथ फ़िल्म देखी।", "My friends and I watched the show."),
+            JaEx("わたし の ともだち は やさしい です。", "watashi no tomodachi wa yasashii desu.", "मेरा दोस्त दयालु है।", "My friends are kind."),
+            JaEx("ともだち に でんわ を かけます。", "tomodachi ni denwa wo kakemasu.", "मैं दोस्त को फ़ोन करता हूँ।", "Call your friend."),
+        ),
+        "かぞく" to listOf(
+
+            JaEx("わたし の かぞく は よにん です。", "watashi no kazoku wa yonin desu.", "मेरे परिवार में चार लोग हैं।", "My family is Yonin."),
+            JaEx("かぞく と いっしょ に たべます。", "kazoku to issho ni tabemasu.", "मैं परिवार के साथ खाता हूँ।", "I eat it with my family."),
+            JaEx("かぞく が だいじ です。", "kazoku ga daiji desu.", "परिवार महत्वपूर्ण है।", "My family is important."),
+        ),
+        "おかあさん" to listOf(
+
+            JaEx("おかあさん は りょうり が じょうず です。", "okaasan wa ryouri ga jouzu desu.", "मेरी माँ खाना बनाने में अच्छी हैं।", "Mother is very good at cooking."),
+            JaEx("おかあさん に でんわ を します。", "okaasan ni denwa wo shimasu.", "मैं माँ को फ़ोन करता हूँ।", "I will call your mother."),
+            JaEx("おかあさん は いま うち に います。", "okaasan wa ima uchi ni imasu.", "माँ अभी घर पर हैं।", "Mom is at home now."),
+        ),
+        "おとうさん" to listOf(
+
+            JaEx("おとうさん は かいしゃ に いきます。", "otousan wa kaisha ni ikimasu.", "पिताजी कंपनी जाते हैं।", "Dad is going to the museum."),
+            JaEx("おとうさん は せ が たかい です。", "otousan wa se ga takai desu.", "पिताजी लंबे हैं।", "My father is very tall."),
+            JaEx("おとうさん と テニス を します。", "otousan to tenisu wo shimasu.", "मैं पिताजी के साथ टेनिस खेलता हूँ।", "I play tennis with my dad."),
+        ),
+        "あに" to listOf(
+
+            JaEx("あに は にほん に すんで います。", "ani wa nihon ni sunde imasu.", "मेरा बड़ा भाई जापान में रहता है।", "Ani lives in Japan."),
+            JaEx("あに は わたし より とし うえ です。", "ani wa watashi yori toshi ue desu.", "मेरा भाई मुझसे बड़ा है।", "The crab is better than me."),
+            JaEx("あに が たこやき を つくって くれました。", "ani ga takoyaki wo tsukutte kuremashita.", "मेरे भाई ने मेरे लिए ताकोयाकी बनाई।", "Ani made takoyaki for me."),
+        ),
+        "あね" to listOf(
+
+            JaEx("あね は だいがくせい です。", "ane wa daigakusei desu.", "मेरी बड़ी बहन कॉलेज की छात्रा है।", "Ane is a big school."),
+            JaEx("あね と かいもの に いきました。", "ane to kaimono ni ikimashita.", "मैं बहन के साथ ख़रीदारी गया।", "I went to Ane and Kaimono."),
+            JaEx("あね は ピアノ を ひきます。", "ane wa piano wo hikimasu.", "मेरी बहन पियानो बजाती है।", "Ane plays the piano."),
+        ),
+        "おとうと" to listOf(
+
+            JaEx("おとうと は ちゅうがくせい です。", "otouto wa chuugakusei desu.", "मेरा छोटा भाई मिडिल स्कूल का छात्र है।", "My father is a middle school student."),
+            JaEx("おとうと と サッカー を します。", "otouto to sakkaa wo shimasu.", "मैं भाई के साथ फ़ुटबॉल खेलता हूँ।", "I play soccer with my father."),
+            JaEx("おとうと は げんき です。", "otouto wa genki desu.", "मेरा छोटा भाई स्वस्थ है।", "My father is doing well."),
+        ),
+        "いもうと" to listOf(
+
+            JaEx("いもうと は かわいい です。", "imouto wa kawaii desu.", "मेरी छोटी बहन प्यारी है।", "My sister is cute."),
+            JaEx("いもうと は おどり が すき です。", "imouto wa odori ga suki desu.", "मेरी बहन को नाचना पसंद है।", "My sister likes dancing."),
+            JaEx("いもうと と あそびます。", "imouto to asobimasu.", "मैं छोटी बहन के साथ खेलता हूँ।", "I play with my sister."),
+        ),
+        "おじいさん" to listOf(
+
+            JaEx("おじいさん は おちゃ が すき です。", "ojiisan wa ocha ga suki desu.", "दादाजी को चाय पसंद है。", "Grandpa likes tea."),
+            JaEx("おじいさん は しんぶん を よんで います。", "ojiisan wa shinbun wo yonde imasu.", "दादाजी अख़बार पढ़ रहे हैं।", "The old man is reading Shinbun."),
+            JaEx("おじいさん に あいに いきます。", "ojiisan ni ai ni ikimasu.", "मैं दादाजी से मिलने जाता हूँ।", "I'm going to visit my grandfather."),
+        ),
+        "おばあさん" to listOf(
+
+            JaEx("おばあさん は はな が すき です。", "obaasan wa hana ga suki desu.", "दादी को फूल पसंद हैं।", "Grandma loves flowers."),
+            JaEx("おばあさん は にわ で はな を そだてて います。", "obaasan wa niwa de hana wo sodatete imasu.", "दादी बगीचे में फूल उगा रही हैं।", "The old woman is raising flowers with her chickens."),
+            JaEx("おばあさん は やさしい です。", "obaasan wa yasashii desu.", "दादी दयालु हैं।", "Grandma is kind."),
+        ),
+        "せんせい" to listOf(
+
+            JaEx("せんせい に しつもん を します。", "sensei ni shitsumon wo shimasu.", "मैं शिक्षक से सवाल पूछता हूँ।", "I will give my teacher a lesson."),
+            JaEx("せんせい は やさしい です。", "sensei wa yasashii desu.", "शिक्षक दयालु हैं।", "My teacher is kind."),
+            JaEx("せんせい、ありがとう ございます。", "sensei, arigatou gozaimasu.", "शिक्षक जी, धन्यवाद।", "Thank you, teacher."),
+        ),
+        "がくせい" to listOf(
+
+            JaEx("わたし は がくせい です。", "watashi wa gakusei desu.", "मैं एक छात्र हूँ।", "My name is Gakusei."),
+            JaEx("あの がくせい は まじめ です。", "ano gakusei wa majime desu.", "वह छात्र मेहनती है।", "That school is serious."),
+            JaEx("がくせい は がっこう で べんきょう します。", "gakusei wa gakkou de benkyou shimasu.", "छात्र स्कूल में पढ़ते हैं।", "Students study at school."),
+        ),
+        "いしゃ" to listOf(
+
+            JaEx("いしゃ に みて もらいました。", "isha ni mite moraimashita.", "मैंने डॉक्टर से दिखाया।", "I had Isha look at it."),
+            JaEx("この いしゃ は しんせつ です。", "kono isha wa shinsetsu desu.", "यह डॉक्टर दयालु है।", "This is the beginning."),
+            JaEx("いたい とき は いしゃ に いきます。", "itai toki wa isha ni ikimasu.", "दर्द होने पर डॉक्टर के पास जाता हूँ।", "I'll come to you whenever I want."),
+        ),
+        "あたま" to listOf(
+
+            JaEx("あたま が いたい です。", "atama ga itai desu.", "मेरे सिर में दर्द है।", "I want to have a head."),
+            JaEx("あたま を あらいます。", "atama wo araimasu.", "मैं सिर धोता हूँ।", "I'll clean your head."),
+            JaEx("この こ は あたま が いい です。", "kono ko wa atama ga ii desu.", "यह बच्चा होशियार है।", "This kid has a good head."),
+        ),
+        "かお" to listOf(
+
+            JaEx("かお を あらいます。", "kao wo araimasu.", "मैं चेहरा धोता हूँ।", "I'll take care of you."),
+            JaEx("かお が あかい です。", "kao ga akai desu.", "चेहरा लाल है।", "The color is red."),
+            JaEx("えがお の かお が すき です。", "egao no kao ga suki desu.", "मुझे मुस्कुराता चेहरा पसंद है।", "I like Egao's voice."),
+        ),
+        "め" to listOf(
+
+            JaEx("め が つかれました。", "me ga tsukaremashita.", "आँखें थक गईं।", "I'm tired."),
+            JaEx("め を とじて ください。", "me wo tojite kudasai.", "कृपया आँखें बंद कीजिए।", "Please close the message."),
+            JaEx("この こ は め が おおきい です。", "kono ko wa me ga ookii desu.", "इस बच्चे की आँखें बड़ी हैं।", "This place is big."),
+        ),
+        "みみ" to listOf(
+
+            JaEx("みみ で おと を ききます。", "mimi de oto wo kikimasu.", "मैं कान से आवाज़ सुनता हूँ।", "I can listen to my mother with my ear."),
+            JaEx("みみ が いたい です。", "mimi ga itai desu.", "मेरे कान में दर्द है।", "I want to see Mimi."),
+            JaEx("みみ を あらいます。", "mimi wo araimasu.", "मैं कान धोता हूँ।", "I will wash the ears."),
+        ),
+        "くち" to listOf(
+
+            JaEx("くち を あけて ください。", "kuchi wo akete kudasai.", "कृपया मुँह खोलिए।", "Please open your mouth."),
+            JaEx("くち の なか に あめ が あります。", "kuchi no naka ni ame ga arimasu.", "मुँह में मिठाई है।", "There is candy in your mouth."),
+            JaEx("くち を すすぎます。", "kuchi wo susugimasu.", "मैं मुँह कुल्ला करता हूँ।", "Rinse your mouth."),
+        ),
+        "て" to listOf(
+
+            JaEx("て を あらいます。", "te wo araimasu.", "मैं हाथ धोता हूँ।", "I'll take care of it."),
+            JaEx("て で かきます。", "te de kakimasu.", "मैं हाथ से लिखता हूँ।", "I'll write it by hand."),
+            JaEx("て を つないで さんぽ します。", "te wo tsunaide sanpo shimasu.", "हाथ पकड़कर टहलता हूँ।", "Let's go for a walk together."),
+        ),
+        "あし" to listOf(
+
+            JaEx("あし が いたい です。", "ashi ga itai desu.", "मेरे पैर में दर्द है।", "I want to have legs."),
+            JaEx("あし で あるきます。", "ashi de arukimasu.", "मैं पैरों से चलता हूँ।", "I walk on my legs."),
+            JaEx("あし を のばします。", "ashi wo nobashimasu.", "मैं पैर फैलाता हूँ।", "Stretch out your legs."),
+        ),
+        "おなか" to listOf(
+
+            JaEx("おなか が すきました。", "onaka ga sukimashita.", "मुझे भूख लगी है।", "I'm hungry."),
+            JaEx("おなか が いたい です。", "onaka ga itai desu.", "मेरे पेट में दर्द है।", "I'm hungry."),
+            JaEx("おなか が いっぱい です。", "onaka ga ippai desu.", "मेरा पेट भर गया।", "My stomach is full."),
+        ),
+        "せなか" to listOf(
+
+            JaEx("せなか が かゆい です。", "senaka ga kayui desu.", "मेरी पीठ में खुजली है।", "My skin is itchy."),
+            JaEx("せなか を のばします。", "senaka wo nobashimasu.", "मैं पीठ फैलाता हूँ।", "Stretch out the middle of the day."),
+            JaEx("こども を せなか に おいます。", "kodomo wo senaka ni oimasu.", "मैं बच्चे को पीठ पर उठाता हूँ।", "Place the child in the nursery."),
+        ),
+        "がっこう" to listOf(
+
+            JaEx("がっこう に いきます。", "gakkou ni ikimasu.", "मैं स्कूल जाता हूँ।", "I'm going to school."),
+            JaEx("がっこう は なんじ に はじまります か。", "gakkou wa nanji ni hajimarimasu ka.", "स्कूल कितने बजे शुरू होता है?", "Where does school start?"),
+            JaEx("がっこう の せんせい は やさしい です。", "gakkou no sensei wa yasashii desu.", "स्कूल के शिक्षक दयालु हैं।", "My school teacher is very kind."),
+        ),
+        "かいしゃ" to listOf(
+
+            JaEx("かいしゃ で はたらきます。", "kaisha de hatarakimasu.", "मैं कंपनी में काम करता हूँ।", "I work at Kaisha."),
+            JaEx("かいしゃ は うち から ちかい です。", "kaisha wa uchi kara chikai desu.", "कंपनी घर से पास है।", "It's near from my house."),
+            JaEx("あした かいしゃ に いきます。", "ashita kaisha ni ikimasu.", "कल मैं कंपनी जाऊँगा।", "I'll go to Kaisha tomorrow."),
+        ),
+        "いえ" to listOf(
+
+            JaEx("いえ に かえります。", "ie ni kaerimasu.", "मैं घर लौटता हूँ।", "Yes, I will return."),
+            JaEx("この いえ は あたらしい です。", "kono ie wa atarashii desu.", "यह घर नया है।", "This house is new."),
+            JaEx("いえ で ごはん を たべます。", "ie de gohan wo tabemasu.", "मैं घर पर खाना खाता हूँ।", "I'm going to eat dinner."),
+        ),
+        "へや" to listOf(
+
+            JaEx("へや に はいります。", "heya ni hairimasu.", "मैं कमरे में जाता हूँ।", "I go into the room."),
+            JaEx("この へや は ひろい です。", "kono heya wa hiroi desu.", "यह कमरा बड़ा है।", "This room is spacious."),
+            JaEx("へや を そうじ します。", "heya wo souji shimasu.", "मैं कमरा साफ़ करता हूँ।", "I will clean the room."),
+        ),
+        "トイレ" to listOf(
+
+            JaEx("トイレ は どこ です か。", "toire wa doko desu ka.", "शौचालय कहाँ है?", "Where is the restroom."),
+            JaEx("トイレ に いきます。", "toire ni ikimasu.", "मैं शौचालय जाता हूँ।", "I'm going to the toilet."),
+            JaEx("トイレ を かします か。", "toire wo kashimasu ka.", "क्या मैं शौचालय इस्तेमाल कर सकता हूँ?", "Would you like to use the toilet?"),
+        ),
+        "だいどころ" to listOf(
+
+            JaEx("だいどころ で りょうり を します。", "daidokoro de ryouri wo shimasu.", "मैं रसोई में खाना बनाता हूँ।", "I'm going to take a drink at the main point."),
+            JaEx("だいどころ は せまい です。", "daidokoro wa semai desu.", "रसोई छोटी है।", "The main point is that it is small."),
+            JaEx("だいどころ に れいぞうこ が あります。", "daidokoro ni reizouko ga arimasu.", "रसोई में फ्रिज है।", "There is a Reizouko in the middle of the day."),
+        ),
+        "ほん" to listOf(
+
+            JaEx("ほん を よみます。", "hon wo yomimasu.", "मैं किताब पढ़ता हूँ।", "I will read the book."),
+            JaEx("この ほん は おもしろい です。", "kono hon wa omoshiroi desu.", "यह किताब दिलचस्प है।", "This book is interesting."),
+            JaEx("ほん を かしました。", "hon wo kashimashita.", "मैंने किताब उधार दी।", "I told the truth."),
+        ),
+        "ペン" to listOf(
+
+            JaEx("ペン で かきます。", "pen de kakimasu.", "मैं पेन से लिखता हूँ।", "I draw it with a pen."),
+            JaEx("この ペン は あかい です。", "kono pen wa akai desu.", "यह पेन लाल है।", "This pen is red."),
+            JaEx("ペン を かして ください。", "pen wo kashite kudasai.", "कृपया पेन उधार दीजिए।", "Please use your pen."),
+        ),
+        "かばん" to listOf(
+
+            JaEx("かばん の なか に ほん が あります。", "kaban no naka ni hon ga arimasu.", "बैग में किताब है।", "There is a book in my bag."),
+            JaEx("この かばん は おもい です。", "kono kaban wa omoi desu.", "यह बैग भारी है।", "This bag is special to me."),
+            JaEx("かばん を かいました。", "kaban wo kaimashita.", "मैंने बैग ख़रीदा।", "I grabbed my bag."),
+        ),
+        "くつ" to listOf(
+
+            JaEx("くつ を はきます。", "kutsu wo hakimasu.", "मैं जूते पहनता हूँ。", "I'll put on my shoes."),
+            JaEx("この くつ は あたらしい です。", "kono kutsu wa atarashii desu.", "ये जूते नए हैं।", "These shoes are new."),
+            JaEx("くつ を ぬぎます。", "kutsu wo nugimasu.", "मैं जूते उतारता हूँ।", "Take off your shoes."),
+        ),
+        "ふく" to listOf(
+
+            JaEx("ふく を きます。", "fuku wo kimasu.", "मैं कपड़े पहनता हूँ।", "I'm going to take a nap."),
+            JaEx("ふく を あらいます。", "fuku wo araimasu.", "मैं कपड़े धोता हूँ।", "I'll clean the cloth."),
+            JaEx("きれい な ふく が すき です。", "kirei na fuku ga suki desu.", "मुझे सुंदर कपड़े पसंद हैं।", "I like clean clothes."),
+        ),
+        "とけい" to listOf(
+
+            JaEx("とけい を みます。", "tokei wo mimasu.", "मैं घड़ी देखता हूँ।", "I will look into the problem."),
+            JaEx("いま なんじ です か、とけい を みて ください。", "ima nanji desu ka, tokei wo mite kudasai.", "अभी कितने बजे हैं, कृपया घड़ी देखिए।", "What are you doing now? Please take a look."),
+            JaEx("この とけい は たかい です。", "kono tokei wa takai desu.", "यह घड़ी महँगी है।", "This scale is very high."),
+        ),
+        "でんわ" to listOf(
+
+            JaEx("でんわ を かけます。", "denwa wo kakemasu.", "मैं फ़ोन करता हूँ।", "I'll call you."),
+            JaEx("でんわ が なって います。", "denwa ga natte imasu.", "फ़ोन बज रहा है।", "The phone is out."),
+            JaEx("でんわ ばんごう を おしえて ください。", "denwa bangou wo oshiete kudasai.", "कृपया फ़ोन नंबर बताइए।", "Please tell me the phone number."),
+        ),
+        "けいたい" to listOf(
+
+            JaEx("けいたい で えいが を みます。", "keitai de eiga wo mimasu.", "मैं फ़ोन पर फ़िल्म देखता हूँ।", "I'm going to look into the English language at the university."),
+            JaEx("けいたい を わすれました。", "keitai wo wasuremashita.", "मैं फ़ोन भूल गया।", "I forgot the key."),
+            JaEx("けいたい の でんち が きれました。", "keitai no denchi ga kiremashita.", "फ़ोन की बैटरी ख़त्म हो गई।", "My cell phone has finished."),
+        ),
+        "パソコン" to listOf(
+
+            JaEx("パソコン で しごと を します。", "pasokon de shigoto wo shimasu.", "मैं कंप्यूटर पर काम करता हूँ।", "I do my work on my computer."),
+            JaEx("この パソコン は はやい です。", "kono pasokon wa hayai desu.", "यह कंप्यूटर तेज़ है।", "This computer is fast."),
+            JaEx("パソコン を つけます。", "pasokon wo tsukemasu.", "मैं कंप्यूटर चालू करता हूँ।", "Turn on your computer."),
+        ),
+        "かぎ" to listOf(
+
+            JaEx("かぎ を かぎ に さします。", "kagi wo kagi ni sashimasu.", "मैं ताले में चाबी लगाता हूँ।", "Put the key in the lock."),
+            JaEx("かぎ を わすれました。", "kagi wo wasuremashita.", "मैं चाबी भूल गया।", "I forgot my key."),
+            JaEx("この かぎ は どこ です か。", "kono kagi wa doko desu ka.", "यह चाबी कहाँ है?", "Where is this key?"),
+        ),
+        "かさ" to listOf(
+
+            JaEx("かさ を もって いきます。", "kasa wo motte ikimasu.", "मैं छाता लेकर जाता हूँ।", "I'll go with an umbrella."),
+            JaEx("かさ が いりません。", "kasa ga irimasen.", "छाते की ज़रूरत नहीं है।", "No umbrella required."),
+            JaEx("かさ を わすれました。", "kasa wo wasuremashita.", "मैं छाता भूल गया।", "I forgot the umbrella."),
+        ),
+        "シャツ" to listOf(
+
+            JaEx("シャツ は しろい です。", "shatsu wa shiroi desu.", "शर्ट सफ़ेद है।", "The shirt is white."),
+            JaEx("シャツ を かいました。", "shatsu wo kaimashita.", "मैंने शर्ट ख़रीदी।", "I wore a shirt."),
+            JaEx("この シャツ は ちいさい です。", "kono shatsu wa chiisai desu.", "यह शर्ट छोटी है।", "This shirt is small."),
+        ),
+        "みせ" to listOf(
+
+            JaEx("この みせ の ケーキ は おいしい です。", "kono mise no keeki wa oishii desu.", "इस दुकान का केक स्वादिष्ट है।", "This fancy cake is delicious."),
+            JaEx("みせ は なんじ に あきます か。", "mise wa nanji ni akimasu ka.", "दुकान कितने बजे खुलती है?", "What do you like about Mise?"),
+            JaEx("となりの みせ で かいます。", "tonari no mise de kaimasu.", "मैं पास की दुकान से ख़रीदता हूँ।", "I'm going to meet you next door."),
+        ),
+        "レストラン" to listOf(
+
+            JaEx("レストラン で ばんごはん を たべます。", "resutoran de bangohan wo tabemasu.", "मैं रेस्तराँ में रात का खाना खाता हूँ।", "I'm going to eat dinner at a restaurant."),
+            JaEx("この レストラン は ゆうめい です。", "kono resutoran wa yuumei desu.", "यह रेस्तराँ प्रसिद्ध है।", "This restaurant is Yuumei."),
+            JaEx("レストラン は こんで います。", "resutoran wa konde imasu.", "रेस्तराँ में भीड़ है।", "The restaurant is here."),
+        ),
+        "ぎんこう" to listOf(
+
+            JaEx("ぎんこう で おかね を おろします。", "ginkou de okane wo oroshimasu.", "मैं बैंक से पैसे निकालता हूँ।", "Drop money with Ginkou."),
+            JaEx("ぎんこう は どこ です か。", "ginkou wa doko desu ka.", "बैंक कहाँ है?", "Where is Ginkou?"),
+            JaEx("ぎんこう に いきます。", "ginkou ni ikimasu.", "मैं बैंक जाता हूँ।", "I'm going to Ginkou."),
+        ),
+        "えき" to listOf(
+
+            JaEx("えき で でんしゃ を まちます。", "eki de densha wo machimasu.", "मैं स्टेशन पर ट्रेन का इंतज़ार करता हूँ।", "Stop the train at the train station."),
+            JaEx("えき は ここ から ちかい です。", "eki wa koko kara chikai desu.", "स्टेशन यहाँ से पास है।", "The station is not far from here."),
+            JaEx("えき に つきました。", "eki ni tsukimashita.", "मैं स्टेशन पहुँच गया।", "I arrived at the station."),
+        ),
+        "くうこう" to listOf(
+
+            JaEx("くうこう に ひこうき が つきました。", "kuukou ni hikouki ga tsukimashita.", "हवाई जहाज़ हवाई अड्डे पर उतरा।", "A plane arrived on the plane."),
+            JaEx("くうこう まで タクシー で いきます。", "kuukou made takushii de ikimasu.", "मैं हवाई अड्डे तक टैक्सी से जाता हूँ।", "I'll take a taxi to Kuko."),
+            JaEx("くうこう は とおい です。", "kuukou wa tooi desu.", "हवाई अड्डा दूर है।", "Kuukou is Tooi."),
+        ),
+        "バス" to listOf(
+
+            JaEx("バス で がっこう に いきます。", "basu de gakkou ni ikimasu.", "मैं बस से स्कूल जाता हूँ।", "I will go to school by bus."),
+            JaEx("バス を まって います。", "basu wo matte imasu.", "मैं बस का इंतज़ार कर रहा हूँ।", "I'm waiting for the bus."),
+            JaEx("この バス は えき に いきます か。", "kono basu wa eki ni ikimasu ka.", "क्या यह बस स्टेशन जाती है?", "Does this bus go to the station?"),
+        ),
+        "でんしゃ" to listOf(
+
+            JaEx("でんしゃ で かいしゃ に いきます。", "densha de kaisha ni ikimasu.", "मैं ट्रेन से कंपनी जाता हूँ।", "I'm going to the train station."),
+            JaEx("でんしゃ が おくれて います。", "densha ga okurete imasu.", "ट्रेन देर से चल रही है।", "The train is late."),
+            JaEx("でんしゃ の なか で ほん を よみます。", "densha no naka de hon wo yomimasu.", "मैं ट्रेन में किताब पढ़ता हूँ।", "I read a book on the train."),
+        ),
+        "くるま" to listOf(
+
+            JaEx("くるま で いきます。", "kuruma de ikimasu.", "मैं कार से जाता हूँ।", "I'll go by car."),
+            JaEx("この くるま は あたらしい です。", "kono kuruma wa atarashii desu.", "यह कार नई है।", "This car is new."),
+            JaEx("くるま を うんてん します。", "kuruma wo unten shimasu.", "मैं कार चलाता हूँ।", "I will take care of your car."),
+        ),
+        "じてんしゃ" to listOf(
+
+            JaEx("じてんしゃ で としょかん に いきます。", "jitensha de toshokan ni ikimasu.", "मैं साइकिल से पुस्तकालय जाता हूँ।", "I will go to the library by train."),
+            JaEx("じてんしゃ に のります。", "jitensha ni norimasu.", "मैं साइकिल चलाता हूँ।", "I'm going to ride on a train."),
+            JaEx("この じてんしゃ は あかい です。", "kono jitensha wa akai desu.", "यह साइकिल लाल है।", "This train is red."),
+        ),
+        "タクシー" to listOf(
+
+            JaEx("タクシー を よびます。", "takushii wo yobimasu.", "मैं टैक्सी बुलाता हूँ।", "I'll call a taxi."),
+            JaEx("タクシー で ホテル に いきます。", "takushii de hoteru ni ikimasu.", "मैं टैक्सी से होटल जाता हूँ।", "I'll take a taxi to the hotel."),
+            JaEx("タクシー の うんてんしゅ は しんせつ です。", "takushii no untenshu wa shinsetsu desu.", "टैक्सी ड्राइवर दयालु है।", "The taxi service is simple."),
+        ),
+        "ひこうき" to listOf(
+
+            JaEx("ひこうき で にほん に いきます。", "hikouki de nihon ni ikimasu.", "मैं हवाई जहाज़ से जापान जाता हूँ।", "I'm going to Japan by plane."),
+            JaEx("ひこうき は そら を とんで います。", "hikouki wa sora wo tonde imasu.", "हवाई जहाज़ आकाश में उड़ रहा है।", "A plane is flying in the sky."),
+            JaEx("ひこうき の チケット を かいました。", "hikouki no chiketto wo kaimashita.", "मैंने हवाई जहाज़ का टिकट ख़रीदा।", "I bought a plane ticket."),
+        ),
+        "としょかん" to listOf(
+
+            JaEx("としょかん で ほん を かります。", "toshokan de hon wo karimasu.", "मैं पुस्तकालय से किताब उधार लेता हूँ।", "I read the book in the library."),
+            JaEx("としょかん は しずか です。", "toshokan wa shizuka desu.", "पुस्तकालय शांत है।", "The library is quiet."),
+            JaEx("としょかん で べんきょう します。", "toshokan de benkyou shimasu.", "मैं पुस्तकालय में पढ़ता हूँ।", "I study at the library."),
+        ),
+        "びょういん" to listOf(
+
+            JaEx("びょういん に いきます。", "byouin ni ikimasu.", "मैं अस्पताल जाता हूँ।", "I'm going to the hospital."),
+            JaEx("びょういん は どこ です か。", "byouin wa doko desu ka.", "अस्पताल कहाँ है?", "Where is the inn?"),
+            JaEx("この びょういん は おおきい です。", "kono byouin wa ookii desu.", "यह अस्पताल बड़ा है।", "This inn is big."),
+        ),
+        "こうえん" to listOf(
+
+            JaEx("こうえん で あそびます。", "kouen de asobimasu.", "मैं पार्क में खेलता हूँ।", "Let's play in Koen."),
+            JaEx("こうえん に き が たくさん あります。", "kouen ni ki ga takusan arimasu.", "पार्क में बहुत सारे पेड़ हैं।", "There are a lot of things to do in Koen."),
+            JaEx("こうえん を さんぽ します。", "kouen wo sanpo shimasu.", "मैं पार्क में टहलता हूँ।", "Let's take a walk around Koen."),
+        ),
+        "えいが" to listOf(
+
+            JaEx("えいが を みます。", "eiga wo mimasu.", "मैं फ़िल्म देखता हूँ।", "I will look into the matter."),
+            JaEx("この えいが は おもしろい です。", "kono eiga wa omoshiroi desu.", "यह फ़िल्म दिलचस्प है।", "This picture is interesting."),
+            JaEx("えいがかん で えいが を みました。", "eigakan de eiga wo mimashita.", "मैंने सिनेमा में फ़िल्म देखी।", "I read the book in English."),
+        ),
+        "テレビ" to listOf(
+
+            JaEx("テレビ で ニュース を みます。", "terebi de nyuusu wo mimasu.", "मैं टीवी पर समाचार देखता हूँ।", "I watch the news on TV."),
+            JaEx("テレビ を つけます。", "terebi wo tsukemasu.", "मैं टीवी चालू करता हूँ।", "Turn on the TV."),
+            JaEx("テレビ の おと が おおきい です。", "terebi no oto ga ookii desu.", "टीवी की आवाज़ तेज़ है।", "The front of the TV is big."),
+        ),
+        "しごと" to listOf(
+
+            JaEx("しごと は なんですか。", "shigoto wa nan desu ka.", "आपका काम क्या है?", "What is your job?"),
+            JaEx("しごと が いそがしい です。", "shigoto ga isogashii desu.", "काम व्यस्त है।", "I'm busy with work."),
+            JaEx("しごと を がんばります。", "shigoto wo ganbarimasu.", "मैं काम में मेहनत करता हूँ।", "I will do my best at my job."),
+        ),
+        "かいがい" to listOf(
+
+            JaEx("かいがい に いった こと が あります。", "kaigai ni itta koto ga arimasu.", "मैं विदेश गया हूँ।", "I once went to a meeting."),
+            JaEx("かいがい りょこう が すき です。", "kaigai ryokou ga suki desu.", "मुझे विदेश यात्रा पसंद है।", "I like Kaigai Ryoko."),
+            JaEx("かいがい から ともだち が きます。", "kaigai kara tomodachi ga kimasu.", "विदेश से दोस्त आ रहा है।", "Friends will come from the meeting."),
+        ),
+        "きょう" to listOf(
+
+            JaEx("きょう は いい てんき です。", "kyou wa ii tenki desu.", "आज मौसम अच्छा है।", "Today is a good day."),
+            JaEx("きょう は なんようび です か。", "kyou wa nan'youbi desu ka.", "आज कौन सा दिन है?", "What is your day today?"),
+            JaEx("きょう は いそがしい です。", "kyou wa isogashii desu.", "आज मैं व्यस्त हूँ।", "I'm busy today."),
+        ),
+        "あした" to listOf(
+
+            JaEx("あした は やすみ です。", "ashita wa yasumi desu.", "कल छुट्टी है।", "Tomorrow is a day of rest."),
+            JaEx("あした は なに を します か。", "ashita wa nani wo shimasu ka.", "कल आप क्या करेंगे?", "What will you do tomorrow?"),
+            JaEx("あした また あいましょう。", "ashita mata aimashou.", "कल फिर मिलते हैं।", "Let's meet again tomorrow."),
+        ),
+        "きのう" to listOf(
+
+            JaEx("きのう は あめ でした。", "kinou wa ame deshita.", "कल बारिश हुई थी।", "Yesterday was candy."),
+            JaEx("きのう なに を しました か。", "kinou nani wo shimashita ka.", "कल आपने क्या किया?", "What did you do yesterday?"),
+            JaEx("きのう は やすみ でした。", "kinou wa yasumi deshita.", "कल छुट्टी थी।", "Yesterday was a good night."),
+        ),
+        "いま" to listOf(
+
+            JaEx("いま なんじ です か。", "ima nanji desu ka.", "अभी कितने बजे हैं?", "What are you doing now?"),
+            JaEx("いま ごぜん くじ です。", "ima gozen kuji desu.", "अभी सुबह नौ बजे हैं।", "Now it's Gozen Kuji."),
+            JaEx("いま いそがしい です。", "ima isogashii desu.", "अभी मैं व्यस्त हूँ।", "I'm busy right now."),
+        ),
+        "あさ" to listOf(
+
+            JaEx("あさ に おきます。", "asa ni okimasu.", "मैं सुबह उठता हूँ।", "I'll leave it in the morning."),
+            JaEx("あさ ごはん を たべます。", "asa gohan wo tabemasu.", "मैं सुबह नाश्ता करता हूँ।", "Let's eat breakfast tomorrow."),
+            JaEx("あさ は すずしい です。", "asa wa suzushii desu.", "सुबह ठंडी होती है।", "The morning is cool."),
+        ),
+        "ひる" to listOf(
+
+            JaEx("ひる ごはん を たべます。", "hiru gohan wo tabemasu.", "मैं दोपहर का खाना खाता हूँ।", "I'm going to eat some rice."),
+            JaEx("ひる は あつい です。", "hiru wa atsui desu.", "दोपहर गर्म होती है।", "Hiru is hot."),
+            JaEx("ひる に こうえん に いきます。", "hiru ni kouen ni ikimasu.", "दोपहर में मैं पार्क जाता हूँ।", "I'm going to Hiru ni Koen."),
+        ),
+        "よる" to listOf(
+
+            JaEx("よる は つき が きれい です。", "yoru wa tsuki ga kirei desu.", "रात में चाँद सुंदर होता है।", "It has a beautiful shape."),
+            JaEx("よる に ほん を よみます。", "yoru ni hon wo yomimasu.", "रात में मैं किताब पढ़ता हूँ।", "I will read the book depending on the situation."),
+            JaEx("よる は さむい です。", "yoru wa samui desu.", "रात ठंडी होती है।", "It's cold at night."),
+        ),
+        "げつようび" to listOf(
+
+            JaEx("げつようび に しごと が はじまります。", "getsuyoubi ni shigoto ga hajimarimasu.", "सोमवार को काम शुरू होता है।", "The work begins at the end of the year."),
+            JaEx("げつようび は いそがしい です。", "getsuyoubi wa isogashii desu.", "सोमवार व्यस्त होता है।", "The beetle is busy."),
+            JaEx("げつようび に かいぎ が あります。", "getsuyoubi ni kaigi ga arimasu.", "सोमवार को बैठक है।", "There is a bulge in the beetle."),
+        ),
+        "かようび" to listOf(
+
+            JaEx("かようび に にほんご の クラス が あります。", "kayoubi ni nihongo no kurasu ga arimasu.", "मंगलवार को जापानी की कक्षा है।", "There is a Japanese class in Kayobi."),
+            JaEx("かようび は ひる まで べんきょう します。", "kayoubi wa hiru made benkyou shimasu.", "मंगलवार को मैं दोपहर तक पढ़ता हूँ।", "Kayobi will study till the end."),
+            JaEx("かようび に ともだち と あいます。", "kayoubi ni tomodachi to aimasu.", "मंगलवार को मैं दोस्त से मिलता हूँ।", "I will hang out with my friends on a good night."),
+        ),
+        "すいようび" to listOf(
+
+            JaEx("すいようび に かいもの に いきます。", "suiyoubi ni kaimono ni ikimasu.", "बुधवार को मैं ख़रीदारी जाता हूँ।", "I'm going to eat some seafood."),
+            JaEx("すいようび は たのしい です。", "suiyoubi wa tanoshii desu.", "बुधवार मज़ेदार होता है।", "Holidays are fun."),
+            JaEx("すいようび に じゅぎょう が あります。", "suiyoubi ni jugyou ga arimasu.", "बुधवार को पाठ है।", "There is a lesson in my daily life."),
+        ),
+        "もくようび" to listOf(
+
+            JaEx("もくようび に てがみ を かきます。", "mokuyoubi ni tegami wo kakimasu.", "गुरुवार को मैं पत्र लिखता हूँ।", "I'm going to write a letter for my study."),
+            JaEx("もくようび の よる は ひま です。", "mokuyoubi no yoru wa hima desu.", "गुरुवार की रात मैं खाली हूँ।", "My work depends on my free time."),
+            JaEx("もくようび に そと で たべます。", "mokuyoubi ni soto de tabemasu.", "गुरुवार को मैं बाहर खाना खाता हूँ।", "I'll eat it outside when I'm ready."),
+        ),
+        "きんようび" to listOf(
+
+            JaEx("きんようび に えいが を みます。", "kinyoubi ni eiga wo mimasu.", "शुक्रवार को मैं फ़िल्म देखता हूँ।", "I'm going to tell you about the English language."),
+            JaEx("きんようび は しごと の さいご の ひ です。", "kinyoubi wa shigoto no saigo no hi desu.", "शुक्रवार काम का आख़िरी दिन है।", "Health care is the most important part of a job."),
+            JaEx("きんようび の よる は たのしい です。", "kinyoubi no yoru wa tanoshii desu.", "शुक्रवार की रात मज़ेदार होती है।", "It's fun to read the book."),
+        ),
+        "しゅうまつ" to listOf(
+
+            JaEx("しゅうまつ は なに を します か。", "shuumatsu wa nani wo shimasu ka.", "सप्ताहांत पर आप क्या करते हैं?", "What does the festival do?"),
+            JaEx("しゅうまつ は やすみます。", "shuumatsu wa yasumimasu.", "सप्ताहांत पर मैं आराम करता हूँ।", "The holidays are over."),
+            JaEx("しゅうまつ に りょこう に いきます。", "shuumatsu ni ryokou ni ikimasu.", "सप्ताहांत पर मैं यात्रा पर जाता हूँ।", "I'm going to the shrine for the holidays."),
+        ),
+        "じかん" to listOf(
+
+            JaEx("じかん が ありません。", "jikan ga arimasen.", "मेरे पास समय नहीं है।", "There is no time."),
+            JaEx("じかん を まもって ください。", "jikan wo mamotte kudasai.", "कृपया समय का पालन करें।", "Please take care of yourself."),
+            JaEx("じかん が あれば、あいましょう。", "jikan ga areba, aimashou.", "अगर समय मिले तो मिलते हैं।", "If you have time, let's meet."),
+        ),
+        "いち" to listOf(
+
+            JaEx("りんご が いっこ あります。", "ringo ga ikko arimasu.", "एक सेब है।", "There are a lot of apples."),
+            JaEx("いち から じゅう まで かぞえて ください。", "ichi kara juu made kazoete kudasai.", "कृपया एक से दस तक गिनें।", "Please count from one to all."),
+            JaEx("いち ばん すき な たべもの は なに です か。", "ichiban suki na tabemono wa nani desu ka.", "आपका सबसे पसंदीदा खाना क्या है?", "What is your favorite food?"),
+        ),
+        "に" to listOf(
+
+            JaEx("りんご を ふたつ ください。", "ringo wo futatsu kudasai.", "कृपया दो सेब दीजिए।", "Please give me two apples."),
+            JaEx("いち、に、さん。", "ichi, ni, san.", "एक, दो, तीन।", "I, ni, san."),
+            JaEx("に じ に あいましょう。", "ni ji ni aimashou.", "दो बजे मिलते हैं।", "Let's meet on the rainbow."),
+        ),
+        "さん" to listOf(
+
+            JaEx("みっつ の りんご が あります。", "mittsu no ringo ga arimasu.", "तीन सेब हैं।", "There are three apples."),
+            JaEx("さん じ に おきましょう。", "san ji ni okimashou.", "चलो तीन बजे उठें।", "Let's put it in the middle."),
+            JaEx("さん にん の ともだち が きます。", "san nin no tomodachi ga kimasu.", "तीन दोस्त आएँगे।", "Sannin's friends will be there."),
+        ),
+        "じゅう" to listOf(
+
+            JaEx("じゅう は おおきい かず です。", "juu wa ookii kazu desu.", "दस एक बड़ी संख्या है।", "The first one is a big one."),
+            JaEx("じゅう じ に ねます。", "juu ji ni nemasu.", "मैं दस बजे सोता हूँ।", "I will sleep all the time."),
+            JaEx("じゅう まで かぞえて ください。", "juu made kazoete kudasai.", "कृपया दस तक गिनें।", "Please count to the end."),
+        ),
+        "ひゃく" to listOf(
+
+            JaEx("ひゃく えん です。", "hyaku en desu.", "यह सौ येन है।", "My name is Hyakuen."),
+            JaEx("ひゃく まで かぞえられます。", "hyaku made kazoeraremasu.", "मैं सौ तक गिन सकता हूँ।", "You can even count it down to Hyaku."),
+            JaEx("この みせ は ひゃく ねん いじょう です。", "kono mise wa hyaku nen ijou desu.", "यह दुकान सौ साल से अधिक पुरानी है।", "This appearance is very simple."),
+        ),
+        "わたし" to listOf(
+
+            JaEx("わたし は マイク です。", "watashi wa maiku desu.", "मैं माइक हूँ।", "I'm Mike."),
+            JaEx("わたし は にほんご を べんきょう して います。", "watashi wa nihongo wo benkyou shite imasu.", "मैं जापानी सीख रहा हूँ।", "I am learning Japanese."),
+            JaEx("わたし の いえ は えき の ちかく です。", "watashi no ie wa eki no chikaku desu.", "मेरा घर स्टेशन के पास है।", "My house is near the station."),
+        ),
+        "あなた" to listOf(
+
+            JaEx("あなた は どこ の ひと です か。", "anata wa doko no hito desu ka.", "आप कहाँ के हैं?", "Where are you from?"),
+            JaEx("あなた の なまえ は なん です か。", "anata no namae wa nan desu ka.", "आपका नाम क्या है?", "What is your name?"),
+            JaEx("あなた は にほんご が じょうず です。", "anata wa nihongo ga jouzu desu.", "आपकी जापानी अच्छी है।", "You are good at Japanese."),
+        ),
+        "かれ" to listOf(
+
+            JaEx("かれ は がくせい です。", "kare wa gakusei desu.", "वह एक छात्र है।", "He is a schoolboy."),
+            JaEx("かれ は やさしい です。", "kare wa yasashii desu.", "वह दयालु है।", "He is kind."),
+            JaEx("かれ は いま にほん に います。", "kare wa ima nihon ni imasu.", "वह अभी जापान में है।", "He is really in Japan right now."),
+        ),
+        "かのじょ" to listOf(
+
+            JaEx("かのじょ は いしゃ です。", "kanojo wa isha desu.", "वह एक डॉक्टर है।", "My name is Isha."),
+            JaEx("かのじょ は きれい です。", "kanojo wa kirei desu.", "वह सुंदर है।", "Kanojo is beautiful."),
+            JaEx("かのじょ は うた が すき です。", "kanojo wa uta ga suki desu.", "उसे गाना पसंद है।", "Kanojo likes singing."),
+        ),
+        "これ" to listOf(
+
+            JaEx("これ は ほん です。", "kore wa hon desu.", "यह एक किताब है।", "This is true."),
+            JaEx("これ は いくら です か。", "kore wa ikura desu ka.", "यह कितने का है?", "how much is this."),
+            JaEx("これ は わたし の です。", "kore wa watashi no desu.", "यह मेरा है।", "This is mine."),
+        ),
+        "それ" to listOf(
+
+            JaEx("それ は なん です か。", "sore wa nan desu ka.", "वह क्या है?", "What is that?"),
+            JaEx("それ を ください。", "sore wo kudasai.", "कृपया वह दीजिए।", "Please give me that."),
+            JaEx("それ は おいしい です。", "sore wa oishii desu.", "वह स्वादिष्ट है।", "It's delicious."),
+        ),
+        "あれ" to listOf(
+
+            JaEx("あれ は なん です か。", "are wa nan desu ka.", "वह (वहाँ) क्या है?", "What is that?"),
+            JaEx("あれ は やま です。", "are wa yama desu.", "वह (वहाँ) एक पहाड़ है।", "That is Yama."),
+            JaEx("あれ は だれ の かばん です か。", "are wa dare no kaban desu ka.", "वह (वहाँ) किसका बैग है?", "Whose bag is that?"),
+        ),
+        "どこ" to listOf(
+
+            JaEx("えき は どこ です か。", "eki wa doko desu ka.", "स्टेशन कहाँ है?", "Where is the station?"),
+            JaEx("どこ に すんで います か。", "doko ni sunde imasu ka.", "आप कहाँ रहते हैं?", "Where do you live?"),
+            JaEx("どこ に いきます か。", "doko ni ikimasu ka.", "आप कहाँ जा रहे हैं?", "Where are you going?"),
+        ),
+        "だれ" to listOf(
+
+            JaEx("あの ひと は だれ です か。", "ano hito wa dare desu ka.", "वह व्यक्ति कौन है?", "Who is that person?"),
+            JaEx("だれ が きました か。", "dare ga kimashita ka.", "कौन आया?", "Who came?"),
+            JaEx("これ は だれ の です か。", "kore wa dare no desu ka.", "यह किसका है?", "Who does this belong to?"),
+        ),
+        "なに" to listOf(
+
+            JaEx("これ は なん です か。", "kore wa nan desu ka.", "यह क्या है?", "What is this?"),
+            JaEx("なに が すき です か。", "nani ga suki desu ka.", "आपको क्या पसंद है?", "What do you like?"),
+            JaEx("きょう は なに を します か。", "kyou wa nani wo shimasu ka.", "आज आप क्या करेंगे?", "What will you do today?"),
+        ),
+        "いつ" to listOf(
+
+            JaEx("いつ にほん に いきます か。", "itsu nihon ni ikimasu ka.", "आप जापान कब जाएँगे?", "When are you going to Japan?"),
+            JaEx("いつ ひま です か。", "itsu hima desu ka.", "आप कब खाली हैं?", "When do you have free time?"),
+            JaEx("いつ でも いい です。", "itsu demo ii desu.", "किसी भी समय चलता है।", "Any time is fine."),
+        ),
+        "なぜ" to listOf(
+
+            JaEx("なぜ にほんご を べんきょう して います か。", "naze nihongo wo benkyou shite imasu ka.", "आप जापानी क्यों सीख रहे हैं?", "Why are you learning Japanese?"),
+            JaEx("なぜ か わかりません。", "naze ka wakarimasen.", "मुझे नहीं पता क्यों।", "I don't know why."),
+            JaEx("なぜ おくれて います か。", "naze okurete imasu ka.", "आप देर से क्यों हैं?", "Why are you late?"),
+        ),
+        "どう" to listOf(
+
+            JaEx("おげんき です か。げんき です。", "ogenki desu ka. genki desu.", "आप कैसे हैं? मैं ठीक हूँ।", "Are you okay? This is Genki."),
+            JaEx("どう です か。", "dou desu ka.", "कैसा है?", "What do you think?"),
+            JaEx("コーヒー は どう です か。", "koohii wa dou desu ka.", "कॉफ़ी कैसी है?", "How about some coffee?"),
+        ),
+        "いくら" to listOf(
+
+            JaEx("これ は いくら です か。", "kore wa ikura desu ka.", "यह कितने का है?", "how much is this."),
+            JaEx("いくら で すか。", "ikura desu ka.", "कितने का है?", "How much does it cost?"),
+            JaEx("この かばん は いくら でした か。", "kono kaban wa ikura deshita ka.", "यह बैग कितने का था?", "How much did this bag cost?"),
+        ),
+        "おおきい" to listOf(
+
+            JaEx("この いえ は おおきい です。", "kono ie wa ookii desu.", "यह घर बड़ा है।", "This house is big."),
+            JaEx("おおきい ねこ が います。", "ookii neko ga imasu.", "वहाँ एक बड़ी बिल्ली है।", "There is a big cat."),
+            JaEx("ぞう は とても おおきい です。", "zou wa totemo ookii desu.", "हाथी बहुत बड़ा होता है।", "Elephants are very big."),
+        ),
+        "ちいさい" to listOf(
+
+            JaEx("この ねこ は ちいさい です。", "kono neko wa chiisai desu.", "यह बिल्ली छोटी है।", "This cat is small."),
+            JaEx("ちいさい みせ で かいました。", "chiisai mise de kaimashita.", "मैंने एक छोटी दुकान से ख़रीदा।", "It was small and big."),
+            JaEx("うち は ちいさい です。", "uchi wa chiisai desu.", "मेरा घर छोटा है।", "We are small."),
+        ),
+        "たかい" to listOf(
+
+            JaEx("この とけい は たかい です。", "kono tokei wa takai desu.", "यह घड़ी महँगी है।", "This scale is very high."),
+            JaEx("たかい やま に のぼりました。", "takai yama ni noborimashita.", "मैं ऊँचे पहाड़ पर चढ़ा।", "I climbed a tall mountain."),
+            JaEx("かれ は せ が たかい です。", "kare wa se ga takai desu.", "वह लंबा है।", "He is very smart."),
+        ),
+        "やすい" to listOf(
+
+            JaEx("この みせ は やすい です。", "kono mise wa yasui desu.", "यह दुकान सस्ती है।", "This appearance is easy."),
+            JaEx("やすい もの を さがして います。", "yasui mono wo sagashite imasu.", "मैं सस्ती चीज़ ढूँढ रहा हूँ।", "I'm looking for something easy."),
+            JaEx("これ は やすい です ね。", "kore wa yasui desu ne.", "यह सस्ता है, है ना?", "This is easy."),
+        ),
+        "あつい" to listOf(
+
+            JaEx("きょう は あつい です。", "kyou wa atsui desu.", "आज गर्मी है।", "It's hot today."),
+            JaEx("この みず は あつい です。", "kono mizu wa atsui desu.", "यह पानी गर्म है।", "This water is hot."),
+            JaEx("なつ は あつい です。", "natsu wa atsui desu.", "गर्मी में तेज़ गर्मी होती है।", "Summer is hot."),
+        ),
+        "さむい" to listOf(
+
+            JaEx("きょう は さむい です。", "kyou wa samui desu.", "आज ठंड है।", "It's cold today."),
+            JaEx("ふゆ は さむい です。", "fuyu wa samui desu.", "सर्दी में ठंड होती है।", "Fuyu is cold."),
+            JaEx("さむい から、まど を しめて ください。", "samui kara, mado wo shimete kudasai.", "ठंड है, कृपया खिड़की बंद कर दीजिए।", "It's cold, so please close the window."),
+        ),
+        "あたらしい" to listOf(
+
+            JaEx("あたらしい でんわ を かいました。", "atarashii denwa wo kaimashita.", "मैंने एक नया फ़ोन ख़रीदा।", "I made a new phone call."),
+            JaEx("あたらしい ともだち が できました。", "atarashii tomodachi ga dekimashita.", "मुझे एक नया दोस्त मिला।", "I made a new friend."),
+            JaEx("これ は あたらしい ほん です。", "kore wa atarashii hon desu.", "यह एक नई किताब है।", "This is a new book."),
+        ),
+        "ふるい" to listOf(
+
+            JaEx("この ほん は ふるい です。", "kono hon wa furui desu.", "यह किताब पुरानी है।", "This book is a sieve."),
+            JaEx("ふるい まち が すき です。", "furui machi ga suki desu.", "मुझे पुराने शहर पसंद हैं।", "I like the town of Furuimachi."),
+            JaEx("この いえ は とても ふるい です。", "kono ie wa totemo furui desu.", "यह घर बहुत पुराना है।", "This house is very sieve."),
+        ),
+        "おいしい" to listOf(
+
+            JaEx("この りょうり は おいしい です。", "kono ryouri wa oishii desu.", "यह खाना स्वादिष्ट है।", "This gourd is delicious."),
+            JaEx("おいしい ものを たべたい です。", "oishii mono wo tabetai desu.", "मैं स्वादिष्ट खाना खाना चाहता हूँ।", "I want to eat something delicious."),
+            JaEx("すし は とても おいしい です。", "sushi wa totemo oishii desu.", "सुशी बहुत स्वादिष्ट है।", "Sushi is very delicious."),
+        ),
+        "まずい" to listOf(
+
+            JaEx("この くすり は まずい です。", "kono kusuri wa mazui desu.", "यह दवा बेस्वाद है।", "This medicine is bad."),
+            JaEx("まずい と おもいません か。", "mazui to omoimasen ka.", "क्या आपको नहीं लगता यह बेस्वाद है?", "Don't you think it's bad?"),
+            JaEx("この コーヒー は まずい です。", "kono koohii wa mazui desu.", "यह कॉफ़ी बेस्वाद है।", "This coffee is bad."),
+        ),
+        "きれい" to listOf(
+
+            JaEx("この こうえん は きれい です。", "kono kouen wa kirei desu.", "यह पार्क सुंदर है।", "This garden is beautiful."),
+            JaEx("かのじょ は きれい です。", "kanojo wa kirei desu.", "वह सुंदर है।", "Kanojo is beautiful."),
+            JaEx("へや を きれい に して ください。", "heya wo kirei ni shite kudasai.", "कृपया कमरा साफ़ कर दीजिए।", "Please keep the room clean."),
+        ),
+        "いい" to listOf(
+
+            JaEx("きょう は いい てんき です。", "kyou wa ii tenki desu.", "आज मौसम अच्छा है।", "Today is a good day."),
+            JaEx("いい アイデア です ね。", "ii aidea desu ne.", "अच्छा विचार है।", "That's a good idea."),
+            JaEx("これ は いい ほん です。", "kore wa ii hon desu.", "यह एक अच्छी किताब है।", "This is a good book."),
+        ),
+        "わるい" to listOf(
+
+            JaEx("きょう は わるい てんき です。", "kyou wa warui tenki desu.", "आज मौसम ख़राब है।", "Today is a bad day."),
+            JaEx("わるい ところ も あります。", "warui tokoro mo arimasu.", "कुछ बुरी बातें भी हैं।", "There are also some bad points."),
+            JaEx("これは わるい きょういく です。", "kore wa warui kyouiku desu.", "यह बुरी आदत है।", "This is a bad idea."),
+        ),
+        "たのしい" to listOf(
+
+            JaEx("きょう は たのしかった です。", "kyou wa tanoshikatta desu.", "आज मज़ेदार था।", "It was fun today."),
+            JaEx("にほんご は たのしい です。", "nihongo wa tanoshii desu.", "जापानी सीखना मज़ेदार है।", "Japanese is fun."),
+            JaEx("たのしい えいが を みました。", "tanoshii eiga wo mimashita.", "मैंने एक मज़ेदार फ़िल्म देखी।", "I watched a fun movie."),
+        ),
+        "かわいい" to listOf(
+
+            JaEx("この ねこ は かわいい です。", "kono neko wa kawaii desu.", "यह बिल्ली प्यारी है।", "This cat is cute."),
+            JaEx("この こ は とても かわいい です。", "kono ko wa totemo kawaii desu.", "यह बच्चा बहुत प्यारा है।", "This one is very cute."),
+            JaEx("かわいい ふく を かいました。", "kawaii fuku wo kaimashita.", "मैंने प्यारे कपड़े ख़रीदे।", "I drew a cute balloon."),
+        ),
+        "はやい" to listOf(
+
+            JaEx("でんしゃ は はやい です。", "densha wa hayai desu.", "ट्रेन तेज़ होती है।", "Trains are fast."),
+            JaEx("かれ は はやく はしります。", "kare wa hayaku hashirimasu.", "वह तेज़ दौड़ता है।", "He is fast."),
+            JaEx("この くるま は とても はやい です。", "kono kuruma wa totemo hayai desu.", "यह कार बहुत तेज़ है।", "This car is very fast."),
+        ),
+        "おそい" to listOf(
+
+            JaEx("わたし は おそい です。", "watashi wa osoi desu.", "मैं धीमा हूँ।", "I'm late."),
+            JaEx("でんしゃ が おくれて います。", "densha ga okurete imasu.", "ट्रेन देर से चल रही है।", "The train is late."),
+            JaEx("おそく なって すみません。", "osoku natte sumimasen.", "देर हो गई, माफ़ कीजिए।", "Sorry for being late."),
+        ),
+        "ながい" to listOf(
+
+            JaEx("この みち は ながい です。", "kono michi wa nagai desu.", "यह रास्ता लंबा है।", "This road is long."),
+            JaEx("かれ は かみ が ながい です。", "kare wa kami ga nagai desu.", "उसके बाल लंबे हैं।", "He has a long hair."),
+            JaEx("ぞう は はな が ながい です。", "zou wa hana ga nagai desu.", "हाथी की सूँड़ लंबी होती है।", "Elephants have long flowers."),
+        ),
+        "みじかい" to listOf(
+
+            JaEx("この みち は みじかい です。", "kono michi wa mijikai desu.", "यह रास्ता छोटा है।", "This path is short."),
+            JaEx("みじかい し を かきました。", "mijikai shi wo kakimashita.", "मैंने एक छोटी कविता लिखी।", "I wrote a small paper."),
+            JaEx("ふゆ は ひ が みじかい です。", "fuyu wa hi ga mijikai desu.", "सर्दी में दिन छोटे होते हैं।", "Fuyu is very small."),
+        ),
+        "あか" to listOf(
+
+            JaEx("この りんご は あか です。", "kono ringo wa aka desu.", "यह सेब लाल है।", "This apple is red."),
+            JaEx("あか い ふく を きて います。", "akai fuku wo kite imasu.", "मैंने लाल कपड़े पहने हैं।", "I am bringing red cloth."),
+            JaEx("あか い はな が すき です。", "akai hana ga suki desu.", "मुझे लाल फूल पसंद हैं।", "I like red flowers."),
+        ),
+        "あお" to listOf(
+
+            JaEx("そら は あお です。", "sora wa ao desu.", "आकाश नीला है。", "Sora is Ao."),
+            JaEx("あお い ペン を ください。", "aoi pen wo kudasai.", "कृपया नीला पेन दीजिए।", "Please give me a blue pen."),
+            JaEx("うみ は あお い です。", "umi wa aoi desu.", "समुद्र नीला है।", "The sea is blue."),
+        ),
+        "きいろ" to listOf(
+
+            JaEx("ばなな は きいろ です。", "banana wa kiiro desu.", "केला पीला होता है।", "Banana is yellow."),
+            JaEx("きいろ い くつ を かいました。", "kiiroi kutsu wo kaimashita.", "मैंने पीले जूते ख़रीदे।", "I wore yellow shoes."),
+            JaEx("この はな は きいろ です。", "kono hana wa kiiro desu.", "यह फूल पीला है।", "This flower is yellow."),
+        ),
+        "しろ" to listOf(
+
+            JaEx("ゆき は しろ です。", "yuki wa shiro desu.", "बर्फ़ सफ़ेद होती है।", "Yuki is Shiro."),
+            JaEx("しろ い いぬ が います。", "shiroi inu ga imasu.", "एक सफ़ेद कुत्ता है।", "There is a white dog."),
+            JaEx("この しゃつ は しろ い です。", "kono shatsu wa shiroi desu.", "यह शर्ट सफ़ेद है।", "This chat is good."),
+        ),
+        "くろ" to listOf(
+
+            JaEx("この ねこ は くろ です。", "kono neko wa kuro desu.", "यह बिल्ली काली है।", "This cat is black."),
+            JaEx("くろ い かばん を もって います。", "kuroi kaban wo motte imasu.", "मैं काला बैग लिए हुए हूँ।", "I'm carrying a black bag."),
+            JaEx("よる は くらくて くろ です。", "yoru wa kurakute kuro desu.", "रात अंधेरी और काली होती है।", "It's dark and black."),
+        ),
+        "みどり" to listOf(
+
+            JaEx("この は は みどり です。", "kono ha wa midori desu.", "यह पत्ता हरा है।", "This is Midori."),
+            JaEx("みどり い やま が きれい です。", "midorii yama ga kirei desu.", "हरा पहाड़ सुंदर है।", "The green mountain is beautiful."),
+            JaEx("こうえん の くさ は みどり です。", "kouen no kusa wa midori desu.", "पार्क की घास हरी है।", "The grass of Koen is green."),
+        ),
+        "こんにちは" to listOf(
+
+            JaEx("こんにちは。おげんき です か。", "konnichiwa. ogenki desu ka.", "नमस्ते। आप कैसे हैं?", "Hello. Are you okay?"),
+            JaEx("こんにちは。あつい です ね。", "konnichiwa. atsui desu ne.", "नमस्ते। गर्मी है, है ना?", "Hello. It's hot, isn't it?"),
+            JaEx("こんにちは。はじめまして。", "konnichiwa. hajimemashite.", "नमस्ते। आपसे मिलकर खुशी हुई।", "Hello. nice to meet you."),
+        ),
+        "おはよう" to listOf(
+
+            JaEx("おはよう ございます。", "ohayou gozaimasu.", "सुप्रभात।", "good morning."),
+            JaEx("おはよう。いい てんき です ね。", "ohayou. ii tenki desu ne.", "सुप्रभात। मौसम अच्छा है, है ना?", "good morning. It's a good idea."),
+            JaEx("おはよう ございます。きょう も がんばりましょう。", "ohayou gozaimasu. kyou mo ganbarimashou.", "सुप्रभात। आज भी मेहनत करते हैं।", "good morning. Let's do our best today too."),
+        ),
+        "こんばんは" to listOf(
+
+            JaEx("こんばんは。", "konbanwa.", "शुभ संध्या।", "Good evening."),
+            JaEx("こんばんは。よる ごはん は もう たべました か。", "konbanwa. yoru gohan wa mou tabemashita ka.", "शुभ संध्या। क्या आपने रात का खाना खा लिया?", "Good evening. Have you already eaten your dinner?"),
+            JaEx("こんばんは。つき が きれい です ね。", "konbanwa. tsuki ga kirei desu ne.", "शुभ संध्या। चाँद सुंदर है, है ना?", "Good evening. It has a beautiful appearance."),
+        ),
+        "ありがとう" to listOf(
+
+            JaEx("ありがとう ございます。", "arigatou gozaimasu.", "धन्यवाद।", "thank you."),
+            JaEx("たすけて くれて ありがとう。", "tasukete kurete arigatou.", "मदद करने के लिए धन्यवाद।", "Thank you for your help."),
+            JaEx("ありがとう ございました。", "arigatou gozaimashita.", "धन्यवाद। (पहले की बात के लिए)", "thank you very much."),
+        ),
+        "すみません" to listOf(
+
+            JaEx("すみません。えき は どこ です か。", "sumimasen. eki wa doko desu ka.", "माफ़ कीजिए। स्टेशन कहाँ है?", "sorry. Where is the station?"),
+            JaEx("すみません。また あとで。", "sumimasen. mata ato de.", "क्षमा करें। फिर मिलते हैं।", "sorry. See you later."),
+            JaEx("すみません、おそくなりました。", "sumimasen, osoku narimashita.", "माफ़ कीजिए, मुझे देर हो गई।", "Sorry, I'm late."),
+        ),
+        "さようなら" to listOf(
+
+            JaEx("さようなら。また らいしゅう。", "sayounara. mata raishuu.", "अलविदा। अगले हफ़्ते मिलते हैं।", "Goodbye. Reishu again."),
+            JaEx("さようなら。おげんき で。", "sayounara. ogenki de.", "अलविदा। अपना ख़्याल रखिए।", "Goodbye. At Ogenki."),
+            JaEx("では、さようなら。", "dewa, sayounara.", "तो फिर, अलविदा।", "Well then, goodbye."),
+        ),
+        "はじめまして" to listOf(
+
+            JaEx("はじめまして。わたし は マイク です。", "hajimemashite. watashi wa maiku desu.", "आपसे मिलकर खुशी हुई। मैं माइक हूँ।", "nice to meet you. I'm Mike."),
+            JaEx("はじめまして。よろしく おねがい します。", "hajimemashite. yoroshiku onegai shimasu.", "आपसे मिलकर खुशी हुई। कृपया मेरा साथ दें।", "nice to meet you. Thank you for your support."),
+            JaEx("はじめまして。どこ から きました か。", "hajimemashite. doko kara kimashita ka.", "आपसे मिलकर खुशी हुई। आप कहाँ से आए हैं?", "nice to meet you. Where did you come from?"),
+        ),
+        "よろしくおねがいします" to listOf(
+
+            JaEx("よろしく おねがい します。", "yoroshiku onegai shimasu.", "कृपया मेरा साथ दें।", "Thank you for your support."),
+            JaEx("これから も よろしく おねがい します。", "korekara mo yoroshiku onegai shimasu.", "आगे भी कृपया मेरा साथ दें।", "I look forward to your continued support."),
+            JaEx("おしごと がんばって ください。よろしく です。", "oshigoto ganbatte kudasai. yoroshiku desu.", "काम में मेहनत कीजिए। आपका बहुत-बहुत शुक्रिया।", "Please do your best at your job. Nice to meet you."),
+        ),
+        "うれしい" to listOf(
+
+            JaEx("あえて うれしい です。", "aete ureshii desu.", "आपसे मिलकर मुझे खुशी हुई।", "I'm really happy."),
+            JaEx("たんじょうび に プレゼント を もらって うれしかった です。", "tanjoubi ni purezento wo moratte ureshikatta desu.", "जन्मदिन पर उपहार पाकर मैं खुश हुआ।", "I was happy to receive a gift for my birthday."),
+            JaEx("きょう は うれしい です。", "kyou wa ureshii desu.", "आज मैं खुश हूँ।", "I'm happy today."),
+        ),
+        "かなしい" to listOf(
+
+            JaEx("さようなら は かなしい です。", "sayounara wa kanashii desu.", "विदाई दुखद होती है।", "Goodbye is sad."),
+            JaEx("この えいが は かなしかった です。", "kono eiga wa kanashikatta desu.", "यह फ़िल्म दुखद थी।", "This painting was very sad."),
+            JaEx("なぜ かなしい の です か。", "naze kanashii no desu ka.", "आप उदास क्यों हैं?", "Why are you so sad?"),
+        ),
+        "こわい" to listOf(
+
+            JaEx("へび は こわい です。", "hebi wa kowai desu.", "साँप डरावना होता है।", "Snakes are scary."),
+            JaEx("よる は こわい です。", "yoru wa kowai desu.", "रात डरावनी होती है।", "Night is scary."),
+            JaEx("この えいが は こわい です。", "kono eiga wa kowai desu.", "यह फ़िल्म डरावनी है।", "This picture is scary."),
+        ),
+        "あかい" to listOf(
+
+            JaEx("この りんご は あか です。", "kono ringo wa aka desu.", "यह सेब लाल है।", "This apple is red."),
+            JaEx("あか い ふく を きて います。", "akai fuku wo kite imasu.", "मैंने लाल कपड़े पहने हैं।", "I am bringing red cloth."),
+            JaEx("あか い はな が すき です。", "akai hana ga suki desu.", "मुझे लाल फूल पसंद हैं।", "I like red flowers."),
+        ),
+        "あおい" to listOf(
+
+            JaEx("そら は あお です。", "sora wa ao desu.", "आकाश नीला है。", "Sora is Ao."),
+            JaEx("あお い ペン を ください。", "aoi pen wo kudasai.", "कृपया नीला पेन दीजिए।", "Please give me a blue pen."),
+            JaEx("うみ は あお い です。", "umi wa aoi desu.", "समुद्र नीला है।", "The sea is blue."),
+        ),
+        "きいろい" to listOf(
+
+            JaEx("ばなな は きいろ です。", "banana wa kiiro desu.", "केला पीला होता है।", "Banana is yellow."),
+            JaEx("きいろ い くつ を かいました。", "kiiroi kutsu wo kaimashita.", "मैंने पीले जूते ख़रीदे।", "I wore yellow shoes."),
+            JaEx("この はな は きいろ です。", "kono hana wa kiiro desu.", "यह फूल पीला है।", "This flower is yellow."),
+        ),
+        "しろい" to listOf(
+
+            JaEx("ゆき は しろ です。", "yuki wa shiro desu.", "बर्फ़ सफ़ेद होती है।", "Yuki is Shiro."),
+            JaEx("しろ い いぬ が います。", "shiroi inu ga imasu.", "एक सफ़ेद कुत्ता है।", "There is a white dog."),
+            JaEx("この しゃつ は しろ い です。", "kono shatsu wa shiroi desu.", "यह शर्ट सफ़ेद है।", "This chat is good."),
+        ),
+        "くろい" to listOf(
+
+            JaEx("この ねこ は くろ です。", "kono neko wa kuro desu.", "यह बिल्ली काली है।", "This cat is black."),
+            JaEx("くろ い かばん を もって います。", "kuroi kaban wo motte imasu.", "मैं काला बैग लिए हुए हूँ।", "I'm carrying a black bag."),
+            JaEx("よる は くらくて くろ です。", "yoru wa kurakute kuro desu.", "रात अंधेरी और काली होती है।", "It's dark and black."),
+        ),
+        "よい" to listOf(
+
+            JaEx("きょう は いい てんき です。", "kyou wa ii tenki desu.", "आज मौसम अच्छा है।", "Today is a good day."),
+            JaEx("いい アイデア です ね。", "ii aidea desu ne.", "अच्छा विचार है।", "That's a good idea."),
+            JaEx("これ は いい ほん です。", "kore wa ii hon desu.", "यह एक अच्छी किताब है।", "This is a good book."),
+        ),
+        "なん／なに" to listOf(
+
+            JaEx("これ は なん です か。", "kore wa nan desu ka.", "यह क्या है?", "What is this?"),
+            JaEx("なに が すき です か。", "nani ga suki desu ka.", "आपको क्या पसंद है?", "What do you like?"),
+            JaEx("きょう は なに を します か。", "kyou wa nani wo shimasu ka.", "आज आप क्या करेंगे?", "What will you do today?"),
+        ),
+        "おはようございます" to listOf(
+
+            JaEx("おはよう ございます。", "ohayou gozaimasu.", "सुप्रभात।", "good morning."),
+            JaEx("おはよう。いい てんき です ね。", "ohayou. ii tenki desu ne.", "सुप्रभात। मौसम अच्छा है, है ना?", "good morning. It's a good idea."),
+            JaEx("おはよう ございます。きょう も がんばりましょう。", "ohayou gozaimasu. kyou mo ganbarimashou.", "सुप्रभात। आज भी मेहनत करते हैं।", "good morning. Let's do our best today too."),
+        ),
+    )}
+
+    fun jaForWord(word: Word): List<JaEx> {
+        val k = word.kana.trim()
+        if (k.isEmpty()) return emptyList()
+        CURATED_JA[k]?.let { return it }
+        return generatedJa(word)
+    }
+
+    private fun generatedJa(word: Word): List<JaEx> {
+        val k = word.kana.trim()
+        if (k.isEmpty()) return emptyList()
+        val h = word.hi.trim()
+        val e = word.en.trim()
+        val frames = if (k.endsWith("い")) listOf(
+            "これはとても${k}です。" to "This is very $e.",
+            "あれはあまり${k}ではありません。" to "That is not very $e.",
+            "とても${k}ですね。" to "That is very $e, isn't it?"
+        ) else listOf(
+            "「${k}」はどういういみですか。" to "What does \"$e\" mean?",
+            "「${k}」ということばをききました。" to "I heard the word \"$e\".",
+            "「${k}」のいみをおしえてください。" to "Please tell me the meaning of \"$e\"."
+        )
+        return frames.map { (j, en) -> JaEx(j, "", h, en) }
+    }
+
+    fun nativeJa(word: Word, native: String, ex: JaEx): String {
+        val base = when (native) {
+            "ja" -> ex.en
+            "en" -> ex.en
+            "hi" -> ex.hi.ifBlank { ex.en }
+            else -> {
+                val direct = Gloss.lookup(ex.ja)
+                if (!direct.isNullOrEmpty()) {
+                    direct
+                } else {
+                    val k = word.kana.trim()
+                    val template = if (k.isEmpty()) ex.ja else ex.ja.replace(k, "XKEYX")
+                    val fromTemplate = if (template == ex.ja) "" else (Gloss.lookup(template) ?: "").replace("XKEYX", word.glossFor(native))
+                    fromTemplate.ifBlank { ex.en }
+                }
+            }
+        }
+        val bn = Gloss.lookupBn(ex.ja) ?: banglaGloss(ex.en)
+        return if (hasBengaliScript(base) || bn.isBlank()) base else "$base · $bn"
+    }
+
+    /** One example sentence in the target language, with an optional romanization and native gloss. */
+    data class ExLine(val text: String, val sub: String, val gloss: String)
+
+    private fun bucketOf(pos: String): String = when (pos.trim().lowercase()) {
+        "adverb" -> "adverb"
+        "adjective" -> "adjective"
+        "number", "ordinal number" -> "number"
+        "verb", "linking verb", "modal verb", "infinitive marker" -> "verb"
+        "noun" -> "noun"
+        else -> "other"
+    }
+
+    /**
+     * True when the entry is already a complete utterance — a greeting, a
+     * courtesy formula or a whole sentence like "good evening", "thank you",
+     * "see you later" or "how are you?". Those get real conversational examples
+     * instead of the generic vocabulary frames.
+     */
+    fun isSentenceLike(key: String): Boolean {
+        if (key.isEmpty()) return false
+        if (key.endsWith(".") || key.endsWith("?") || key.endsWith("!")) return true
+        if (key in INTERJECTIONS) return true
+        if (!key.contains(" ")) return false
+        return SENTENCE_STARTS.any { key.startsWith(it) }
+    }
+
+    private val INTERJECTIONS = setOf(
+        "yes", "no", "okay", "ok", "hello", "hi", "hey", "bye", "goodbye",
+        "thanks", "sorry", "please", "welcome", "sure", "maybe", "congratulations"
+    )
+
+    private val SENTENCE_STARTS = listOf(
+        "i ", "i'm ", "i am ", "we ", "you ", "he ", "she ", "they ", "it's ", "it is ",
+        "let's ", "let us ", "don't ", "do you", "do i", "does ", "did ", "can you",
+        "can i", "could you", "would you", "will you", "shall ", "what ", "where ",
+        "when ", "why ", "who ", "whose ", "how ", "good morning", "good afternoon",
+        "good evening", "good night", "nice to ", "thank you", "thanks", "sorry",
+        "excuse me", "see you", "have a ", "of course", "you're ", "please ",
+        "congratulations", "welcome", "happy ", "here you", "there you", "how's ",
+        "what's ", "no thank", "not at all", "never mind", "by the way", "take care",
+        "good luck", "bless you", "long time"
+    )
+
+    /** Capitalise the first letter of a phrase so it reads well inside a quote. */
+    private fun phraseCase(s: String): String {
+        val t = s.trim()
+        if (t.isEmpty()) return t
+        return t.substring(0, 1).uppercase() + t.substring(1)
+    }
+
+    /** Coarse part-of-speech bucket used to choose example frames for a word. */
+    fun posBucket(word: Word): String {
+        if (isSentenceLike(normalize(word.en))) return "phrase"
+        val p = word.ipa.trim().lowercase()
+        if (p.isNotEmpty()) {
+            val direct = bucketOf(p)
+            if (direct != "other") return direct
+        }
+        return bucketOf(POS[normalize(word.en)] ?: guessPos(normalize(word.en)))
+    }
+
+    /** The word rendered in the language being learned. */
+    private fun targetWordIn(word: Word, target: String): String = when (target) {
+        "en" -> word.en
+        "ja" -> word.kana.ifEmpty { word.en }
+        else -> word.kana.ifEmpty { cleanGloss(Gloss.lookupTarget(word.en)) ?: word.en }
+    }
+
+    /** The word rendered in the learner's native language. */
+    private fun nativeWordIn(word: Word, native: String): String = when (native) {
+        "en" -> word.en
+        "bn" -> banglaGloss(word.en).ifEmpty { word.en }
+        "hi" -> word.hi.ifEmpty { cleanGloss(Gloss.lookup(word.en)) ?: word.en }
+        else -> cleanGloss(Gloss.lookup(word.en)) ?: word.en
+    }
+
+    private fun lookupForLang(sentence: String, lang: String): String? =
+        if (lang == "bn") Gloss.lookupBn(sentence) else Gloss.lookup(sentence)
+
+    private fun englishGloss(sentence: String, word: Word, native: String): String {
+        if (native == "en" || native.isBlank()) return ""
+        lookupForLang(sentence, native)?.let { return cleanGloss(it) ?: it }
+        val meaning = when (native) {
+            "bn" -> banglaGloss(word.en)
+            "hi" -> word.hi.ifEmpty { cleanGloss(Gloss.lookup(word.en)) ?: "" }
+            else -> cleanGloss(Gloss.lookup(word.en)) ?: ""
+        }
+        if (meaning.isEmpty()) return ""
+        val key = normalize(word.en)
+        if (key.isEmpty()) return ""
+        val template = sentence.replace(
+            Regex("(?<![\\p{L}\\p{N}])" + Regex.escape(key) + "(?![\\p{L}\\p{N}])", RegexOption.IGNORE_CASE),
+            "XKEYX"
+        )
+        if (template == sentence) return ""
+        return lookupForLang(template, native)?.replace("XKEYX", meaning) ?: ""
+    }
+
+    private fun withBanglaGloss(primary: String, enSentence: String, word: Word): String {
+        if (hasBengaliScript(primary)) return primary
+        val bn = englishGloss(enSentence, word, "bn").ifBlank { banglaGloss(enSentence) }
+        return when {
+            bn.isBlank() -> primary
+            primary.isBlank() -> bn
+            else -> "$primary · $bn"
+        }
+    }
+
+    /**
+     * Ten example sentences for [word] in the language being learned, each with
+     * English + বাংলা + native-language glosses.
+     */
+    fun exLines(word: Word, target: String, native: String): List<ExLine> {
+        val out = ArrayList<ExLine>(10)
+        val effNative = native.ifBlank { "bn" }
+        val key = normalize(word.en)
+        if (key.isNotEmpty() && isSentenceLike(key)) {
+            val tw = phraseCase(targetWordIn(word, target))
+            val gframes = if (effNative != target && effNative != "en") TargetExamples.frames(effNative, "phrase") else emptyList()
+            val nw = if (gframes.isNotEmpty()) phraseCase(nativeWordIn(word, effNative)) else ""
+            val bnFrames = if (target != "bn") TargetExamples.frames("bn", "phrase") else emptyList()
+            val bnW = if (bnFrames.isNotEmpty()) phraseCase(nativeWordIn(word, "bn")) else ""
+            val sub = if (target == "ja") word.romaji else ""
+            TargetExamples.frames(target, "phrase").forEachIndexed { i, f ->
+                val text = f.replace("XKEYX", tw)
+                val baseGloss = if (gframes.isNotEmpty()) (gframes.getOrNull(i) ?: "").replace("XKEYX", nw) else ""
+                val bnGloss = if (bnFrames.isNotEmpty()) (bnFrames.getOrNull(i) ?: "").replace("XKEYX", bnW) else ""
+                val combined = when {
+                    hasBengaliScript(baseGloss) -> baseGloss
+                    baseGloss.isNotBlank() && bnGloss.isNotBlank() -> "$baseGloss · $bnGloss"
+                    bnGloss.isNotBlank() -> bnGloss
+                    else -> baseGloss
+                }
+                out.add(ExLine(text, sub, combined))
+            }
+            return out
+        }
+        when (target) {
+            "ja" -> jaForWord(word).forEach { ex ->
+                out.add(ExLine(ex.ja, ex.romaji, nativeJa(word, effNative, ex)))
+            }
+            "en" -> forWord(word).forEach { s ->
+                val nat = if (effNative == "en" || effNative == "bn") "" else englishGloss(s, word, effNative)
+                out.add(ExLine(s, "", withBanglaGloss(nat, s, word)))
+            }
+            else -> forWord(word).forEach { e ->
+                val t = Gloss.lookupTarget(e) ?: return@forEach
+                val base = when (effNative) {
+                    "en", "bn" -> e
+                    else -> englishGloss(e, word, effNative).ifBlank { e }
+                }
+                out.add(ExLine(t, "", withBanglaGloss(base, e, word)))
+            }
+        }
+        if (out.size < 10) {
+            val bucket = posBucket(word)
+            val tw = targetWordIn(word, target)
+            val gframes = if (effNative != target && effNative != "bn") TargetExamples.frames(effNative, bucket) else emptyList()
+            val nw = if (gframes.isNotEmpty()) nativeWordIn(word, effNative) else ""
+            val bnFrames = if (target != "bn") TargetExamples.frames("bn", bucket) else emptyList()
+            val bnW = if (bnFrames.isNotEmpty()) nativeWordIn(word, "bn") else ""
+            TargetExamples.frames(target, bucket).forEachIndexed { i, f ->
+                if (out.size >= 10) return@forEachIndexed
+                val text = f.replace("XKEYX", tw)
+                if (out.any { it.text == text }) return@forEachIndexed
+                val baseGloss = if (gframes.isNotEmpty()) (gframes.getOrNull(i) ?: "").replace("XKEYX", nw) else ""
+                val bnGloss = if (bnFrames.isNotEmpty()) (bnFrames.getOrNull(i) ?: "").replace("XKEYX", bnW) else ""
+                val combined = when {
+                    hasBengaliScript(baseGloss) -> baseGloss
+                    baseGloss.isNotBlank() && bnGloss.isNotBlank() -> "$baseGloss · $bnGloss"
+                    bnGloss.isNotBlank() -> bnGloss
+                    else -> baseGloss
+                }
+                out.add(ExLine(text, "", combined))
+            }
+        }
+        return out.take(10)
+    }
+}
