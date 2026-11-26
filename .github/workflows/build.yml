@@ -32,11 +32,26 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Decode signing keystore
-        run: echo "${{ secrets.SIGNING_KEY }}" | base64 -d > "$KEYSTORE_PATH"
+      - name: Decode signing keystore (if configured)
+        id: keystore
+        run: |
+          if [ -n "${{ secrets.SIGNING_KEY }}" ]; then
+            echo "${{ secrets.SIGNING_KEY }}" | base64 -d > "$KEYSTORE_PATH"
+            echo "signed=true" >> "$GITHUB_OUTPUT"
+          else
+            keytool -genkeypair -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Build signed release APK
-        run: ./gradlew assembleRelease
+      - name: Build APK
+        run: |
+          if [ "${{ steps.keystore.outputs.signed }}" = "true" ]; then
+            ./gradlew assembleRelease
+            cp app/build/outputs/apk/release/app-release.apk elyora-app.apk
+          else
+            ./gradlew assembleDebug
+            cp app/build/outputs/apk/debug/app-debug.apk elyora-app.apk
+          fi
 
       - name: Get app version
         id: version
@@ -45,8 +60,8 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: elyora-release-${{ env.APP_VERSION }}
-          path: app/build/outputs/apk/release/app-release.apk
+          name: elyora-${{ env.APP_VERSION }}
+          path: elyora-app.apk
           retention-days: 90
 
       - name: Create GitHub Release
@@ -55,6 +70,6 @@ jobs:
           tag_name: v${{ env.APP_VERSION }}
           name: Elyora v${{ env.APP_VERSION }}
           body: |
-            Signed release APK for Elyora ${{ env.APP_VERSION }}.
-          files: app/build/outputs/apk/release/app-release.apk
+            Installable Android APK for Elyora ${{ env.APP_VERSION }}.
+          files: elyora-app.apk
           fail_on_unmatched_files: true
