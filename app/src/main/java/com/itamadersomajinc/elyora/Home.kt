@@ -1,5 +1,9 @@
 package com.itamadersomajinc.elyora
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -22,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
@@ -42,7 +47,6 @@ import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Spellcheck
 import androidx.compose.material.icons.filled.Translate
-import androidx.compose.material.icons.filled.ViewAgenda
 import androidx.compose.material.icons.filled.ViewModule
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -66,6 +70,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
@@ -384,39 +389,73 @@ fun HomeScreen(
                         "Your Lessons · আপনার পাঠসমূহ",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = if (accents.isDark) Color.White else Color(0xFF28175A)
                     )
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val activeToggleBg = if (accents.isDark) Color(0xFF2D314A) else Color.White
+                    val inactiveToggleBg = if (accents.isDark) Color(0xFF1D2033).copy(alpha = 0.85f) else Color.White.copy(alpha = 0.72f)
+                    val activeToggleTint = cs.primary
+                    val inactiveToggleTint = if (accents.isDark) Color(0xFFD2CEF6) else Color(0xFF4D3E8F)
+                    val activeBorder = cs.primary.copy(alpha = 0.35f)
+                    val inactiveBorder = if (accents.isDark) Color.White.copy(alpha = 0.14f) else cs.primary.copy(alpha = 0.18f)
+
+                    val gridBg by animateColorAsState(if (gridView) activeToggleBg else inactiveToggleBg, label = "gridBg")
+                    val listBg by animateColorAsState(if (!gridView) activeToggleBg else inactiveToggleBg, label = "listBg")
+                    val gridScale by animateFloatAsState(
+                        if (gridView) 1.05f else 0.96f,
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+                        label = "gridScale"
+                    )
+                    val listScale by animateFloatAsState(
+                        if (!gridView) 1.05f else 0.96f,
+                        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+                        label = "listScale"
+                    )
+
                     Surface(
                         shape = RoundedCornerShape(10.dp),
-                        color = if (gridView) Color.White.copy(alpha = 0.9f) else Color.White.copy(alpha = 0.35f),
+                        color = gridBg,
+                        shadowElevation = if (gridView) 3.dp else 0.dp,
+                        border = BorderStroke(1.dp, if (gridView) activeBorder else inactiveBorder),
                         modifier = Modifier
-                            .size(34.dp)
+                            .size(36.dp)
+                            .graphicsLayer {
+                                scaleX = gridScale
+                                scaleY = gridScale
+                            }
                             .clickable { gridView = true }
+                            .testTag("home_grid_toggle")
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
                                 Icons.Filled.GridView,
                                 contentDescription = "Grid view",
-                                tint = if (gridView) cs.primary else Color.White,
+                                tint = if (gridView) activeToggleTint else inactiveToggleTint,
                                 modifier = Modifier.size(18.dp)
                             )
                         }
                     }
                     Surface(
                         shape = RoundedCornerShape(10.dp),
-                        color = if (!gridView) Color.White.copy(alpha = 0.9f) else Color.White.copy(alpha = 0.35f),
+                        color = listBg,
+                        shadowElevation = if (!gridView) 3.dp else 0.dp,
+                        border = BorderStroke(1.dp, if (!gridView) activeBorder else inactiveBorder),
                         modifier = Modifier
-                            .size(34.dp)
+                            .size(36.dp)
+                            .graphicsLayer {
+                                scaleX = listScale
+                                scaleY = listScale
+                            }
                             .clickable { gridView = false }
+                            .testTag("home_list_toggle")
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Icon(
-                                Icons.Filled.ViewAgenda,
+                                Icons.AutoMirrored.Filled.FormatListBulleted,
                                 contentDescription = "List view",
-                                tint = if (!gridView) cs.primary else Color.White,
-                                modifier = Modifier.size(18.dp)
+                                tint = if (!gridView) activeToggleTint else inactiveToggleTint,
+                                modifier = Modifier.size(19.dp)
                             )
                         }
                     }
