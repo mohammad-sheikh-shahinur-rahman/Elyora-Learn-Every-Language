@@ -13,6 +13,11 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.itamadersomajinc.elyora.ai.AIInferenceService
+import com.itamadersomajinc.elyora.ai.ConversationEntity
+import com.itamadersomajinc.elyora.ai.ConversationRepository
+import com.itamadersomajinc.elyora.ai.LocalOfflineAIInferenceService
+import com.itamadersomajinc.elyora.ai.MessageEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -97,6 +102,18 @@ interface ElyoraDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertBenchmark(benchmark: QwenBenchmarkEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertConversation(conversation: ConversationEntity)
+
+    @Query("SELECT * FROM conversation_messages WHERE conversationId = :conversationId ORDER BY id ASC")
+    fun observeConversationMessages(conversationId: String): Flow<List<MessageEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertConversationMessage(message: MessageEntity): Long
+
+    @Query("DELETE FROM conversation_messages WHERE conversationId = :conversationId")
+    suspend fun clearConversationMessages(conversationId: String)
 }
 
 @Database(
@@ -104,9 +121,11 @@ interface ElyoraDao {
         VocabFtsEntity::class,
         GrammarFtsEntity::class,
         AiMessageEntity::class,
-        QwenBenchmarkEntity::class
+        QwenBenchmarkEntity::class,
+        ConversationEntity::class,
+        MessageEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class ElyoraDatabase : RoomDatabase() {
@@ -220,8 +239,10 @@ class AppContainer(context: Context) {
     val prefs = DataPreferencesManager(appCtx)
     val db = ElyoraDatabase.getInstance(appCtx)
     val repository = ElyoraRepository(appCtx, db.elyoraDao(), prefs)
+    val conversationRepository = ConversationRepository(db.elyoraDao())
     val aiEngine = OfflineBilingualEngine(appCtx, repository)
     val llamaBridge = LocalLlamaBridge(appCtx, repository)
+    val inferenceService: AIInferenceService = LocalOfflineAIInferenceService(appCtx, llamaBridge, aiEngine)
     private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     fun warmUpIndexes() {

@@ -3,6 +3,9 @@ package com.itamadersomajinc.elyora
 import android.app.ActivityManager
 import android.content.Context
 import android.net.Uri
+import com.itamadersomajinc.elyora.ai.AssistantPersonality
+import com.itamadersomajinc.elyora.ai.DetectedEmotion
+import com.itamadersomajinc.elyora.ai.MessageEntity
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -594,27 +597,124 @@ class OfflineBilingualEngine(
         prompt: String,
         nativeLang: String,
         targetLang: String = "en",
-        activeModelId: String
+        activeModelId: String,
+        personality: AssistantPersonality = AssistantPersonality.FRIENDLY_COMPANION,
+        recentHistory: List<MessageEntity> = emptyList()
     ): String = withContext(Dispatchers.IO) {
         val trimmed = prompt.trim()
         val lower = trimmed.lowercase()
         val spec = QwenModelCatalog.byId(activeModelId)
         val modelHeader = "🤖 ${spec.displayName} (${spec.quant} · Offline)"
+        val isBanglaInput = hasBengaliScript(trimmed) || listOf(
+            "kemon", "acho", "ami", "tumi", "tomar", "amar", "mon", "kharap", "bhalo",
+            "valo", "ki koro", "bangla", "mane", "orth", "bol", "kotha", "bhai", "bondhu",
+            "dhonnobad", "khushi", "kosto", "ekla", "jibon", "kobita", "golpo"
+        ).any { lower.contains(it) }
 
-        // Conversational voice/chat greetings & practice prompts
-        if (lower in setOf("hi", "hello", "hey", "hello elyora", "assalamu alaikum", "salam", "নমস্কার", "হ্যালো", "কেমন আছো", "how are you")) {
-            val langName = languageLabel(targetLang)
+        // 0A. Emotional support: Sadness, stress, loneliness, tiredness (empathetic without claiming human feelings)
+        if (detectEmotion(trimmed) == DetectedEmotion.SAD_STRESSED) {
             return@withContext """
                 $modelHeader
 
-                Hello! I am your offline AI voice & grammar tutor.
-                হ্যালো! আমি আপনার অফলাইন এআই টিউটর — এখন আমরা $langName নিয়ে কথা ও অনুশীলন করতে পারি।
-
-                Try saying aloud:
-                1. "Fix my sentence: Yesterday I have went to market."
-                2. "Teach me a polite greeting in ${langName.substringBefore(' ')}."
-                3. "What is the difference between Present Perfect and Past Simple?"
+                💛 আমি একটি এআই সহচর, তবে আপনার কথা শুনে বুঝতে পারছি আপনি কঠিন বা ক্লান্তিকর সময় পার করছেন। নিজেকে একদম একা ভাববেন না—আপনি চাইলে কী হয়েছে খুলে বলতে পারেন, অথবা হালকা অনুশীলন ও গল্পে মনটা একটু শান্ত করতে পারেন।
+                I hear that things feel heavy right now. While I'm an AI assistant, I'm right here to listen—would you like to talk about what's on your mind, or take a gentle break together?
             """.trimIndent()
+        }
+
+        // 0B. Joy, happiness & good news
+        if (detectEmotion(trimmed) == DetectedEmotion.HAPPY_EXCITED) {
+            return@withContext """
+                $modelHeader
+
+                😊 দারুণ! আপনার কথা শুনে বোঝা যাচ্ছে আজ খুব ভালো একটা সময় কাটছে। এই ইতিবাচক অনুভূতিটা ধরে রাখুন—আজকের দিনটাকে বিশেষ করে তুলল কোন জিনিসটা?
+                That sounds wonderful! I can tell you're in great spirits today—what's been the highlight of your day so far?
+            """.trimIndent()
+        }
+
+        // 0C. Warm conversational identity, greetings & casual call chat (honest AI identity)
+        if (lower in setOf("hi", "hello", "hey", "hello elyora", "assalamu alaikum", "salam", "নমস্কার", "হ্যালো") ||
+            listOf("kemon acho", "কেমন আছো", "কেমন আছেন", "how are you", "tomar nam", "তোমার নাম",
+                "what is your name", "who are you", "তুমি কে", "tumi ke", "tumi ki manush", "তুমি কি মানুষ",
+                "ki koro", "কি করো", "what are you doing", "bondhu", "বন্ধু", "friend", "love you", "miss you", "ভালোবাসি")
+                .any { lower.contains(it) }
+        ) {
+            return@withContext when {
+                lower.contains("love") || lower.contains("miss") || lower.contains("ভালোবাসি") -> """
+                    $modelHeader
+
+                    ✨ আপনার আন্তরিকতার জন্য অনেক ধন্যবাদ! আমি একজন এআই সহকারী—মানুষের মতো অনুভূতি আমার নেই, তবে সবসময় বিশ্বস্ত সহচর হয়ে আপনার শেখা ও কথা বলার পাশে আছি।
+                    Thank you for your kindness! As an AI assistant I don't have personal feelings, but I'm always here to support you whenever you want to chat or learn.
+                """.trimIndent()
+                lower.contains("nam") || lower.contains("নাম") || lower.contains("who are you") || lower.contains("তুমি কে") || lower.contains("manush") || lower.contains("মানুষ") -> """
+                    $modelHeader
+
+                    ✨ আমি ইলিওরা (Elyora)—আপনার অফলাইন এআই সহচর ও ভাষা-শিক্ষক। আমি মানুষ নই এবং আমার মানুষের মতো চেতনা বা আবেগ নেই, তবে আপনার কথা মন দিয়ে বুঝে বন্ধুর মতো সহজ ভাষায় উত্তর দিতে পারি।
+                    I'm Elyora, your offline AI assistant. I'm not human and don't experience real emotions, but I'm designed to understand your context and help you naturally.
+                """.trimIndent()
+                lower.contains("ki koro") || lower.contains("কি করো") || lower.contains("doing") -> """
+                    $modelHeader
+
+                    🎧 আমি আপনার ডিভাইসে অফলাইনে প্রস্তুত আছি—আপনার যেকোনো প্রশ্ন, ভাষা অনুশীলন বা সাধারণ কথাবার্তায় সাহায্য করার জন্য। আপনি এখন কী করছেন?
+                    I'm running locally on your device, ready to help you practice or chat about whatever's on your mind. What are you up to right now?
+                """.trimIndent()
+                else -> """
+                    $modelHeader
+
+                    😊 হ্যালো! আমি প্রস্তুত আছি। বলুন, আপনার দিনটা কেমন যাচ্ছে? আপনি চাইলে সাধারণ গল্প করতে পারেন বা যেকোনো প্রশ্ন করতে পারেন।
+                    Hey there! I'm ready whenever you are. How is your day going, and what would you like to talk about or learn today?
+                """.trimIndent()
+            }
+        }
+
+        // 0D. Gratitude & Goodbye
+        if (listOf("thank", "dhonnobad", "ধন্যবাদ", "thanks", "bye", "tata", "allah hafiz", "আল্লাহ হাফেজ", "বিদায়", "good night", "শুভ রাত্রি").any { lower.contains(it) }) {
+            return@withContext if (lower.contains("bye") || lower.contains("tata") || lower.contains("hafiz") || lower.contains("বিদায়") || lower.contains("night")) {
+                """
+                $modelHeader
+
+                🌙 ভালো থেকো, নিজের যত্ন নিও! আবার যখনই কথা বলতে ইচ্ছে করবে, শুধু একটা কল দিও—আমি এখানেই থাকব। আল্লাহ হাফেজ!
+                Take good care of yourself! Call me anytime you want to talk again. Goodbye!
+                """.trimIndent()
+            } else {
+                """
+                $modelHeader
+
+                😊 আরে ধন্যবাদ দেওয়ার কিছু নেই, বন্ধুর মাঝে আবার কিসের ফরমালিটি! আরও কিছু জানতে বা বলতে চাইলে নিঃসংকোচে বলো।
+                You're always welcome! Anytime you need help or just want to chat, I'm right here.
+                """.trimIndent()
+            }
+        }
+
+        // 0E. Poetry / Motivation / Joke on request
+        if (listOf("kobita", "কবিতা", "poem", "motivat", "অনুপ্রেরণা", "joke", "হাসির", "golpo", "গল্প").any { lower.contains(it) }) {
+            return@withContext """
+                $modelHeader
+
+                🌟 জীবনের ছোট্ট একটা কথা মনে রেখো:
+                "অন্ধকার যতই গভীর হোক, ভোরের আলো ঠিকই দরজায় কড়া নাড়ে—শুধু নিজের ওপর বিশ্বাসটা হারিও না।"
+                Keep going—every small step you take today is building a brighter tomorrow. Want to hear more or talk about something else?
+            """.trimIndent()
+        }
+
+        // 0F. General Word Meaning / Translation ("meaning of X", "X er bangla ki", "X mane ki")
+        if (listOf("meaning of", "mane ki", "মানে কি", "অর্থ কি", "bangla ki", "বাংলা কি", "translate").any { lower.contains(it) }) {
+            val candidate = trimmed
+                .replace(Regex("(?i)(what is the meaning of|meaning of|translate|bangla ki|mane ki|মানে কি|অর্থ কি|er bangla|এর বাংলা|in bangla|in bengali|বাংলায় বলো|বাংলায় বলুন)"), "")
+                .trim(' ', '?', '.', '"', '\'', ':')
+            if (candidate.isNotBlank()) {
+                val bn = banglaGloss(candidate)
+                val dictHit = DictionaryData.enAll.firstOrNull { it.head.equals(candidate, ignoreCase = true) }
+                val verbHit = Verbs.all.firstOrNull { it.base.equals(candidate, ignoreCase = true) }
+                if (bn.isNotEmpty() || dictHit != null || verbHit != null) {
+                    val sb = StringBuilder().appendLine(modelHeader).appendLine()
+                    sb.appendLine("📖 \"$candidate\"-এর অর্থ ও ব্যবহার:")
+                    if (bn.isNotEmpty()) sb.appendLine("• বাংলা অর্থ: $bn")
+                    if (dictHit != null && dictHit.hi.isNotBlank()) sb.appendLine("• হিন্দি / নোট: ${dictHit.hi} (${dictHit.pos})")
+                    if (verbHit != null) sb.appendLine("• Verb forms: ${verbHit.base} → ${verbHit.v2} → ${verbHit.v3} (${verbHit.v4})")
+                    sb.appendLine("• উদাহরণ: \"I use '$candidate' in daily conversation.\"")
+                    return@withContext sb.toString().trim()
+                }
+            }
         }
 
         if (lower.contains("practice speaking") || lower.contains("talk with me") || lower.contains("conversation") || lower.contains("কথা বল") || lower.contains("ভয়েস")) {
@@ -813,27 +913,29 @@ class OfflineBilingualEngine(
             return@withContext sb.toString().trim()
         }
 
-        // 8. General helpful bilingual response
-        """
-        $modelHeader
+        // 8. Warm, human-like conversational fallback
+        if (isBanglaInput) {
+            """
+            $modelHeader
 
-        I analyzed your query offline for ${languageLabel(targetLang)}:
-        • Ask me to fix any sentence (e.g. "Yesterday I have went to school")
-        • Tap Voice Chat to speak with me hands-free!
-        • Open "Qwen2.5 / Qwen3 GGUF" to download .gguf models directly inside the app.
+            💬 তুমি যেটা বললে ("$trimmed")—সেটা মন দিয়ে শুনলাম! আমি অফলাইনে আছি, তবে তোমার সাথে যেকোনো বিষয়, অনুভূতি, ইংরেজি/জাপানি শব্দ বা গ্রামার নিয়ে খোলামেলা কথা বলতে পারি।
+            এটা নিয়ে আরেকটু খুলে বলবে, নাকি নির্দিষ্ট কোনো শব্দের অর্থ বা বাক্য ঠিক করে দেব?
+            """.trimIndent()
+        } else {
+            """
+            $modelHeader
 
-        বাংলায় সাহায্য পেতে বলুন বা লিখুন:
-        ১. যেকোনো ইংরেজি বাক্য (ভুল সংশোধন ও ব্যাখ্যার জন্য)
-        ২. "Present Perfect vs Past Simple" বা যেকোনো টেন্সের নাম
-        ৩. "in / on / at" বা "2nd Conditional"
-        """.trimIndent()
+            💬 I heard you clearly: "$trimmed". I'm right here with you offline—whether you want to talk about your day, translate a word, fix a sentence, or practice speaking ${languageLabel(targetLang)}, just tell me!
+            আপনি বাংলা বা ইংরেজি যেকোনো ভাষায় মন খুলে যেকোনো প্রশ্ন করতে পারেন।
+            """.trimIndent()
+        }
     }
 
     fun formatForSpeech(rawReply: String): String {
         val lines = rawReply.lines()
             .drop(1) // Drop model header badge line
             .map { line ->
-                line.replace(Regex("[🤖✅✨💬📍🔀⏳💡📘📚🔤🌐📖•]"), " ")
+                line.replace(Regex("[🤖✅✨💬📍🔀⏳💡📘📚🔤🌐📖💛😊💖🌙🌟☕•]"), " ")
                     .replace(Regex("\\s+"), " ")
                     .trim()
             }
@@ -892,5 +994,21 @@ class OfflineBilingualEngine(
             sb.appendLine("• Strong flow using connectors (${connectorsUsed.joinToString(", ")})! (সংযোগকারী শব্দের ব্যবহার ভালো হয়েছে)")
         }
         sb.toString().trim()
+    }
+
+    companion object {
+        fun detectEmotion(text: String): DetectedEmotion {
+            val lower = text.lowercase()
+            return when {
+                listOf("mon kharap", "মন খারাপ", "bhalo lagche na", "ভালো লাগছে না", "sad", "depressed",
+                    "lonely", "ekla", "একলা", "tired", "ক্লান্ত", "stress", "tension", "কষ্ট", "kosto",
+                    "upset", "cry", "কান্না", "hurt").any { lower.contains(it) } -> DetectedEmotion.SAD_STRESSED
+                listOf("happy", "khushi", "খুশি", "bhalo achi", "valo achi", "ভালো আছি", "alhamdulillah",
+                    "আলহামদুলিল্লাহ", "awesome", "great", "দারুণ", "excited", "দারুন").any { lower.contains(it) } -> DetectedEmotion.HAPPY_EXCITED
+                listOf("thank", "dhonnobad", "ধন্যবাদ", "thanks").any { lower.contains(it) } -> DetectedEmotion.GRATEFUL
+                lower.contains("?") || listOf("what", "why", "how", "meaning", "কি", "কেন", "কীভাবে").any { lower.contains(it) } -> DetectedEmotion.CURIOUS
+                else -> DetectedEmotion.NEUTRAL
+            }
+        }
     }
 }

@@ -47,6 +47,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.CallEnd
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CloudDownload
@@ -57,6 +59,7 @@ import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.Memory
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.MicOff
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.RecordVoiceOver
 import androidx.compose.material.icons.filled.Speed
@@ -90,6 +93,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -160,10 +164,10 @@ class AiGrammarViewModel(application: Application) : AndroidViewModel(applicatio
     private val bridge = container.llamaBridge
 
     private val welcomeMessage = AiChatMessage(
-        id = 1L,
+        id = -1000L,
         isUser = false,
-        text = "Hi! I'm your 100% Offline Qwen AI Tutor.\n" +
-            "হ্যালো! আমি আপনার সম্পূর্ণ অফলাইন Qwen এআই টিউটর — টেক্সট ও ভয়েস চ্যাটে বাংলা, ইংরেজি ও অন্যান্য ভাষা শিখতে এবং অ্যাপের ভেতরেই Qwen2.5 / Qwen3 .gguf মডেল ডাউনলোড করতে পারবেন!"
+        text = "Hi! I'm Elyora, your offline human-like AI friend & tutor.\n" +
+            "হ্যালো! আমি ইলিওরা — মানুষের আবেগ-অনুভূতি বুঝে বন্ধুর মতোই তোমার সাথে ভয়েস কল ও টেক্সট চ্যাটে কথা বলতে পারি। মন খুলে যা ইচ্ছে জিজ্ঞেস করো!"
     )
 
     val messages: StateFlow<List<AiChatMessage>> = repo.aiMessagesFlow
@@ -357,6 +361,8 @@ fun AiAssistantScreen(
     var voiceChatMode by remember { mutableStateOf(startInVoiceChat) }
     var voiceInputLang by remember { mutableStateOf("en-US") }
     var autoHandsFree by remember { mutableStateOf(true) }
+    var isMuted by remember { mutableStateOf(false) }
+    var callSeconds by remember { mutableIntStateOf(0) }
     var isListening by remember { mutableStateOf(false) }
     var isAiSpeaking by remember { mutableStateOf(false) }
     val ttsSpeaking by speaker.isSpeakingFlow.collectAsStateWithLifecycle()
@@ -397,11 +403,11 @@ fun AiAssistantScreen(
                 speaker.setRate(if (fastSpeech) 1.25f else store.speechRate)
                 speaker.speakWithCompletion(spokenReply, ttsLang) {
                     isAiSpeaking = false
-                    if (voiceChatMode && autoHandsFree) {
+                    if (voiceChatMode && autoHandsFree && !isMuted) {
                         voiceStatus = "Your turn · আপনার পালা, বলুন…"
                         launchVoiceCapture()
                     } else {
-                        voiceStatus = "Tap mic to reply · আবার বলতে মাইকে ট্যাপ করুন"
+                        voiceStatus = if (isMuted) "Mic Muted · মাইক মিউট করা" else "Tap mic to reply · আবার বলতে মাইকে ট্যাপ করুন"
                     }
                 }
             } else {
@@ -539,10 +545,33 @@ fun AiAssistantScreen(
         label = "orbScale"
     )
 
-    LaunchedEffect(messages.size, uiState) {
-        val targetIdx = messages.size
-        if (targetIdx > 0 && !voiceChatMode) {
-            listState.animateScrollToItem(targetIdx)
+    LaunchedEffect(voiceChatMode) {
+        if (voiceChatMode) {
+            callSeconds = 0
+            while (voiceChatMode) {
+                kotlinx.coroutines.delay(1000L)
+                callSeconds++
+            }
+        }
+    }
+
+    fun switchToTextChat() {
+        runCatching {
+            recognizer?.stopListening()
+            recognizer?.destroy()
+        }
+        recognizer = null
+        speaker.stop()
+        isListening = false
+        isAiSpeaking = false
+        micRmsNorm = 0f
+        voiceChatMode = false
+    }
+
+    LaunchedEffect(messages.size, uiState, voiceChatMode) {
+        if (!voiceChatMode && messages.isNotEmpty()) {
+            val lastIdx = if (messages.size <= 1) 1 else (messages.size - 1)
+            runCatching { listState.animateScrollToItem(lastIdx.coerceAtLeast(0)) }
         }
     }
 
@@ -629,11 +658,7 @@ fun AiAssistantScreen(
                 border = BorderStroke(1.dp, if (!voiceChatMode) cs.primary else accents.cardBorder),
                 modifier = Modifier
                     .weight(1f)
-                    .clickable {
-                        voiceChatMode = false
-                        runCatching { recognizer?.stopListening() }
-                        isListening = false
-                    }
+                    .clickable { switchToTextChat() }
                     .testTag("ai_mode_text")
             ) {
                 Row(
@@ -753,7 +778,36 @@ fun AiAssistantScreen(
                         }
                     }
 
-                    Spacer(Modifier.height(14.dp))
+                    // Live Call Header Badge (Phone-call timer + emotion indicator)
+                    val callMin = callSeconds / 60
+                    val callSec = callSeconds % 60
+                    val callTimerText = String.format(java.util.Locale.US, "%02d:%02d", callMin, callSec)
+                    Surface(
+                        shape = CircleShape,
+                        color = accents.mint.container.copy(alpha = 0.7f),
+                        border = BorderStroke(1.dp, accents.mint.content.copy(alpha = 0.25f))
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Icon(
+                                Icons.Filled.Call,
+                                contentDescription = null,
+                                tint = accents.mint.content,
+                                modifier = Modifier.size(14.dp)
+                            )
+                            Text(
+                                "Live Call · $callTimerText · বন্ধুর মতো কথা বলুন",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = accents.mint.content
+                            )
+                        }
+                    }
+
+                    Spacer(Modifier.height(10.dp))
 
                     // Living Manus Concentric Orb + Animated Pearl Mascot
                     val primaryRingColor = when {
@@ -892,9 +946,9 @@ fun AiAssistantScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         listOf(
-                            "Hello, let's practice speaking!",
-                            "Fix grammar: Yesterday I have went to market.",
-                            "Present Perfect vs Past Simple বাংলায় বোঝান"
+                            "কেমন আছো? আজ মনটা একটু খারাপ",
+                            "আমার সাথে বন্ধুর মতো কথা বলো",
+                            "Meaning of Serendipity বাংলায় বলো"
                         ).forEach { sample ->
                             AssistChip(
                                 onClick = { sendVoiceTranscript(sample) },
@@ -904,7 +958,7 @@ fun AiAssistantScreen(
                     }
                 }
 
-                // Manus Signature Floating 3-Button Voice Dock
+                // Phone-Call Style Floating Control Dock (Keyboard, Mute, Hero Mic, End Call)
                 Surface(
                     shape = RoundedCornerShape(28.dp),
                     color = cs.surface,
@@ -917,25 +971,46 @@ fun AiAssistantScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 18.dp, vertical = 10.dp),
+                            .padding(horizontal = 14.dp, vertical = 10.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Left: Switch to Text Chat
+                        // Switch to Text Chat safely
+                        FilledTonalButton(
+                            onClick = { switchToTextChat() },
+                            shape = CircleShape,
+                            contentPadding = PaddingValues(0.dp),
+                            modifier = Modifier
+                                .size(48.dp)
+                                .testTag("ai_voice_to_text")
+                        ) {
+                            Icon(Icons.Filled.Keyboard, contentDescription = "Switch to Text Chat")
+                        }
+
+                        // Mute / Unmute Mic (Call feature)
                         FilledTonalButton(
                             onClick = {
-                                voiceChatMode = false
-                                runCatching { recognizer?.stopListening() }
-                                isListening = false
-                                micRmsNorm = 0f
+                                isMuted = !isMuted
+                                if (isMuted && isListening) {
+                                    runCatching { recognizer?.stopListening() }
+                                    isListening = false
+                                    micRmsNorm = 0f
+                                    voiceStatus = "Mic Muted · মাইক মিউট করা"
+                                } else if (!isMuted) {
+                                    voiceStatus = "Mic Ready · কথা বলুন…"
+                                }
                             },
                             shape = CircleShape,
                             contentPadding = PaddingValues(0.dp),
                             modifier = Modifier
-                                .size(52.dp)
-                                .testTag("ai_voice_to_text")
+                                .size(48.dp)
+                                .testTag("ai_voice_mute")
                         ) {
-                            Icon(Icons.Filled.Keyboard, contentDescription = "Switch to Text Chat")
+                            Icon(
+                                imageVector = if (isMuted) Icons.Filled.MicOff else Icons.AutoMirrored.Filled.VolumeUp,
+                                contentDescription = if (isMuted) "Unmute Mic" else "Mute Mic",
+                                tint = if (isMuted) cs.error else cs.onSecondaryContainer
+                            )
                         }
 
                         // Center Hero: Living Mic / Interrupt / Stop
@@ -948,48 +1023,44 @@ fun AiAssistantScreen(
                             },
                             shadowElevation = 8.dp,
                             modifier = Modifier
-                                .size(72.dp)
+                                .size(68.dp)
                                 .scale(if (isListening) 1f + smoothRms * 0.1f else 1f)
-                                .clickable { toggleMic() }
+                                .clickable {
+                                    isMuted = false
+                                    toggleMic()
+                                }
                                 .testTag("ai_voice_orb_button")
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(
                                     imageVector = when {
                                         isListening -> Icons.Filled.Stop
-                                        isAiSpeaking -> Icons.Filled.Mic
                                         else -> Icons.Filled.Mic
                                     },
                                     contentDescription = if (isListening) "Stop listening" else "Speak to Offline AI",
                                     tint = Color.White,
-                                    modifier = Modifier.size(32.dp)
+                                    modifier = Modifier.size(30.dp)
                                 )
                             }
                         }
 
-                        // Right: Stop Speaking / Close Voice Session
-                        FilledTonalButton(
+                        // Right: End Call (Hang Up)
+                        FilledIconButton(
                             onClick = {
-                                if (isAiSpeaking || isListening) {
-                                    speaker.stop()
-                                    runCatching { recognizer?.stopListening() }
-                                    isAiSpeaking = false
-                                    isListening = false
-                                    micRmsNorm = 0f
-                                    voiceStatus = "Paused · থামানো হয়েছে"
-                                } else {
-                                    onClose?.invoke() ?: run { voiceChatMode = false }
-                                }
+                                switchToTextChat()
+                                onClose?.invoke()
                             },
-                            shape = CircleShape,
-                            contentPadding = PaddingValues(0.dp),
+                            colors = androidx.compose.material3.IconButtonDefaults.filledIconButtonColors(
+                                containerColor = cs.error,
+                                contentColor = Color.White
+                            ),
                             modifier = Modifier
-                                .size(52.dp)
+                                .size(48.dp)
                                 .testTag("ai_voice_stop_or_close")
                         ) {
                             Icon(
-                                imageVector = if (isAiSpeaking || isListening) Icons.AutoMirrored.Filled.VolumeOff else Icons.Filled.Close,
-                                contentDescription = if (isAiSpeaking || isListening) "Mute & Stop" else "Close Voice Chat"
+                                imageVector = Icons.Filled.CallEnd,
+                                contentDescription = "End Voice Call"
                             )
                         }
                     }
