@@ -394,18 +394,22 @@ fun AiAssistantScreen(
         val clean = spoken.trim()
         if (clean.isEmpty()) return
         liveTranscript = clean
-        voiceStatus = "Thinking locally… অফলাইন এআই উত্তর দিচ্ছে…"
+        voiceStatus = "Thinking… উত্তর তৈরি হচ্ছে…"
         vm.sendPrompt(clean, store.nativeLang, store.target) { spokenReply ->
             if (spokenReply.isNotBlank()) {
                 isAiSpeaking = true
                 voiceStatus = "Speaking reply… এআই বলছে…"
-                val ttsLang = if (voiceInputLang.startsWith("bn")) "bn" else "en"
+                val ttsLang = if (hasBengaliScript(spokenReply) || voiceInputLang.startsWith("bn")) "bn" else "en"
                 speaker.setRate(if (fastSpeech) 1.25f else store.speechRate)
                 speaker.speakWithCompletion(spokenReply, ttsLang) {
                     isAiSpeaking = false
                     if (voiceChatMode && autoHandsFree && !isMuted) {
                         voiceStatus = "Your turn · আপনার পালা, বলুন…"
-                        launchVoiceCapture()
+                        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                            if (voiceChatMode && autoHandsFree && !isMuted && !isListening) {
+                                launchVoiceCapture()
+                            }
+                        }, 280L)
                     } else {
                         voiceStatus = if (isMuted) "Mic Muted · মাইক মিউট করা" else "Tap mic to reply · আবার বলতে মাইকে ট্যাপ করুন"
                     }
@@ -448,10 +452,23 @@ fun AiAssistantScreen(
                 recognizer?.destroy()
                 val sr = SpeechRecognizer.createSpeechRecognizer(ctx)
                 recognizer = sr
+                var retriedStandard = false
+                fun startRecognition(preferOffline: Boolean) {
+                    val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                        putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                        putExtra(RecognizerIntent.EXTRA_LANGUAGE, voiceInputLang)
+                        putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, voiceInputLang)
+                        if (preferOffline) {
+                            putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+                        }
+                        putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+                    }
+                    sr.startListening(intent)
+                }
                 sr.setRecognitionListener(object : RecognitionListener {
                     override fun onReadyForSpeech(params: Bundle?) {
                         isListening = true
-                        voiceStatus = "Listening offline… বলুন…"
+                        voiceStatus = "Listening… বলুন…"
                     }
                     override fun onBeginningOfSpeech() {}
                     override fun onRmsChanged(rmsdB: Float) {
@@ -465,7 +482,17 @@ fun AiAssistantScreen(
                     override fun onError(error: Int) {
                         isListening = false
                         micRmsNorm = 0f
-                        voiceStatus = "Tap mic to try again (code $error) · আবার বলতে মাইকে ট্যাপ করুন"
+                        // Many Android devices lack pre-installed offline speech packs for bn-BD/en-US;
+                        // retry once without forcing EXTRA_PREFER_OFFLINE before reporting error.
+                        if (!retriedStandard && error in setOf(2, 4, 5, 12, 13)) {
+                            retriedStandard = true
+                            voiceStatus = "Reconnecting mic… আবার চেষ্টা হচ্ছে…"
+                            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                                runCatching { startRecognition(preferOffline = false) }
+                            }, 180L)
+                        } else {
+                            voiceStatus = "Tap mic to try again (code $error) · আবার বলতে মাইকে ট্যাপ করুন"
+                        }
                     }
                     override fun onResults(results: Bundle?) {
                         isListening = false
@@ -483,13 +510,7 @@ fun AiAssistantScreen(
                     }
                     override fun onEvent(eventType: Int, params: Bundle?) {}
                 })
-                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                    putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                    putExtra(RecognizerIntent.EXTRA_LANGUAGE, voiceInputLang)
-                    putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
-                    putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
-                }
-                sr.startListening(intent)
+                startRecognition(preferOffline = false)
             } catch (_: Exception) {
                 isListening = false
                 micRmsNorm = 0f
