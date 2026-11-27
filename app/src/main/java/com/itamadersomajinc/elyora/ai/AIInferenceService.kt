@@ -8,12 +8,15 @@ import com.itamadersomajinc.elyora.LocalLlamaBridge
 import com.itamadersomajinc.elyora.OfflineBilingualEngine
 import com.itamadersomajinc.elyora.QwenModelSpec
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.isActive
+import java.io.File
 
 data class InferenceChunk(
     val accumulatedText: String,
@@ -69,6 +72,7 @@ class LocalOfflineAIInferenceService(
 
     override fun unloadModel() {
         cancelActiveInference()
+        NativeLlamaEngine.unload()
         loadedModelId = null
     }
 
@@ -147,6 +151,33 @@ class LocalOfflineAIInferenceService(
         }
 
         val emotion = OfflineBilingualEngine.detectEmotion(prompt)
+        val gguf = bridge.inspectModelFile(activeModel)
+        val ggufFile = File(File(context.filesDir, "models"), activeModel.ggufFilename)
+
+        if (gguf.validMagic && ggufFile.exists() && NativeLlamaEngine.isNativeLibraryAvailable) {
+            val sysPrompt = buildSystemPrompt(nativeLang, targetLang, personality)
+            if (NativeLlamaEngine.loadAndPrepare(context, ggufFile.absolutePath, sysPrompt) &&
+                NativeLlamaEngine.startUserTurn(prompt, maxTokens = 240)
+            ) {
+                val raw = StringBuilder()
+                while (currentCoroutineContext().isActive) {
+                    val piece = NativeLlamaEngine.nextToken() ?: break
+                    if (piece.isNotEmpty()) {
+                        raw.append(piece)
+                        val cleaned = stripThinkBlocks(raw.toString())
+                        if (cleaned.isNotEmpty()) {
+                            emit(InferenceChunk(cleaned, isComplete = false, detectedEmotion = emotion))
+                        }
+                    }
+                }
+                val finalClean = stripThinkBlocks(raw.toString()).trim()
+                if (finalClean.isNotEmpty()) {
+                    emit(InferenceChunk(finalClean, isComplete = true, detectedEmotion = emotion))
+                    return@flow
+                }
+            }
+        }
+
         val fullReply = engine.generateReply(
             prompt = prompt,
             nativeLang = nativeLang,
@@ -172,6 +203,22 @@ class LocalOfflineAIInferenceService(
             emit(InferenceChunk(sb.toString(), isComplete = done, detectedEmotion = emotion))
             if (!done) delay(28L)
         }
+    }.flowOn(Dispatchers.IO)
+
+    private fun buildSystemPrompt(
+        nativeLang: String,
+        targetLang: String,
+        personality: AssistantPersonality
+    ): String = """
+        You are Elyora, an empathetic, warm, human-like offline AI assistant and language tutor.
+        Respond directly and naturally to whatever the user asks—whether casual conversation, emotional support, or language/grammar questions—in Bengali or English matching the user's language (native=$nativeLang, learning=$targetLang, style=${personality.labelEn}).
+        Never claim to have actual human consciousness or biological emotions, and keep replies concise and clear for voice playback.
+    """.trimIndent()
+
+    private fun stripThinkBlocks(text: String): String {
+        val noClosed = text.replace(Regex("<think>[\\s\\S]*?</think>"), "")
+        val openIdx = noClosed.indexOf("<think>")
+        return (if (openIdx >= 0) noClosed.substring(0, openIdx) else noClosed).trimStart()
     }
 
     override fun cancelActiveInference() {

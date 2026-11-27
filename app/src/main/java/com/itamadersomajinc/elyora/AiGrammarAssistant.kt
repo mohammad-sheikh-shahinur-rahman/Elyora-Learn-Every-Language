@@ -277,19 +277,28 @@ class AiGrammarViewModel(application: Application) : AndroidViewModel(applicatio
 
         viewModelScope.launch {
             val modelId = repo.prefs.preferencesFlow.first().selectedQwenModelId
+            val spec = QwenModelCatalog.byId(modelId)
             repo.addAiMessage(isUser = true, text = trimmed, modelId = modelId)
             _uiState.value = AiUiState.Loading
 
-            val fullReply = engine.generateReply(trimmed, nativeLang, targetLang, modelId)
-            val words = fullReply.split(" ")
-            val sb = StringBuilder()
-            words.forEachIndexed { idx, w ->
-                sb.append(w)
-                if (idx < words.lastIndex) sb.append(" ")
-                if (idx % 4 == 0 || idx == words.lastIndex) {
-                    _uiState.value = AiUiState.Streaming(sb.toString())
-                    delay(14)
+            var fullReply = ""
+            runCatching {
+                container.inferenceService.streamReply(
+                    prompt = trimmed,
+                    history = emptyList(),
+                    nativeLang = nativeLang,
+                    targetLang = targetLang,
+                    personality = com.itamadersomajinc.elyora.ai.AssistantPersonality.FRIENDLY_COMPANION,
+                    activeModel = spec
+                ).collect { chunk ->
+                    fullReply = chunk.accumulatedText
+                    if (fullReply.isNotBlank()) {
+                        _uiState.value = AiUiState.Streaming(fullReply)
+                    }
                 }
+            }
+            if (fullReply.isBlank()) {
+                fullReply = engine.generateReply(trimmed, nativeLang, targetLang, modelId)
             }
             repo.addAiMessage(isUser = false, text = fullReply, modelId = modelId)
             _uiState.value = AiUiState.Idle

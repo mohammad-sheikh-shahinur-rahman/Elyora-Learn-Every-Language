@@ -932,8 +932,13 @@ class OfflineBilingualEngine(
     }
 
     fun formatForSpeech(rawReply: String): String {
-        val lines = rawReply.lines()
-            .drop(1) // Drop model header badge line
+        val rawLines = rawReply.lines()
+        val contentLines = if (rawLines.firstOrNull()?.trimStart()?.startsWith("🤖") == true) {
+            rawLines.drop(1)
+        } else {
+            rawLines
+        }
+        val lines = contentLines
             .map { line ->
                 line.replace(Regex("[🤖✅✨💬📍🔀⏳💡📘📚🔤🌐📖💛😊💖🌙🌟☕•]"), " ")
                     .replace(Regex("\\s+"), " ")
