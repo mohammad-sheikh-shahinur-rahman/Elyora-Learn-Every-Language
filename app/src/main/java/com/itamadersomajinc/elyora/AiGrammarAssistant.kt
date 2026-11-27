@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -160,20 +161,22 @@ class AiGrammarViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val container = ElyoraAppProvider.get(application)
     private val repo = container.repository
+    private val convRepo = container.conversationRepository
     private val engine = container.aiEngine
     private val bridge = container.llamaBridge
+    private var activeSendJob: kotlinx.coroutines.Job? = null
 
     private val welcomeMessage = AiChatMessage(
         id = -1000L,
         isUser = false,
-        text = "Hi! I'm Elyora, your offline human-like AI friend & tutor.\n" +
-            "হ্যালো! আমি ইলিওরা — মানুষের আবেগ-অনুভূতি বুঝে বন্ধুর মতোই তোমার সাথে ভয়েস কল ও টেক্সট চ্যাটে কথা বলতে পারি। মন খুলে যা ইচ্ছে জিজ্ঞেস করো!"
+        text = "Hi! I'm Elyora, your offline AI friend & language tutor.\n" +
+            "হ্যালো! আমি ইলিওরা — ভয়েস কল ও টেক্সট চ্যাটে একই কথোপকথন শেয়ার করে আপনার সাথে কথা বলতে পারি। মন খুলে যা ইচ্ছে জিজ্ঞেস করো!"
     )
 
-    val messages: StateFlow<List<AiChatMessage>> = repo.aiMessagesFlow
+    val messages: StateFlow<List<AiChatMessage>> = convRepo.observeMessages()
         .map { rows ->
             if (rows.isEmpty()) listOf(welcomeMessage)
-            else listOf(welcomeMessage) + rows.map { AiChatMessage(it.id, it.isUser, it.text) }
+            else listOf(welcomeMessage) + rows.map { AiChatMessage(it.id, it.isUser, it.content) }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), listOf(welcomeMessage))
 
@@ -269,20 +272,33 @@ class AiGrammarViewModel(application: Application) : AndroidViewModel(applicatio
         userText: String,
         nativeLang: String,
         targetLang: String = "en",
+        inputMode: com.itamadersomajinc.elyora.ai.InputMode = com.itamadersomajinc.elyora.ai.InputMode.TEXT,
         onReplyComplete: ((String) -> Unit)? = null
     ) {
         val trimmed = userText.trim()
         if (trimmed.isEmpty() || _uiState.value is AiUiState.Loading || _uiState.value is AiUiState.Streaming) return
         lastUserPrompt = trimmed
 
-        viewModelScope.launch {
+        activeSendJob?.cancel()
+        activeSendJob = viewModelScope.launch {
             val modelId = repo.prefs.preferencesFlow.first().selectedQwenModelId
             val spec = QwenModelCatalog.byId(modelId)
-            repo.addAiMessage(isUser = true, text = trimmed, modelId = modelId)
+            val convId = convRepo.activeConversationId.value
+            val emotion = OfflineBilingualEngine.detectEmotion(trimmed)
+
+            convRepo.ensureConversation(convId, nativeLang, targetLang)
+            convRepo.appendMessage(
+                conversationId = convId,
+                role = "user",
+                content = trimmed,
+                inputMode = inputMode,
+                emotionTag = emotion,
+                modelId = modelId
+            )
             _uiState.value = AiUiState.Loading
 
-            var fullReply = ""
-            runCatching {
+            try {
+                var fullReply = ""
                 container.inferenceService.streamReply(
                     prompt = trimmed,
                     history = emptyList(),
@@ -296,14 +312,33 @@ class AiGrammarViewModel(application: Application) : AndroidViewModel(applicatio
                         _uiState.value = AiUiState.Streaming(fullReply)
                     }
                 }
+                if (fullReply.isBlank()) {
+                    throw IllegalStateException("AI returned an empty response.")
+                }
+                convRepo.appendMessage(
+                    conversationId = convId,
+                    role = "assistant",
+                    content = fullReply,
+                    inputMode = inputMode,
+                    emotionTag = emotion,
+                    modelId = modelId
+                )
+                _uiState.value = AiUiState.Idle
+                onReplyComplete?.invoke(engine.formatForSpeech(fullReply))
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                _uiState.value = AiUiState.Idle
+                throw e
+            } catch (e: Exception) {
+                _uiState.value = AiUiState.Error(e.localizedMessage ?: "Offline AI inference failed")
+                onReplyComplete?.invoke("")
             }
-            if (fullReply.isBlank()) {
-                fullReply = engine.generateReply(trimmed, nativeLang, targetLang, modelId)
-            }
-            repo.addAiMessage(isUser = false, text = fullReply, modelId = modelId)
-            _uiState.value = AiUiState.Idle
-            onReplyComplete?.invoke(engine.formatForSpeech(fullReply))
         }
+    }
+
+    fun cancelGeneration() {
+        activeSendJob?.cancel()
+        container.inferenceService.cancelActiveInference()
+        _uiState.value = AiUiState.Idle
     }
 
     fun formatForSpeech(rawReply: String): String = engine.formatForSpeech(rawReply)
@@ -316,7 +351,8 @@ class AiGrammarViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun clearChat() {
         viewModelScope.launch {
-            repo.clearAiMessages()
+            cancelGeneration()
+            convRepo.clearConversation()
             _uiState.value = AiUiState.Idle
         }
     }
@@ -404,7 +440,12 @@ fun AiAssistantScreen(
         if (clean.isEmpty()) return
         liveTranscript = clean
         voiceStatus = "Thinking… উত্তর তৈরি হচ্ছে…"
-        vm.sendPrompt(clean, store.nativeLang, store.target) { spokenReply ->
+        vm.sendPrompt(
+            clean,
+            store.nativeLang,
+            store.target,
+            inputMode = com.itamadersomajinc.elyora.ai.InputMode.VOICE
+        ) { spokenReply ->
             if (spokenReply.isNotBlank()) {
                 isAiSpeaking = true
                 voiceStatus = "Speaking reply… এআই বলছে…"
@@ -609,6 +650,7 @@ fun AiAssistantScreen(
         modifier
             .fillMaxSize()
             .background(cs.background)
+            .imePadding()
             .padding(horizontal = 16.dp)
     ) {
         Spacer(Modifier.height(8.dp))
@@ -628,13 +670,20 @@ fun AiAssistantScreen(
             )
             Spacer(Modifier.width(8.dp))
             Column(Modifier.weight(1f)) {
-                Text("Offline AI · ভয়েস ও চ্যাট", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold, maxLines = 1)
                 Text(
-                    "${activeSpec.displayName} · " + if (activeGguf.validMagic) ".gguf ডাউনলোডকৃত ✓" else "GGUF ম্যানেজার",
+                    "Elyora AI",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.ExtraBold,
+                    maxLines = 1,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                )
+                Text(
+                    activeSpec.displayName,
                     style = MaterialTheme.typography.labelSmall,
                     color = cs.primary,
                     fontWeight = FontWeight.SemiBold,
-                    maxLines = 1
+                    maxLines = 1,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
             }
             LanguagePillButton(

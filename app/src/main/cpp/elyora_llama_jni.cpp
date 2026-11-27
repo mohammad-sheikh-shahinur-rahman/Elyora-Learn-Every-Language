@@ -1,6 +1,7 @@
 #include <android/log.h>
 #include <jni.h>
 #include <algorithm>
+#include <atomic>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
@@ -29,16 +30,22 @@ static void android_log_cb(ggml_log_level level, const char * text, void * /* us
 constexpr int   N_THREADS_MIN        = 2;
 constexpr int   N_THREADS_MAX        = 4;
 constexpr int   N_THREADS_HEADROOM   = 2;
-constexpr int   DEFAULT_CONTEXT_SIZE = 2048;
+constexpr int   DEFAULT_CONTEXT_SIZE = 4096;
 constexpr int   OVERFLOW_HEADROOM    = 4;
 constexpr int   BATCH_SIZE           = 512;
-constexpr float DEFAULT_TEMP         = 0.6f;
+constexpr float QWEN3_TEMP           = 0.7f;
+constexpr float QWEN3_TOP_P          = 0.8f;
+constexpr int   QWEN3_TOP_K          = 20;
+constexpr float QWEN3_MIN_P          = 0.0f;
+constexpr float QWEN3_REPEAT_PENALTY = 1.05f;
 
 static llama_model            * g_model   = nullptr;
 static llama_context          * g_context = nullptr;
 static common_batch             g_batch;
 static common_chat_templates_ptr g_chat_templates;
 static common_sampler         * g_sampler = nullptr;
+static int                      g_n_ctx   = DEFAULT_CONTEXT_SIZE;
+static std::atomic<bool>        g_cancelled{false};
 
 constexpr const char * ROLE_SYSTEM    = "system";
 constexpr const char * ROLE_USER      = "user";
@@ -94,7 +101,7 @@ static int decode_tokens_in_batches(
     for (int i = 0; i < (int) tokens.size(); i += BATCH_SIZE) {
         const int cur_batch_size = std::min((int) tokens.size() - i, BATCH_SIZE);
         batch.clear();
-        if (start_pos + i + cur_batch_size >= DEFAULT_CONTEXT_SIZE - OVERFLOW_HEADROOM) {
+        if (start_pos + i + cur_batch_size >= g_n_ctx - OVERFLOW_HEADROOM) {
             shift_context();
         }
         for (int j = 0; j < cur_batch_size; j++) {
@@ -162,12 +169,13 @@ Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativeLoad(JNIEnv * env, j
 }
 
 extern "C" JNIEXPORT jint JNICALL
-Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativePrepare(JNIEnv *, jobject) {
+Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativePrepare(JNIEnv *, jobject, jint n_ctx) {
     if (!g_model) return 1;
+    g_n_ctx = std::max(1024, std::min(8192, (int) n_ctx));
     const int n_threads = std::max(N_THREADS_MIN, std::min(N_THREADS_MAX,
             (int) sysconf(_SC_NPROCESSORS_ONLN) - N_THREADS_HEADROOM));
     llama_context_params ctx_params = llama_context_default_params();
-    ctx_params.n_ctx = DEFAULT_CONTEXT_SIZE;
+    ctx_params.n_ctx = g_n_ctx;
     ctx_params.n_batch = BATCH_SIZE;
     ctx_params.n_ubatch = BATCH_SIZE;
     ctx_params.n_threads = n_threads;
@@ -179,8 +187,13 @@ Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativePrepare(JNIEnv *, jo
     g_batch = common_batch(g_context);
     g_chat_templates = common_chat_templates_init(g_model, "");
     common_params_sampling sparams;
-    sparams.temp = DEFAULT_TEMP;
+    sparams.temp = QWEN3_TEMP;
+    sparams.top_p = QWEN3_TOP_P;
+    sparams.top_k = QWEN3_TOP_K;
+    sparams.min_p = QWEN3_MIN_P;
+    sparams.penalty_repeat = QWEN3_REPEAT_PENALTY;
     g_sampler = common_sampler_init(g_model, sparams);
+    g_cancelled.store(false);
     reset_long_term_states(false);
     reset_short_term_states();
     return 0;
@@ -189,6 +202,7 @@ Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativePrepare(JNIEnv *, jo
 extern "C" JNIEXPORT jint JNICALL
 Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativeProcessSystemPrompt(JNIEnv * env, jobject, jstring jsys) {
     if (!g_context) return 1;
+    g_cancelled.store(false);
     reset_long_term_states();
     reset_short_term_states();
 
@@ -202,7 +216,7 @@ Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativeProcessSystemPrompt(
     env->ReleaseStringUTFChars(jsys, sys);
 
     const auto tokens = common_tokenize(g_context, formatted, has_tmpl, has_tmpl);
-    if ((int) tokens.size() > DEFAULT_CONTEXT_SIZE - OVERFLOW_HEADROOM) return 1;
+    if ((int) tokens.size() > g_n_ctx - OVERFLOW_HEADROOM) return 1;
     if (decode_tokens_in_batches(g_context, g_batch, tokens, current_position) != 0) return 2;
     system_prompt_position = current_position = (int) tokens.size();
     return 0;
@@ -211,6 +225,7 @@ Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativeProcessSystemPrompt(
 extern "C" JNIEXPORT jint JNICALL
 Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativeProcessUserPrompt(JNIEnv * env, jobject, jstring juser, jint n_predict) {
     if (!g_context) return 1;
+    g_cancelled.store(false);
     reset_short_term_states();
 
     const auto * user = env->GetStringUTFChars(juser, nullptr);
@@ -223,7 +238,7 @@ Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativeProcessUserPrompt(JN
     env->ReleaseStringUTFChars(juser, user);
 
     auto tokens = common_tokenize(g_context, formatted, has_tmpl, has_tmpl);
-    const int max_batch = DEFAULT_CONTEXT_SIZE - OVERFLOW_HEADROOM;
+    const int max_batch = g_n_ctx - OVERFLOW_HEADROOM;
     if ((int) tokens.size() > max_batch) tokens.resize(max_batch);
     if (decode_tokens_in_batches(g_context, g_batch, tokens, current_position, true) != 0) return 2;
     current_position += (int) tokens.size();
@@ -233,8 +248,8 @@ Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativeProcessUserPrompt(JN
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativeGenerateNextToken(JNIEnv * env, jobject) {
-    if (!g_context || !g_sampler || !g_model) return nullptr;
-    if (current_position >= DEFAULT_CONTEXT_SIZE - OVERFLOW_HEADROOM) shift_context();
+    if (!g_context || !g_sampler || !g_model || g_cancelled.load()) return nullptr;
+    if (current_position >= g_n_ctx - OVERFLOW_HEADROOM) shift_context();
     if (current_position >= stop_generation_position) return nullptr;
 
     const auto new_token_id = common_sampler_sample(g_sampler, g_context, -1);
@@ -258,6 +273,11 @@ Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativeGenerateNextToken(JN
         return res;
     }
     return env->NewStringUTF("");
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_itamadersomajinc_elyora_ai_NativeLlamaEngine_nativeCancel(JNIEnv *, jobject) {
+    g_cancelled.store(true);
 }
 
 extern "C" JNIEXPORT void JNICALL
